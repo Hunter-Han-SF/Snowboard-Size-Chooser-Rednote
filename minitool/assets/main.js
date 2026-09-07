@@ -891,296 +891,148 @@
     var ctx = cv.getContext("2d");
     var s = r.best.s, m = r.model;
     var t = CARD_THEMES[r.pref] || CARD_THEMES.none;
-    var GOLD = "#ffd76e";
 
-    // ---------- 夜空 ----------
+    // ---- 夜空 ----
     var g = ctx.createLinearGradient(0, 0, 0, 1180);
     g.addColorStop(0, t.sky1); g.addColorStop(0.45, t.sky2);
     g.addColorStop(0.75, t.sky3); g.addColorStop(1, t.sky4);
     ctx.fillStyle = g; ctx.fillRect(0, 0, 750, 1180);
 
-    // 星星（含四角星点缀）
+    // 星星 + 月亮
     ctx.fillStyle = "#fff";
-    for (var i = 0; i < 52; i++) {
-      var sx = (i * 173 + 31) % 730 + 10, sy = (i * 97 + 17) % 430 + 20;
-      ctx.globalAlpha = 0.25 + (i * 7 % 10) * 0.06;
+    for (var i = 0; i < 42; i++) {
+      ctx.globalAlpha = 0.2 + (i * 7 % 10) * 0.06;
       ctx.beginPath();
-      ctx.arc(sx, sy, (i % 3) * 0.6 + 0.9, 0, 6.2832);
+      ctx.arc((i * 173 + 31) % 730 + 10, (i * 97 + 17) % 420 + 24, (i % 3) * 0.6 + 0.9, 0, 6.2832);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
-    [[90, 90], [655, 250], [210, 300], [520, 70]].forEach(function (p, k) {
-      ctx.globalAlpha = 0.85 - k * 0.15;
-      ctx.beginPath();
-      ctx.moveTo(p[0], p[1] - 7); ctx.lineTo(p[0] + 2, p[1] - 2);
-      ctx.lineTo(p[0] + 7, p[1]); ctx.lineTo(p[0] + 2, p[1] + 2);
-      ctx.lineTo(p[0], p[1] + 7); ctx.lineTo(p[0] - 2, p[1] + 2);
-      ctx.lineTo(p[0] - 7, p[1]); ctx.lineTo(p[0] - 2, p[1] - 2);
-      ctx.closePath(); ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-    // 月亮
-    var mg = ctx.createRadialGradient(618, 128, 8, 618, 128, 120);
-    mg.addColorStop(0, "rgba(255,255,255,0.4)"); mg.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = mg; ctx.fillRect(470, 0, 300, 270);
-    ctx.fillStyle = "rgba(243,248,252,0.96)";
-    ctx.beginPath(); ctx.arc(618, 128, 26, 0, 6.2832); ctx.fill();
+    var mg = ctx.createRadialGradient(600, 150, 8, 600, 150, 130);
+    mg.addColorStop(0, "rgba(255,255,255,0.35)"); mg.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = mg; ctx.fillRect(440, 0, 320, 300);
+    ctx.fillStyle = "rgba(243,248,252,0.95)";
+    ctx.beginPath(); ctx.arc(600, 150, 30, 0, 6.2832); ctx.fill();
 
-    // ---------- 极光带 ----------
-    function aurora(y0, amp, rgb, alpha, phase) {
-      ctx.beginPath();
-      ctx.moveTo(-40, y0 + Math.sin(phase) * amp);
-      for (var x = -40; x <= 790; x += 12) {
-        ctx.lineTo(x, y0 + Math.sin(x / 150 + phase) * amp + Math.sin(x / 53 + phase * 2) * amp * 0.3);
-      }
-      for (var x2 = 790; x2 >= -40; x2 -= 12) {
-        ctx.lineTo(x2, y0 + 96 + Math.sin(x2 / 120 + 1.4 + phase) * amp * 0.7);
-      }
-      ctx.closePath();
-      var ag = ctx.createLinearGradient(0, y0 - amp, 0, y0 + 130);
-      ag.addColorStop(0, "rgba(" + rgb + "," + alpha + ")");
-      ag.addColorStop(1, "rgba(" + rgb + ",0)");
-      ctx.fillStyle = ag; ctx.fill();
-    }
-    aurora(84, 16, t.aur1, 0.30, 0);
-    aurora(150, 20, t.aur2, 0.22, 1.8);
-    aurora(236, 13, t.aur1, 0.16, 3.6);
-
-    // ---------- 山峦（雪帽）----------
+    // ---- 山峦 ----
     ctx.fillStyle = t.far;
-    poly(ctx, [[0, 470], [120, 384], [215, 452], [330, 358], [445, 462], [560, 392], [665, 470], [750, 408], [750, 560], [0, 560]]);
+    poly(ctx, [[0, 470], [120, 380], [215, 450], [330, 355], [445, 465], [560, 390], [665, 470], [750, 405], [750, 560], [0, 560]]);
     ctx.fillStyle = t.mid;
-    poly(ctx, [[0, 560], [140, 442], [255, 540], [400, 418], [545, 552], [665, 452], [750, 528], [750, 700], [0, 700]]);
+    poly(ctx, [[0, 560], [140, 440], [255, 540], [400, 415], [545, 555], [665, 450], [750, 530], [750, 700], [0, 700]]);
     ctx.fillStyle = "rgba(244,249,253,0.9)";
-    poly(ctx, [[366, 480], [400, 418], [432, 480], [418, 470], [404, 484], [388, 468], [374, 482]]);
+    poly(ctx, [[366, 480], [400, 415], [432, 480], [418, 470], [404, 484], [388, 468], [374, 482]]);
     ctx.fillStyle = t.near;
-    poly(ctx, [[0, 655], [150, 540], [270, 640], [420, 524], [560, 648], [680, 556], [750, 620], [750, 1180], [0, 1180]]);
+    poly(ctx, [[0, 660], [150, 540], [270, 640], [420, 520], [560, 650], [680, 555], [750, 620], [750, 1180], [0, 1180]]);
     ctx.fillStyle = "rgba(238,245,250,0.85)";
-    poly(ctx, [[596, 616], [680, 556], [706, 618], [688, 606], [672, 622], [656, 604], [640, 620], [620, 606]]);
+    poly(ctx, [[596, 616], [680, 555], [706, 618], [688, 606], [672, 622], [656, 604], [640, 620], [620, 606]]);
 
-    // ---------- 雪板：光晕 + 实拍 + 倒影 ----------
-    var bh = 420, bw = boardImg ? boardImg.width / boardImg.height * bh : 118;
-    var halo = ctx.createRadialGradient(375, 318, 30, 375, 318, 300);
-    halo.addColorStop(0, t.glow); halo.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = halo; ctx.fillRect(50, 20, 650, 620);
+    // ---- 板子光晕 + 雪板实拍 ----
+    var bg2 = ctx.createRadialGradient(375, 350, 30, 375, 350, 300);
+    bg2.addColorStop(0, t.glow); bg2.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = bg2; ctx.fillRect(60, 40, 630, 620);
+
     if (boardImg) {
+      var bh = 470, bw = boardImg.width / boardImg.height * bh;
       ctx.save();
-      ctx.translate(375, 318);
+      ctx.translate(375, 385);
       ctx.rotate(-6 * Math.PI / 180);
-      ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 46; ctx.shadowOffsetY = 20;
+      ctx.shadowColor = "rgba(0,0,0,0.45)"; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18;
       ctx.drawImage(boardImg, -bw / 2, -bh / 2, bw, bh);
       ctx.restore();
-      // 倒影（截板底 120px，翻转渐隐）
-      var rc = document.createElement("canvas");
-      rc.width = Math.max(2, Math.round(bw)); rc.height = 120;
-      var rctx = rc.getContext("2d");
-      rctx.translate(0, 0); rctx.scale(1, -1);
-      rctx.drawImage(boardImg, 0, -bh, rc.width, bh);
-      var rgrad = rctx.createLinearGradient(0, 0, 0, 120);
-      rgrad.addColorStop(0, "rgba(255,255,255,0.3)"); rgrad.addColorStop(1, "rgba(255,255,255,0)");
-      rctx.globalCompositeOperation = "destination-in";
-      rctx.fillStyle = rgrad; rctx.fillRect(0, 0, rc.width, 120);
-      ctx.save();
-      ctx.translate(375, 530);
-      ctx.rotate(-6 * Math.PI / 180);
-      ctx.globalAlpha = 0.35;
-      ctx.drawImage(rc, -bw / 2, 4);
-      ctx.restore();
     }
 
-    // ---------- 飘雪 ----------
+    // ---- 飘雪点缀 ----
     ctx.fillStyle = "#fff";
-    for (var si = 0; si < 64; si++) {
-      ctx.globalAlpha = 0.16 + (si % 5) * 0.1;
+    for (var si = 0; si < 70; si++) {
+      ctx.globalAlpha = 0.18 + (si % 5) * 0.12;
       ctx.beginPath();
       ctx.arc((si * 211 + 53) % 740 + 5, (si * 307 + 89) % 1120 + 20, (si % 3) * 0.8 + 0.8, 0, 6.2832);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    // ---------- 顶部标题 ----------
+    // ---- 顶部标题 ----
     ctx.textAlign = "center";
-    ctx.fillStyle = "rgba(255,255,255,0.72)";
-    ctx.font = "600 22px sans-serif";
-    ctx.fillText("J O N E S   S N O W B O A R D S   2 6 - 2 7", 375, 54);
-    ctx.shadowColor = t.glow; ctx.shadowBlur = 15;
+    ctx.fillStyle = "rgba(255,255,255,0.75)";
+    ctx.font = "600 24px sans-serif";
+    ctx.fillText("J O N E S   S N O W B O A R D S   2 6 - 2 7", 375, 66);
     ctx.fillStyle = "#fff";
-    ctx.font = "900 52px sans-serif";
-    ctx.fillText("我的本命板", 375, 114);
-    ctx.shadowBlur = 0;
-    // 新品徽标
-    if (m.isNew) {
-      ctx.save();
-      roundRect(ctx, 34, 36, 128, 34, 17);
-      ctx.strokeStyle = GOLD; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.fillStyle = GOLD; ctx.font = "700 19px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("NEW 26-27", 98, 59);
-      ctx.restore();
-    }
+    ctx.font = "800 52px sans-serif";
+    ctx.fillText("我的本命板", 375, 130);
 
-    // ---------- 尺寸主视觉 ----------
-    // 徽章：官方推荐 / 手动选择
-    ctx.font = "600 21px sans-serif";
-    var chipTxt = "官方推荐尺码";
-    var chipW = ctx.measureText(chipTxt).width + 34;
-    var manualTxt = r.manual ? "手动选择" : null;
-    ctx.font = "600 21px sans-serif";
-    var manualW = manualTxt ? ctx.measureText(manualTxt).width + 34 : 0;
-    var gap = manualTxt ? 14 : 0;
-    var chipsX = 375 - (chipW + gap + manualW) / 2;
-    roundRect(ctx, chipsX, 652, chipW, 34, 17);
-    ctx.strokeStyle = "rgba(255,255,255,0.75)"; ctx.lineWidth = 1.5; ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,0.92)"; ctx.textAlign = "center";
-    ctx.fillText(chipTxt, chipsX + chipW / 2, 675);
-    if (manualTxt) {
-      roundRect(ctx, chipsX + chipW + gap, 652, manualW, 34, 17);
-      ctx.fillStyle = GOLD;
-      ctx.fill();
-      ctx.fillStyle = "#12324e";
-      ctx.fillText(manualTxt, chipsX + chipW + gap + manualW / 2, 675);
-    }
-    // 数字（发光 + W 后缀 + cm，整体居中）
+    // ---- 推荐尺码（数字 + W/UW 后缀 + cm 整体居中） ----
+    ctx.font = "800 132px sans-serif";
     var numText = String(s.len);
+    var numW = ctx.measureText(numText).width;
     var suffix = s.variant || "";
-    ctx.font = "900 128px sans-serif";
-    var numW2 = ctx.measureText(numText).width;
     ctx.font = "800 56px sans-serif";
-    var sufW2 = suffix ? ctx.measureText(suffix).width + 14 : 0;
-    ctx.font = "400 36px sans-serif";
-    var cmW2 = ctx.measureText("cm").width + 12;
-    var x0 = 375 - (numW2 + sufW2 + cmW2) / 2;
+    var sufW = suffix ? ctx.measureText(suffix).width + 12 : 0;
+    ctx.font = "400 38px sans-serif";
+    var cmW = ctx.measureText("cm").width + 12;
+    var x0 = 375 - (numW + sufW + cmW) / 2;
     ctx.textAlign = "left";
-    ctx.font = "900 128px sans-serif";
-    ctx.shadowColor = t.glow; ctx.shadowBlur = 30;
+    ctx.font = "800 132px sans-serif";
     ctx.fillStyle = "#fff";
-    ctx.fillText(numText, x0, 788);
-    ctx.shadowBlur = 0;
+    ctx.fillText(numText, x0, 720);
     if (suffix) {
       ctx.font = "800 56px sans-serif";
-      ctx.fillStyle = GOLD;
-      ctx.fillText(suffix, x0 + numW2 + 14, 788);
+      ctx.fillStyle = "#ffd76e";
+      ctx.fillText(suffix, x0 + numW + 12, 720);
     }
-    ctx.font = "400 36px sans-serif";
+    ctx.font = "400 38px sans-serif";
     ctx.fillStyle = "rgba(255,255,255,0.8)";
-    ctx.fillText("cm", x0 + numW2 + sufW2, 788);
-
-    // ---------- 型号与标签 ----------
+    ctx.fillText("cm", x0 + numW + sufW, 720);
     ctx.textAlign = "center";
-    ctx.font = "800 34px sans-serif";
+
+    // ---- 型号与标签 ----
+    ctx.font = "700 36px sans-serif";
     ctx.fillStyle = "#fff";
-    ctx.fillText(m.name, 375, 838);
-    ctx.font = "400 22px sans-serif";
-    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.fillText(m.name, 375, 778);
+    ctx.font = "400 24px sans-serif";
+    ctx.fillStyle = "rgba(255,255,255,0.72)";
     var tags = [m.category, m.audience, "硬度 " + s.flex];
     if (s.bigHorn) tags.push("Big Horn");
-    if (m.character) tags.push(m.character);
-    ctx.fillText(tags.join(" · "), 375, 872);
+    ctx.fillText(tags.join(" · "), 375, 816);
 
-    // ---------- 地形三维分条 ----------
-    if (m.scores && m.scores.length === 3) {
-      var itemW = 196, barMax = 86, sy = 908;
-      var startX = 375 - (itemW * 3) / 2;
-      ctx.textAlign = "left";
-      m.scores.forEach(function (sc, k) {
-        var ix = startX + k * itemW;
-        ctx.font = "600 19px sans-serif";
-        ctx.fillStyle = "rgba(255,255,255,0.68)";
-        ctx.fillText(sc.l, ix, sy);
-        ctx.fillStyle = "rgba(255,255,255,0.16)";
-        roundRect(ctx, ix, sy + 10, barMax, 7, 3.5); ctx.fill();
-        ctx.fillStyle = "rgba(" + t.aur1 + ",0.95)";
-        roundRect(ctx, ix, sy + 10, Math.max(4, barMax * sc.v / 10), 7, 3.5); ctx.fill();
-        ctx.font = "800 20px sans-serif";
-        ctx.fillStyle = "#fff";
-        ctx.textAlign = "right";
-        ctx.fillText(sc.v + "/10", ix + barMax, sy + 34);
-        ctx.textAlign = "left";
-      });
-      ctx.textAlign = "center";
-    }
-
-    // ---------- 数据玻璃卡 ----------
+    // ---- 个人数据铭牌 ----
     var st1 = STYLES[r.style] ? STYLES[r.style].label : null;
     var stanceRow = (r.stanceInfo && r.EU)
       ? (r.stanceDir === "goofy" ? "右脚前 " : "左脚前 ") +
         fmtAngle(r.stanceInfo.fa) + " / " + fmtAngle(r.stanceInfo.ba) : null;
+    var px = 60, py = 856, pw = 630, ph = stanceRow ? 234 : 196;
+    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    roundRect(ctx, px, py, pw, ph, 22); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.35)"; ctx.lineWidth = 1.5;
+    roundRect(ctx, px, py, pw, ph, 22); ctx.stroke();
+
     var rows = [
-      ["身高 / 体重 / 鞋码", fmt(r.H) + "cm · " + fmt(r.W) + "kg" + (r.EU ? " · EU " + fmt(r.EU) : "")],
+      ["身高 / 体重", fmt(r.H) + " cm · " + fmt(r.W) + " kg"],
+      ["鞋码", r.EU ? "EU " + fmt(r.EU) : "未填写"],
       ["滑行偏好", PREF_NAME[r.pref] + (st1 ? " · " + st1 : "")],
     ];
-    if (stanceRow) {
-      var vCls = r.stanceInfo.verdict.cls;           // ok / warn / bad
-      var vCol = { ok: "#8ee6bd", warn: "#f4c34d", bad: "#ff9d9d" }[vCls];
-      var vTxt = vCls === "ok" ? "出界检测 通过" :
-        "出界 " + fmt(Math.max(r.stanceInfo.fOh, r.stanceInfo.bOh)) + "cm";
-      rows.push(["站姿角度", stanceRow, vTxt, vCol]);
-    }
-    rows.push(["官方体重区间", wRangeText(s) +
-      (s.wMin !== null && r.W >= s.wMin && r.W <= s.wMax ? " ✓" : " 超范围")]);
-
-    var px = 50, pw = 650;
-    var rh = 34, py = 956, ph = 22 + rows.length * rh + 14;
-    ctx.fillStyle = "rgba(255,255,255,0.10)";
-    roundRect(ctx, px, py, pw, ph, 24); ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.32)"; ctx.lineWidth = 1.5;
-    roundRect(ctx, px, py, pw, ph, 24); ctx.stroke();
-    // 顶部高光细线
-    ctx.strokeStyle = "rgba(255,255,255,0.28)"; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(px + 30, py + 1.5); ctx.lineTo(px + pw - 30, py + 1.5); ctx.stroke();
-
-    var ry = py + 34;
-    rows.forEach(function (row, idx) {
+    if (stanceRow) rows.push(["站姿角度", stanceRow]);
+    rows.push(["官方体重区间", wRangeText(s) + (s.wMin !== null && r.W >= s.wMin && r.W <= s.wMax ? " ✓" : " 超范围")]);
+    var ry = py + 46;
+    rows.forEach(function (row) {
       ctx.textAlign = "left";
-      ctx.font = "400 21px sans-serif";
-      ctx.fillStyle = "rgba(255,255,255,0.72)";
-      ctx.fillText(row[0], px + 30, ry);
+      ctx.font = "400 24px sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,0.62)";
+      ctx.fillText(row[0], px + 34, ry);
       ctx.textAlign = "right";
-      ctx.font = "700 23px sans-serif";
+      ctx.font = "600 26px sans-serif";
       ctx.fillStyle = "#fff";
-      ctx.fillText(row[1], px + pw - 30 - (row[2] ? 150 : 0), ry);
-      if (row[2]) {                                   // 出界结论徽标
-        var bx = px + pw - 30;
-        ctx.font = "700 18px sans-serif";
-        var bw2 = ctx.measureText(row[2]).width + 26;
-        roundRect(ctx, bx - bw2, ry - 21, bw2, 28, 14);
-        ctx.strokeStyle = row[3]; ctx.lineWidth = 1.2; ctx.stroke();
-        ctx.fillStyle = row[3];
-        ctx.fillText(row[2], bx - bw2 / 2, ry);
-      }
-      if (idx < rows.length - 1) {
-        ctx.strokeStyle = "rgba(255,255,255,0.10)"; ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(px + 26, ry + 13); ctx.lineTo(px + pw - 26, ry + 13);
-        ctx.stroke();
-      }
-      ry += rh;
+      ctx.fillText(row[1], px + pw - 34, ry);
+      ry += 38;
     });
 
-    // ---------- 底部：来源 + CTA ----------
-    ctx.textAlign = "right";
-    ctx.font = "400 15px sans-serif";
-    ctx.fillStyle = "rgba(255,255,255,0.38)";
-    ctx.fillText("数据来自 Jones 官方目录", px + pw, py + ph + 22);
-    // CTA 胶囊
-    var ctaW = 440, ctaH = 56, ctaY = 1180 - ctaH - 14;
-    var cg = ctx.createLinearGradient(375 - ctaW / 2, 0, 375 + ctaW / 2, 0);
-    cg.addColorStop(0, "#ff6a52"); cg.addColorStop(1, "#e2413e");
-    ctx.fillStyle = cg;
-    roundRect(ctx, 375 - ctaW / 2, ctaY, ctaW, ctaH, ctaH / 2); ctx.fill();
-    ctx.shadowColor = "rgba(226,65,62,0.45)"; ctx.shadowBlur = 22;
-    roundRect(ctx, 375 - ctaW / 2, ctaY, ctaW, ctaH, ctaH / 2); ctx.fill();
-    ctx.shadowBlur = 0;
+    // ---- 底部引导 ----
     ctx.textAlign = "center";
-    ctx.font = "800 26px sans-serif";
-    ctx.fillStyle = "#fff";
-    ctx.fillText("来测测你的本命板 →", 375, ctaY + 37);
+    ctx.font = "400 22px sans-serif";
+    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.fillText("Jones雪板尺寸选择助手 · 数据来自官方目录", 375, 1104);
+    ctx.font = "700 26px sans-serif";
+    ctx.fillStyle = "#f4c34d";
+    ctx.fillText("来测测你的本命板 →", 375, 1146);
 
-    // ---------- 圆角海报裁切 ----------
-    ctx.globalCompositeOperation = "destination-in";
-    roundRect(ctx, 0, 0, 750, 1180, 36);
-    ctx.fill();
-    ctx.globalCompositeOperation = "source-over";
     ctx.textAlign = "left";
     return cv;
   }
