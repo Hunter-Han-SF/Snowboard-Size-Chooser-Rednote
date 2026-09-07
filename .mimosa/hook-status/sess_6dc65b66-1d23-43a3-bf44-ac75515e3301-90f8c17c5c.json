@@ -1,14 +1,14 @@
 {
   "schemaVersion": "mimosa-hook-status/v1",
-  "recordedAt": "2026-09-07T07:26:18.500Z",
+  "recordedAt": "2026-09-07T07:36:08.847Z",
   "sessionId": "sess_6dc65b66-1d23-43a3-bf44-ac75515e3301",
   "event": "PostToolUse",
-  "toolName": "Write",
-  "file": "tools/patch_card.py",
+  "toolName": "Edit",
+  "file": "minitool/index.html",
   "outcome": "clear",
   "coverage": "complete",
   "findingCount": 0,
-  "durationMs": 18,
+  "durationMs": 4,
   "hostState": "hook_complete",
   "reportHint": ".mimosa/reports/"
 }
