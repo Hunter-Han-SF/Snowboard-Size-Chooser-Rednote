@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20260904T081720469Z-32208-7a250528c737",
+  "runId": "20260904T081720469Z-32208-7a250528c737",
+  "runStatus": "completed",
+  "coverage": {
+    "status": "complete",
+    "reasons": []
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "858b67bdde5539517db53320e07c7abaa7fe2552",
+  "diffHash": "4dcc0d6f9460b48f992dcc38c8cc4370568e3979d4113a15f03a2448a5c02e52",
+  "rulesVersion": "unavailable",
+  "sessionHash": "90f8c17c5c02565ecf8a470d3bd4073aed6efb75f59ecce7cca05d37df3eda41",
+  "reportRef": ".mimosa/reports/task-review-sess_6dc65b66-1d23-43a3-bf44-ac75515e3301-20260904T081720469Z-32208-7a250528c737.json",
+  "events": [],
+  "observedFindingIds": [
+    "mimosa-a87915d6fd8d216bc20cbc9a",
+    "mimosa-06e5f980fbe861bf0451b935",
+    "mimosa-30c433d84afa77a2e901a373",
+    "mimosa-a3a6f8aedaa17e83f1fdbe7b",
+    "mimosa-c48df169ecf8a34ab14f2ef5",
+    "mimosa-d33df21ce845b9f66b689f8e",
+    "mimosa-13e4c2146aadef8c1d72432a",
+    "mimosa-9121441f3786bc4c0f47a217"
+  ],
+  "verifiedFiles": [
+    {
+      "file": "minitool/assets/main.js",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "tools/extract_board_images.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "tools/build_data.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "minitool/assets/data.js",
+      "direct": "complete",
+      "projectContext": "partial"
+    }
+  ],
+  "recordedAt": "2026-09-04T08:17:20.923Z"
+}

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>26-27 Jones 雪板尺码选择助手</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  </style>
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body class="theme-bal">
+
+  <!-- 固定背景：雪山夜景 -->
+  <div class="bg-scene" aria-hidden="true">
+    <svg viewBox="0 0 750 1334" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" class="sky1" stop-color="#081a2e"/>
+          <stop offset="0.42" class="sky2" stop-color="#12395c"/>
+          <stop offset="0.72" class="sky3" stop-color="#2e5f83"/>
+          <stop offset="1" class="sky4" stop-color="#6d95b3"/>
+        </linearGradient>
+        <radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+          <stop offset="0.45" stop-color="#cfe3f2" stop-opacity="0.18"/>
+          <stop offset="1" stop-color="#cfe3f2" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#bcd6e8" stop-opacity="0.14"/>
+          <stop offset="1" stop-color="#bcd6e8" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+
+      <rect width="750" height="1334" fill="url(#sky)"/>
+      <circle cx="588" cy="168" r="150" fill="url(#moonGlow)"/>
+      <circle cx="588" cy="168" r="42" fill="#f3f8fc" opacity="0.95"/>
+      <circle cx="574" cy="158" r="7" fill="#dbe8f1" opacity="0.5"/>
+      <circle cx="602" cy="182" r="5" fill="#dbe8f1" opacity="0.4"/>
+
+      <g fill="#ffffff">
+        <circle cx="80" cy="90" r="1.6" opacity="0.9"/><circle cx="170" cy="52" r="1.1" opacity="0.6"/>
+        <circle cx="255" cy="128" r="1.4" opacity="0.8"/><circle cx="330" cy="70" r="1" opacity="0.55"/>
+        <circle cx="420" cy="140" r="1.3" opacity="0.7"/><circle cx="66" cy="210" r="1.1" opacity="0.5"/>
+        <circle cx="500" cy="60" r="1.5" opacity="0.85"/><circle cx="700" cy="120" r="1.2" opacity="0.65"/>
+        <circle cx="140" cy="300" r="1" opacity="0.45"/><circle cx="368" cy="240" r="1.2" opacity="0.55"/>
+        <circle cx="640" cy="300" r="1" opacity="0.4"/><circle cx="60" cy="380" r="1.2" opacity="0.5"/>
+        <circle cx="270" cy="410" r="1" opacity="0.4"/><circle cx="710" cy="420" r="1.2" opacity="0.45"/>
+        <circle cx="450" cy="330" r="1" opacity="0.4"/><circle cx="205" cy="180" r="1.8" opacity="0.95"/>
+      </g>
+
+      <!-- 远山 -->
+      <polygon class="m-far" points="0,760 120,600 210,690 320,560 430,700 540,585 650,720 750,640 750,900 0,900"
+               fill="#3d6787" opacity="0.75"/>
+      <!-- 中山 + 雪帽 -->
+      <polygon class="m-mid" points="0,880 90,700 190,810 300,650 410,800 520,670 630,810 750,700 750,1000 0,1000"
+               fill="#28506f"/>
+      <polygon points="262,712 300,650 338,712 322,704 310,718 296,702 282,716" fill="#e9f2f9"/>
+      <polygon points="482,732 520,670 558,732 542,724 530,738 516,722 500,736" fill="#dfeaf3"/>
+      <polygon points="600,812 630,810 668,872 640,864 622,880 606,862" fill="#d8e6f0"/>
+      <!-- 近山 + 雪帽 -->
+      <polygon class="m-near" points="0,1060 150,830 260,950 400,760 540,930 660,800 750,900 750,1334 0,1334"
+               fill="#14304a"/>
+      <polygon points="340,852 400,760 458,852 436,842 420,860 402,840 384,858 366,842" fill="#f4f9fd"/>
+      <polygon points="612,890 660,800 706,890 688,880 672,898 656,878 640,894" fill="#eef5fa"/>
+      <polygon points="92,918 150,830 206,918 188,908 170,926 152,906 132,922" fill="#e9f1f8"/>
+
+      <rect y="880" width="750" height="240" fill="url(#mist)"/>
+    </svg>
+    <div class="bg-dim"></div>
+  </div>
+
+  <!-- 大雪纷飞 -->
+  <canvas id="snowCanvas" aria-hidden="true"></canvas>
+
+  <div class="page" id="page">
+
+    <header class="hero">
+      <div class="hero-chip">JONES SNOWBOARDS</div>
+      <h1 class="hero-title"><span class="hero-line1">26-27 JONES</span>雪板尺码选择助手</h1>
+      <p class="hero-sub">输入你的身体数据，基于 Jones 官方规格表<br/>找到最适合你的雪板长度</p>
+    </header>
+
+    <main class="content">
+
+      <!-- 第 1 步：选型号 -->
+      <section class="card">
+        <div class="step-head">
+          <span class="step-no">1</span>
+          <div class="step-title">选择雪板型号</div>
+        </div>
+        <div class="chips" id="audienceChips">
+          <button class="chip is-on" data-aud="全部">全部</button>
+          <button class="chip" data-aud="男款">男款</button>
+          <button class="chip" data-aud="女款">女款</button>
+          <button class="chip" data-aud="通用">通用</button>
+          <button class="chip" data-aud="儿童">儿童</button>
+        </div>
+        <div class="select-wrap">
+          <select id="modelSelect" class="select"></select>
+        </div>
+        <p class="model-meta" id="modelMeta"></p>
+
+        <div class="board-preview" id="boardPreview">
+          <div class="bp-img">
+            <div class="bp-glow"></div>
+            <img id="bpImg" alt="雪板产品图" />
+          </div>
+          <div class="bp-info">
+            <div class="bp-name" id="bpName"></div>
+            <div class="bp-tagline" id="bpTagline"></div>
+            <p class="bp-pitch" id="bpPitch"></p>
+            <div class="bp-tags" id="bpTags"></div>
+            <div class="bp-specs" id="bpSpecs"></div>
+            <div class="bp-scores" id="bpScores"></div>
+            <p class="bp-desc" id="bpDesc"></p>
+            <div class="bp-bullets" id="bpBullets"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 第 2 步：身体数据 -->
+      <section class="card">
+        <div class="step-head">
+          <span class="step-no">2</span>
+          <div class="step-title">输入你的身体数据</div>
+        </div>
+
+        <div class="field">
+          <div class="field-label"><span>身高</span><b id="heightVal">175</b><i>cm</i></div>
+          <input type="range" id="heightInput" class="slider" min="120" max="205" step="1" value="175" />
+        </div>
+
+        <div class="field">
+          <div class="field-label"><span>体重</span><b id="weightVal">70</b><i>kg</i></div>
+          <input type="range" id="weightInput" class="slider" min="20" max="120" step="1" value="70" />
+        </div>
+
+        <div class="field">
+          <div class="field-label"><span>鞋码（欧码，可选）</span></div>
+          <div class="select-wrap">
+            <select id="bootSelect" class="select">
+              <option value="">不确定 / 跳过</option>
+            </select>
+          </div>
+          <p class="field-hint">内长 = 适合的脚长（Mondopoint，非鞋底外长）。量脚：脚跟贴墙站立，标记最长脚趾，紧脚 +5mm / 标准 +10mm / 宽松 +15mm（女款 +10/+15/+20）。EU ≥ 44.5（US 11+）将优先推荐 Big Horn 加宽尺码</p>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span>站姿角度（可选）</span>
+            <div class="dir-toggle" id="stanceDir">
+              <button type="button" class="dt-btn is-on" data-dir="regular">左脚前</button>
+              <button type="button" class="dt-btn" data-dir="goofy">右脚前</button>
+            </div>
+          </div>
+          <div class="stance-grid" id="stanceGrid">
+            <div class="stance-col">
+              <label class="stance-cap">前脚角度</label>
+              <div class="select-wrap">
+                <select id="frontAngle" class="select is-placeholder">
+                  <option value="">未填写</option>
+                </select>
+              </div>
+            </div>
+            <div class="stance-col">
+              <label class="stance-cap">后脚角度</label>
+              <div class="select-wrap">
+                <select id="backAngle" class="select is-placeholder">
+                  <option value="">未填写</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="chips stance-presets" id="stancePresets">
+            <button class="chip" data-f="15" data-b="-15">新手 +15/-15</button>
+            <button class="chip" data-f="9" data-b="-9">自由式 +9/-9</button>
+            <button class="chip" data-f="21" data-b="-9">八字刻滑 +21/-9</button>
+            <button class="chip" data-f="36" data-b="27">一顺刻滑 +36/+27</button>
+            <button class="chip" data-f="18" data-b="-6">全山 +18/-6</button>
+          </div>
+          <p class="field-hint">+ = 朝板头，− = 朝板尾；一正一负自动取正为前脚，双正为一顺站姿</p>
+          <p class="field-hint">填写角度 + 鞋码后，将按官方腰宽估算靴子出界量（前脚朝向：右脚前填正角即常规 Regular）</p>
+        </div>
+      </section>
+
+      <!-- 第 3 步：滑行偏好 -->
+      <section class="card">
+        <div class="step-head">
+          <span class="step-no">3</span>
+          <div class="step-title">滑行偏好<span class="step-optional">（可选）</span></div>
+        </div>
+        <div class="pref-grid" id="prefGrid">
+          <button class="pref is-on" data-pref="none">
+            <b>均衡</b><span>官方推荐即最佳</span>
+          </button>
+          <button class="pref" data-pref="short">
+            <b>灵活优先</b><span>交界尺码取短</span>
+          </button>
+          <button class="pref" data-pref="long">
+            <b>稳定优先</b><span>交界尺码取长</span>
+          </button>
+        </div>
+
+        <div class="style-block">
+          <div class="style-label">滑行风格<span class="step-optional">（可选，自动匹配偏好）</span></div>
+          <div class="style-chips" id="styleChips">
+            <button class="schip" data-style="carve">刻滑</button>
+            <button class="schip" data-style="piste">道内</button>
+            <button class="schip" data-style="freeride">道外</button>
+            <button class="schip" data-style="amfs">全山自由式</button>
+            <button class="schip" data-style="freestyle">自由式</button>
+            <button class="schip" data-style="park">公园</button>
+            <button class="schip" data-style="butter">平花</button>
+          </div>
+          <p class="field-hint" id="styleHint">选风格自动匹配上方偏好；尺码始终以滑行偏好为准（默认均衡）</p>
+        </div>
+      </section>
+
+      <div class="form-error" id="formError"></div>
+
+      <button class="cta" id="matchBtn">找到我的尺码</button>
+    </main>
+
+    <!-- 结果页 -->
+    <section class="result" id="resultView">
+      <div class="result-inner">
+
+        <div class="result-card" id="resultCard">
+          <div class="rc-top">
+            <p class="rc-kicker" id="rModelName"></p>
+            <div class="rc-size-row">
+              <div class="rc-size"><b id="rSizeNum">158</b><i>cm</i></div>
+              <div class="rc-badges" id="rBadges"></div>
+            </div>
+            <p class="rc-why" id="rWhy"></p>
+          </div>
+
+          <div class="rc-size-pick" id="rSizePick"></div>
+
+          <div class="rc-match" id="rMatchRows"></div>
+
+          <table class="rc-spec" id="rSpecTable"></table>
+
+          <div class="rc-stance" id="rStance">
+            <div class="rc-stance-title">站姿出界检测</div>
+            <canvas id="stanceCanvas"></canvas>
+            <p class="rc-stance-verdict" id="stanceVerdict"></p>
+          </div>
+
+          <div class="rc-alt" id="rAlt"></div>
+
+          <div class="rc-note" id="rHeightNote"></div>
+
+          <p class="rc-foot">数据来源：Jones 2026-27 官方目录 · 仅供参考</p>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-ghost" id="backBtn">重新调整</button>
+          <button class="btn-primary" id="saveBtn">保存卡片并分享</button>
+        </div>
+        <p class="bridge-tip" id="bridgeTip">在浏览器预览：仅展示结果卡片；上传小红书后可保存到相册并发布笔记</p>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./assets/data.js"></script>
+  <script src="./assets/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20260904T033926785Z-20332-3baba953cf20",
+  "runId": "20260904T033926785Z-20332-3baba953cf20",
+  "runStatus": "completed",
+  "coverage": {
+    "status": "complete",
+    "reasons": []
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "858b67bdde5539517db53320e07c7abaa7fe2552",
+  "diffHash": "097902431e2fd402de403ae18ac0e27a23eafd42b7336ac68f7aebd443345565",
+  "rulesVersion": "unavailable",
+  "sessionHash": "90f8c17c5c02565ecf8a470d3bd4073aed6efb75f59ecce7cca05d37df3eda41",
+  "reportRef": ".mimosa/reports/task-review-sess_6dc65b66-1d23-43a3-bf44-ac75515e3301-20260904T033926785Z-20332-3baba953cf20.json",
+  "events": [],
+  "observedFindingIds": [],
+  "verifiedFiles": [
+    {
+      "file": "tools/extract_jones_specs.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "tools/check_specs.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    },
+    {
+      "file": "tools/gen_specs_md.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    }
+  ],
+  "recordedAt": "2026-09-04T03:39:27.256Z"
+}
