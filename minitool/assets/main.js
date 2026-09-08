@@ -435,46 +435,170 @@
   }
 
   /* ---------- 匹配算法 ---------- */
-  function scoreSizes(model, W, EU) {
-    return model.sizes.map(function (s) {
-      var wScore;
-      if (s.wMin !== null && W >= s.wMin && W <= s.wMax) {
-        wScore = 100;
-      } else {
-        var d = (s.wMin === null) ? 99 : (W < s.wMin ? s.wMin - W : W - s.wMax);
-        wScore = Math.max(0, 100 - d * 12);
+  function rangeContains(value, min, max, open) {
+    if (min === null || min === undefined || value === null || value === undefined) return false;
+    return value >= min && (open || max === null || max === undefined || value <= max);
+  }
+
+  function rangeGap(value, min, max, open) {
+    if (min === null || min === undefined || value === null || value === undefined) return 999;
+    if (value < min) return min - value;
+    if (!open && max !== null && max !== undefined && value > max) return value - max;
+    return 0;
+  }
+
+  // Jones 官方宽度表：EU 44 以上开始用板腰宽度校验大脚，数值按相邻档位线性插值。
+  // 官方表中 EU 46 与 46.5 同属 US 12 行（最小板腰均为 26.7），46.5 需单独列点，
+  // 否则 46→47 插值会得到 26.8，把 26.7 板腰的尺码错误排除。
+  // 这只是宽度下限，不把 W / UW 后缀当成长度排序依据。
+  function minWaistForEU(EU) {
+    if (!EU || EU < 44) return null;
+    var points = [
+      [44, 25.9], [44.5, 26.1], [45, 26.3], [45.5, 26.5],
+      [46, 26.7], [46.5, 26.7], [47, 26.9], [47.5, 27.1],
+      [48, 27.3], [48.5, 27.5], [49, 27.8]
+    ];
+    if (EU <= points[0][0]) return points[0][1];
+    if (EU >= points[points.length - 1][0]) return points[points.length - 1][1];
+    for (var i = 1; i < points.length; i++) {
+      if (EU <= points[i][0]) {
+        var x0 = points[i - 1][0], y0 = points[i - 1][1];
+        var x1 = points[i][0], y1 = points[i][1];
+        return y0 + (y1 - y0) * (EU - x0) / (x1 - x0);
       }
+    }
+    return points[points.length - 1][1];
+  }
+
+  function scoreSizes(model, W, EU) {
+    var minWaist = minWaistForEU(EU);
+    return model.sizes.map(function (s) {
+      var wIn = rangeContains(W, s.wMin, s.wMax, s.wOpen);
+      var wGap = rangeGap(W, s.wMin, s.wMax, s.wOpen);
+      var wScore = wIn ? 100 : Math.max(0, 100 - wGap * 12);
       var euScore = 0;
-      if (EU) {
-        if (s.euMin !== null && EU >= s.euMin && (s.euMax === null || EU <= s.euMax)) {
+      var euIn = true;
+      var euGap = 0;
+      if (EU !== null && EU !== undefined) {
+        euIn = rangeContains(EU, s.euMin, s.euMax, s.euMax === null);
+        euGap = rangeGap(EU, s.euMin, s.euMax, s.euMax === null);
+        if (euIn) {
           euScore = 40;
         } else if (s.euMin !== null) {
-          var dE = EU < s.euMin ? s.euMin - EU : (s.euMax === null ? 0 : EU - s.euMax);
-          euScore = Math.max(0, 40 - dE * 10);
+          euScore = Math.max(0, 40 - euGap * 10);
         }
       }
-      var bhBonus = (EU >= 44.5 && s.bigHorn) ? 18 : 0;
-      return { s: s, total: wScore + euScore + bhBonus };
+      var widthGap = minWaist === null ? 0 : Math.max(0, minWaist - s.waist);
+      // The official chart is expressed in 0.1 cm increments. Keep only a
+      // tiny floating-point tolerance; a 26.0 cm waist does not satisfy a
+      // 26.1 cm minimum recommendation for EU 44.5 boots.
+      var widthIn = minWaist === null || widthGap <= 0.05;
+      return { s: s, total: wScore + euScore, wIn: wIn, wGap: wGap,
+               euIn: euIn, euGap: euGap, widthIn: widthIn, widthGap: widthGap };
     });
   }
 
-  function pickBest(scored, W, pref) {
-    var arr = scored.slice();
-    arr.sort(function (a, b) {
-      if (b.total !== a.total) return b.total - a.total;
-      // 未由鞋码驱动时，常规版优先于加宽/窄版
-      var va = a.s.variant ? 1 : 0, vb = b.s.variant ? 1 : 0;
-      if (va !== vb) return va - vb;
-      // 官方体重区间中心离用户更近的优先
-      var ca = Math.abs((a.s.wMin + a.s.wMax) / 2 - W);
-      var cb = Math.abs((b.s.wMin + b.s.wMax) / 2 - W);
-      if (ca !== cb) return ca - cb;
-      // 完全同区间时按偏好取短/取长
-      if (pref === "short") return a.s.len - b.s.len;
-      if (pref === "long") return b.s.len - a.s.len;
-      return 0;
+  function candidatePool(scored, W, EU) {
+    var pool = scored.filter(function (r) { return r.wIn; });
+    var widthStatus = "ok";
+
+    // 体重不落在任何尺码内时，先取离官方区间最近的一组。
+    if (!pool.length) {
+      var minGap = Math.min.apply(null, scored.map(function (r) { return r.wGap; }));
+      pool = scored.filter(function (r) { return r.wGap === minGap; });
+    }
+
+    // 体重档原始候选（未做鞋码筛选），供板腰空档回退使用
+    var wPool = pool;
+
+    if (EU !== null && EU !== undefined) {
+      // 在体重合适的尺码中，优先选择官方鞋码覆盖的尺码。
+      var bootFit = pool.filter(function (r) { return r.euIn; });
+      if (bootFit.length) pool = bootFit;
+
+      // EU 44 以上再做板腰下限校验，避免“大脚加分”把人推到最长普通尺码。
+      var minWaist = minWaistForEU(EU);
+      if (minWaist !== null) {
+        var widthFit = pool.filter(function (r) { return r.widthIn; });
+        if (widthFit.length) pool = widthFit;
+        else {
+          // 鞋码覆盖与板腰下限没有交集时，回看体重档原始候选里是否有板腰
+          // 达标、只是目录鞋码下限略高的尺码（EU 44 与 W 版 euMin 44.5 之间
+          // 存在官方宽度表 25.9 下限的空档）——宽度表是官方指南的硬性下限，
+          // 优先级高于目录鞋码区间；其中仍优先鞋码能覆盖的。
+          var wideAlt = wPool.filter(function (r) { return r.widthIn; });
+          if (wideAlt.length) {
+            var wideBoot = wideAlt.filter(function (r) { return r.euIn; });
+            pool = wideBoot.length ? wideBoot : wideAlt;
+          } else {
+            // 体重档内确实没有板腰达标的尺码：不跨到明显超重的长板，在当前
+            // 体重可用尺码中选最宽的一档，并在结果页明确提示存在取舍。
+            var maxWaist = Math.max.apply(null, pool.map(function (r) { return r.s.waist; }));
+            pool = pool.filter(function (r) { return r.s.waist >= maxWaist - 0.05; });
+            widthStatus = "fallback";
+          }
+        }
+      } else {
+        // EU 44 以下官方建议常规宽度即可。目录里部分 W 版（如 Howler 157W）
+        // 的最佳鞋码下限很低，不能仅凭鞋码区间把小脚推向加宽版；只有当
+        // 体重档内没有常规尺码时才保留 W/UW。窄版 N 仍由鞋码区间约束。
+        var regular = pool.filter(function (r) { return r.s.variant !== "W" && r.s.variant !== "UW"; });
+        if (regular.length) pool = regular;
+      }
+    } else {
+      // 没有鞋码时，不主动推荐 W/UW；但保留无后缀的原生宽板（如 Hovercraft 156）。
+      var regular = pool.filter(function (r) { return !r.s.variant; });
+      if (regular.length) pool = regular;
+    }
+
+    pool.widthStatus = widthStatus;
+    return pool;
+  }
+
+  function heightAdjustedIndex(pool, index, H, model, W) {
+    // Jones 的尺码原则仍以体重为主；身高只在成人候选明显偏离常规身高比例时轻推一档。
+    // 儿童不使用成人的 H-25/H-15 经验范围，避免把儿童板推得过长。
+    if (!H || !model || model.audience === "儿童" || pool.length < 2) return index;
+    var s = pool[index].s;
+    var lo = H - 25, hi = H - 15;
+    var weightPos = (s.wMax > s.wMin) ? (W - s.wMin) / (s.wMax - s.wMin) : 0.5;
+    if (s.len > hi && weightPos < 0.35) return Math.max(0, index - 1);
+    if (s.len < lo && weightPos > 0.35) return Math.min(pool.length - 1, index + 1);
+    return index;
+  }
+
+  function pickBest(scored, W, EU, H, pref, model) {
+    var sourcePool = candidatePool(scored, W, EU);
+    var widthStatus = sourcePool.widthStatus || "ok";
+    var pool = sourcePool.slice();
+    pool.sort(function (a, b) { return a.s.len - b.s.len; });
+
+    // 官方建议：多个尺码覆盖体重时取中间；偏好只向短/长相邻移动一档。
+    var mid = Math.floor((pool.length - 1) / 2);
+    var index = mid;
+    if (pref === "short") index = Math.max(0, mid - 1);
+    if (pref === "long") index = Math.min(pool.length - 1, mid + 1);
+    index = heightAdjustedIndex(pool, index, H, model, W);
+
+    var chosen = pool[index];
+    var ranked = [chosen];
+    var rest = pool.slice();
+    rest.splice(index, 1);
+    rest.sort(function (a, b) {
+      var da = Math.abs(a.s.len - chosen.s.len);
+      var db = Math.abs(b.s.len - chosen.s.len);
+      if (da !== db) return da - db;
+      return a.s.len - b.s.len;
     });
-    return arr;
+    ranked = ranked.concat(rest);
+
+    // 保留不在当前合格池中的尺码用于结果页备选展示。
+    var inPool = new Set(pool.map(function (r) { return r.s.size; }));
+    var outside = scored.filter(function (r) { return !inPool.has(r.s.size); });
+    outside.sort(function (a, b) { return b.total - a.total || a.s.len - b.s.len; });
+    var result = ranked.concat(outside);
+    result.widthStatus = widthStatus;
+    return result;
   }
 
   function match() {
@@ -486,27 +610,12 @@
     if (!state.model) { showError("请先选择雪板型号"); return null; }
     hideError();
 
-    var ranked = pickBest(scoreSizes(state.model, W, EU), W, state.pref);
-
-    // 尺码仅由滑行偏好驱动：同分常规版候选中按偏好取紧邻的短/长一档
-    // （鞋码只参与打分与加宽版推荐，滑行风格不影响尺码）
+    var scored = scoreSizes(state.model, W, EU);
+    var ranked = pickBest(scored, W, EU, H, state.pref, state.model);
     var best = ranked[0];
-    var top = ranked[0];
-    var sameScore = ranked.filter(function (r) {
-      return r.total === top.total && !r.s.variant;
-    });
-    var adj = null;
-    if (state.pref === "short") {
-      sameScore.forEach(function (r) {
-        if (r.s.len < top.s.len && (!adj || r.s.len > adj.s.len)) adj = r;
-      });
-    } else if (state.pref === "long") {
-      sameScore.forEach(function (r) {
-        if (r.s.len > top.s.len && (!adj || r.s.len < adj.s.len)) adj = r;
-      });
-    }
-    var prefAdjusted = false;
-    if (adj) { best = adj; prefAdjusted = true; }
+    var balanced = pickBest(scored, W, EU, H, "none", state.model)[0];
+    var prefAdjusted = state.pref !== "none" && best.s.size !== balanced.s.size;
+    var widthStatus = ranked.widthStatus || "ok";
 
     // 手动选码：用户在结果页点选的尺码优先于推荐结果
     var manual = false;
@@ -521,6 +630,11 @@
         }
       }
     }
+
+    // 大脚宽度校验按当前展示的尺码实时判定（手动改码后同样生效），
+    // widthStatus 仅保留为「该型号体重档内是否存在完全匹配」的池级信号
+    var widthMin = minWaistForEU(EU);
+    var widthOk = widthMin === null || best.s.waist + 0.05 >= widthMin;
 
     // 备选：不同长度的次优项
     var alts = [];
@@ -553,6 +667,7 @@
 
     return { model: state.model, W: W, H: H, EU: EU, best: best, ranked: ranked,
              alts: alts, style: state.style, pref: state.pref, prefAdjusted: prefAdjusted,
+             widthStatus: widthStatus, widthMin: widthMin, widthOk: widthOk,
              manual: manual, autoSize: autoSize,
              stanceDir: state.stanceDir, stanceInfo: stanceInfo };
   }
@@ -606,6 +721,11 @@
     } else if (r.prefAdjusted) {
       why += "；按「" + PREF_NAME[r.pref] + "」在区间交界取" + (r.pref === "long" ? "长" : "短") + "一档";
     }
+    if (!r.manual && r.widthStatus === "fallback") {
+      why += "；该型号没有同时满足体重与大脚宽度的官方尺码，已在当前体重档优先选最宽（板腰 " + fmt(s.waist) + " cm，官方下限 " + fmt(r.widthMin) + " cm）";
+    } else if (!r.widthOk) {
+      why += "；注意：当前尺码板腰 " + fmt(s.waist) + " cm 低于官方大脚下限 " + fmt(r.widthMin) + " cm";
+    }
     $("rWhy").textContent = why + "。";
 
     // 手动选码：该型号全部尺码芯片（★ 为当前推荐）
@@ -633,6 +753,12 @@
     addMatchRow(rows, "滑手体重", fmt(r.W) + " kg", true);
     addMatchRow(rows, "官方体重区间", wRangeText(s), false);
     if (r.EU) addMatchRow(rows, "官方最佳鞋码", euRangeText(s), s.euMin !== null && r.EU >= s.euMin && (s.euMax === null || r.EU <= s.euMax));
+    if (r.EU && r.EU >= 44) {
+      addMatchRow(rows, "大脚宽度校验",
+        r.widthOk ? "满足官方板腰下限 ≥" + fmt(r.widthMin) + " cm"
+                  : "板腰 " + fmt(s.waist) + " cm < 官方下限 " + fmt(r.widthMin) + " cm",
+        r.widthOk);
+    }
     addMatchRow(rows, "滑行偏好", PREF_NAME[r.pref], true);
     if (r.style) addMatchRow(rows, "滑行风格", STYLES[r.style].label, true);
     if (r.stanceInfo) {
