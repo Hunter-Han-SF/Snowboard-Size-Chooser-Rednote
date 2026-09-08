@@ -82,6 +82,8 @@
   function euRangeText(s) {
     if (s.euMin === null) return "—";
     var open = s.euMax === null;
+    // 官方目录 Hovercraft 2.0 144 的鞋码下限印作 0（官网亦然），按“无下限”显示
+    if (s.euMin === 0) return "EU ≤" + fmt(s.euMax);
     return open ? "EU " + fmt(s.euMin) + "+"
                 : "EU " + fmt(s.euMin) + "–" + fmt(s.euMax);
   }
