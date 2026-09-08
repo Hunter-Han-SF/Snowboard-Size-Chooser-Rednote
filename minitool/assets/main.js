@@ -1002,66 +1002,49 @@
 
   /* ---------- 结果卡片（Canvas）与保存 ---------- */
   var CARD_THEMES = {
-    none:  { sky1: "#081a2e", sky2: "#12395c", sky3: "#2e5f83", sky4: "#6d95b3",
-             far: "rgba(120,165,200,0.35)", mid: "#28506f", near: "#14304a",
-             glow: "rgba(122,182,236,0.55)", aur1: "122,182,236", aur2: "150,120,220" },
-    short: { sky1: "#062218", sky2: "#10402e", sky3: "#2b6b4c", sky4: "#79a88f",
-             far: "rgba(120,200,160,0.30)", mid: "#235c41", near: "#0f3526",
-             glow: "rgba(126,214,170,0.50)", aur1: "126,214,170", aur2: "110,220,205" },
-    long:  { sky1: "#250a10", sky2: "#571e24", sky3: "#834046", sky4: "#b37e80",
-             far: "rgba(220,150,150,0.30)", mid: "#5f3338", near: "#330f14",
-             glow: "rgba(240,150,150,0.45)", aur1: "240,150,150", aur2: "235,175,120" }
+    none:  { bg: "bg-balanced.webp", sky1: "#081a2e", sky2: "#12395c", sky3: "#2e5f83", sky4: "#6d95b3",
+             glow: "rgba(125,185,240,0.42)" },
+    short: { bg: "bg-flexible.webp", sky1: "#062218", sky2: "#10402e", sky3: "#2b6b4c", sky4: "#79a88f",
+             glow: "rgba(135,225,175,0.40)" },
+    long:  { bg: "bg-stable.webp",   sky1: "#250a10", sky2: "#571e24", sky3: "#834046", sky4: "#b37e80",
+             glow: "rgba(245,155,145,0.40)" }
   };
 
-  function drawCard(r, boardImg) {
+  var CARD_SCALE = 2;  // 导出倍率：画布物理 1500x2360，绘制坐标仍按 750x1180 逻辑写
+  function drawCard(r, boardImg, bgImg) {
     var cv = document.createElement("canvas");
-    cv.width = 750; cv.height = 1180;
+    cv.width = 750 * CARD_SCALE; cv.height = 1180 * CARD_SCALE;
     var ctx = cv.getContext("2d");
+    ctx.scale(CARD_SCALE, CARD_SCALE);
     var s = r.best.s, m = r.model;
     var t = CARD_THEMES[r.pref] || CARD_THEMES.none;
 
-    // ---- 夜空 ----
-    var g = ctx.createLinearGradient(0, 0, 0, 1180);
-    g.addColorStop(0, t.sky1); g.addColorStop(0.45, t.sky2);
-    g.addColorStop(0.75, t.sky3); g.addColorStop(1, t.sky4);
-    ctx.fillStyle = g; ctx.fillRect(0, 0, 750, 1180);
-
-    // 星星 + 月亮
-    ctx.fillStyle = "#fff";
-    for (var i = 0; i < 42; i++) {
-      ctx.globalAlpha = 0.2 + (i * 7 % 10) * 0.06;
-      ctx.beginPath();
-      ctx.arc((i * 173 + 31) % 730 + 10, (i * 97 + 17) % 420 + 24, (i % 3) * 0.6 + 0.9, 0, 6.2832);
-      ctx.fill();
+    // ---- 背景图（按滑行偏好主题，标题已含在图内）；加载失败退回纯色夜空 ----
+    if (bgImg) {
+      var k = Math.max(750 / bgImg.width, 1180 / bgImg.height);
+      ctx.drawImage(bgImg, (750 - bgImg.width * k) / 2, (1180 - bgImg.height * k) / 2,
+                    bgImg.width * k, bgImg.height * k);
+      var sc = ctx.createLinearGradient(0, 600, 0, 1180);
+      sc.addColorStop(0, "rgba(8,10,16,0)");
+      sc.addColorStop(0.45, "rgba(8,10,16,0.42)");
+      sc.addColorStop(1, "rgba(8,10,16,0.66)");
+      ctx.fillStyle = sc; ctx.fillRect(0, 600, 750, 580);
+    } else {
+      var g = ctx.createLinearGradient(0, 0, 0, 1180);
+      g.addColorStop(0, t.sky1); g.addColorStop(0.45, t.sky2);
+      g.addColorStop(0.75, t.sky3); g.addColorStop(1, t.sky4);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 750, 1180);
     }
-    ctx.globalAlpha = 1;
-    var mg = ctx.createRadialGradient(600, 150, 8, 600, 150, 130);
-    mg.addColorStop(0, "rgba(255,255,255,0.35)"); mg.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = mg; ctx.fillRect(440, 0, 320, 300);
-    ctx.fillStyle = "rgba(243,248,252,0.95)";
-    ctx.beginPath(); ctx.arc(600, 150, 30, 0, 6.2832); ctx.fill();
 
-    // ---- 山峦 ----
-    ctx.fillStyle = t.far;
-    poly(ctx, [[0, 470], [120, 380], [215, 450], [330, 355], [445, 465], [560, 390], [665, 470], [750, 405], [750, 560], [0, 560]]);
-    ctx.fillStyle = t.mid;
-    poly(ctx, [[0, 560], [140, 440], [255, 540], [400, 415], [545, 555], [665, 450], [750, 530], [750, 700], [0, 700]]);
-    ctx.fillStyle = "rgba(244,249,253,0.9)";
-    poly(ctx, [[366, 480], [400, 415], [432, 480], [418, 470], [404, 484], [388, 468], [374, 482]]);
-    ctx.fillStyle = t.near;
-    poly(ctx, [[0, 660], [150, 540], [270, 640], [420, 520], [560, 650], [680, 555], [750, 620], [750, 1180], [0, 1180]]);
-    ctx.fillStyle = "rgba(238,245,250,0.85)";
-    poly(ctx, [[596, 616], [680, 555], [706, 618], [688, 606], [672, 622], [656, 604], [640, 620], [620, 606]]);
-
-    // ---- 板子光晕 + 雪板实拍 ----
-    var bg2 = ctx.createRadialGradient(375, 350, 30, 375, 350, 300);
+    // ---- 板子光晕 + 雪板实拍（立于光环正中） ----
+    var bg2 = ctx.createRadialGradient(375, 455, 30, 375, 455, 290);
     bg2.addColorStop(0, t.glow); bg2.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = bg2; ctx.fillRect(60, 40, 630, 620);
+    ctx.fillStyle = bg2; ctx.fillRect(60, 120, 630, 620);
 
     if (boardImg) {
-      var bh = 470, bw = boardImg.width / boardImg.height * bh;
+      var bh = 400, bw = boardImg.width / boardImg.height * bh;
       ctx.save();
-      ctx.translate(375, 385);
+      ctx.translate(375, 462);
       ctx.rotate(-6 * Math.PI / 180);
       ctx.shadowColor = "rgba(0,0,0,0.45)"; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18;
       ctx.drawImage(boardImg, -bw / 2, -bh / 2, bw, bh);
@@ -1078,55 +1061,46 @@
     }
     ctx.globalAlpha = 1;
 
-    // ---- 顶部标题 ----
-    ctx.textAlign = "center";
-    ctx.fillStyle = "rgba(255,255,255,0.75)";
-    ctx.font = "600 24px sans-serif";
-    ctx.fillText("J O N E S   S N O W B O A R D S   2 6 - 2 7", 375, 66);
-    ctx.fillStyle = "#fff";
-    ctx.font = "800 52px sans-serif";
-    ctx.fillText("我的本命板", 375, 130);
-
     // ---- 推荐尺码（数字 + W/UW 后缀 + cm 整体居中） ----
-    ctx.font = "800 132px sans-serif";
+    ctx.font = "800 116px sans-serif";
     var numText = String(s.len);
     var numW = ctx.measureText(numText).width;
     var suffix = s.variant || "";
-    ctx.font = "800 56px sans-serif";
+    ctx.font = "800 50px sans-serif";
     var sufW = suffix ? ctx.measureText(suffix).width + 12 : 0;
-    ctx.font = "400 38px sans-serif";
+    ctx.font = "400 34px sans-serif";
     var cmW = ctx.measureText("cm").width + 12;
     var x0 = 375 - (numW + sufW + cmW) / 2;
     ctx.textAlign = "left";
-    ctx.font = "800 132px sans-serif";
+    ctx.font = "800 116px sans-serif";
     ctx.fillStyle = "#fff";
-    ctx.fillText(numText, x0, 720);
+    ctx.fillText(numText, x0, 765);
     if (suffix) {
-      ctx.font = "800 56px sans-serif";
+      ctx.font = "800 50px sans-serif";
       ctx.fillStyle = "#ffd76e";
-      ctx.fillText(suffix, x0 + numW + 12, 720);
+      ctx.fillText(suffix, x0 + numW + 12, 765);
     }
-    ctx.font = "400 38px sans-serif";
+    ctx.font = "400 34px sans-serif";
     ctx.fillStyle = "rgba(255,255,255,0.8)";
-    ctx.fillText("cm", x0 + numW + sufW, 720);
+    ctx.fillText("cm", x0 + numW + sufW, 765);
     ctx.textAlign = "center";
 
     // ---- 型号与标签 ----
     ctx.font = "700 36px sans-serif";
     ctx.fillStyle = "#fff";
-    ctx.fillText(m.name, 375, 778);
+    ctx.fillText(m.name, 375, 822);
     ctx.font = "400 24px sans-serif";
     ctx.fillStyle = "rgba(255,255,255,0.72)";
     var tags = [m.category, m.audience, "硬度 " + s.flex];
     if (s.bigHorn) tags.push("Big Horn");
-    ctx.fillText(tags.join(" · "), 375, 816);
+    ctx.fillText(tags.join(" · "), 375, 858);
 
     // ---- 个人数据铭牌 ----
     var st1 = STYLES[r.style] ? STYLES[r.style].label : null;
     var stanceRow = (r.stanceInfo && r.EU)
       ? (r.stanceDir === "goofy" ? "右脚前 " : "左脚前 ") +
         fmtAngle(r.stanceInfo.fa) + " / " + fmtAngle(r.stanceInfo.ba) : null;
-    var px = 60, py = 856, pw = 630, ph = stanceRow ? 234 : 196;
+    var px = 60, py = 884, pw = 630, ph = stanceRow ? 220 : 186;
     ctx.fillStyle = "rgba(255,255,255,0.12)";
     roundRect(ctx, px, py, pw, ph, 22); ctx.fill();
     ctx.strokeStyle = "rgba(255,255,255,0.35)"; ctx.lineWidth = 1.5;
@@ -1139,7 +1113,7 @@
     ];
     if (stanceRow) rows.push(["站姿角度", stanceRow]);
     rows.push(["官方体重区间", wRangeText(s) + (s.wMin !== null && r.W >= s.wMin && r.W <= s.wMax ? " ✓" : " 超范围")]);
-    var ry = py + 46;
+    var ry = py + 42;
     rows.forEach(function (row) {
       ctx.textAlign = "left";
       ctx.font = "400 24px sans-serif";
@@ -1149,28 +1123,34 @@
       ctx.font = "600 26px sans-serif";
       ctx.fillStyle = "#fff";
       ctx.fillText(row[1], px + pw - 34, ry);
-      ry += 38;
+      ry += 35;
     });
 
     // ---- 底部引导 ----
     ctx.textAlign = "center";
     ctx.font = "400 22px sans-serif";
     ctx.fillStyle = "rgba(255,255,255,0.55)";
-    ctx.fillText("Jones雪板尺寸选择助手 · 数据来自官方目录", 375, 1104);
+    ctx.fillText("Jones雪板尺寸选择助手 · 数据来自官方目录", 375, 1128);
     ctx.font = "700 26px sans-serif";
     ctx.fillStyle = "#f4c34d";
-    ctx.fillText("来测测你的本命板 →", 375, 1146);
+    ctx.fillText("来测测你的本命板 →", 375, 1164);
 
     ctx.textAlign = "left";
     return cv;
   }
+  window.__drawCard = drawCard;  // 调试/预览钩子
 
   function saveCard() {
     if (!state.lastResult) return;
     var r = state.lastResult;
     var img = new Image();
+    var t = CARD_THEMES[r.pref] || CARD_THEMES.none;
+    var todo = (r.model.img ? 1 : 0) + 1, boardImg = null, bgImg = null;
+    function step() { if (--todo <= 0) finish(drawCard(r, boardImg, bgImg)); }
     function finish(cv) {
-      var dataUri = cv.toDataURL("image/png");
+      // 2x 画布下 PNG 解码后约 4MB，远超单条 Base64 1MiB 预算；
+      // 卡片为全不透明照片类内容，JPEG q0.92 视觉无损且体积可控
+      var dataUri = cv.toDataURL("image/jpeg", 0.92);
       var mt = window.xhs && window.xhs.miniTool;
       if (mt && mt.saveImageToPhotosAlbum) {
         shareCard(mt, r, dataUri);
@@ -1178,10 +1158,15 @@
         toast("保存与分享需在小红书 App 内打开使用");
       }
     }
-    img.onload = function () { finish(drawCard(r, img)); };
-    img.onerror = function () { finish(drawCard(r, null)); };
-    if (r.model.img) img.src = r.model.img;
-    else finish(drawCard(r, null));
+    if (r.model.img) {
+      img.onload = function () { boardImg = img; step(); };
+      img.onerror = step;
+      img.src = r.model.img;
+    }
+    var bg = new Image();
+    bg.onload = function () { bgImg = bg; step(); };
+    bg.onerror = step;
+    bg.src = "assets/" + t.bg + "?v=1";
   }
 
   // 笔记标题：按剩余字数从强到弱选钩子，保证含型号+尺码且 ≤20 字

@@ -40,12 +40,14 @@
 │   ├── jones-specs.json       # 46 款雪板完整规格（板腰/边刃/侧切/站姿/体重区间等）
 │   ├── jones-copy.json        # 官方产品文案（卖点、评分、板型等）
 │   ├── jones-specs.md         # 人类可读版规格总表
-│   └── boards_raw/            # 原始产品图
+│   └── boards_raw/            # 原始产品图（PDF 内嵌，~481px）
+│   └── boards_raw_hd/         # Real-ESRGAN 4x 超分后的白底高清版
 ├── tools/                     # 数据管线与开发工具（Python 3）
 │   ├── extract_jones_specs.py # PyMuPDF 从目录 PDF 提取规格表
 │   ├── extract_board_copy.py  # 提取官方产品文案
 │   ├── extract_board_images.py# 提取产品图
-│   ├── remove_bg.py           # 产品图去背景
+│   ├── remove_bg.py           # 产品图去背景（长边 560）
+│   ├── upscale_boards.py      # Real-ESRGAN 4x 超分 + 去背（长边 1200）
 │   ├── check_specs.py         # 数据质量校验（字段完整性、taper 一致性等）
 │   ├── recheck_specs.py       # 复核校验
 │   ├── gen_specs_md.py        # 生成 Markdown 规格总表

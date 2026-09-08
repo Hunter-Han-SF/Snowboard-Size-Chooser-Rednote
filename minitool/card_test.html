@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- 卡片渲染调试页：?pref=none|short|long 直出对应主题的分享卡片，验证后可删 -->
+<html lang="zh">
+<head><meta charset="utf-8"><title>card-test</title></head>
+<body style="margin:0;background:#111">
+<script src="assets/data.js"></script>
+<script src="assets/main.js"></script>
+<script>
+(function () {
+  var pref = ({ none: 1, short: 1, long: 1 })[new URLSearchParams(location.search).get("pref")] ? new URLSearchParams(location.search).get("pref") : "none";
+  var m = window.JONES_DATA.filter(function (x) { return x.name === "Men\u2019s Howler"; })[0];
+  var s = m.sizes.filter(function (x) { return x.len === 155; })[0];
+  var r = {
+    pref: pref, H: 175, W: 72, EU: 43, style: "freeride", stanceDir: "regular",
+    best: { s: s }, model: m, stanceInfo: { fa: 18, ba: -9 }
+  };
+  var done = 0, boardImg = null, bgImg = null;
+  function step() {
+    if (++done < 2) return;
+    var cv = window.__drawCard(r, boardImg, bgImg);
+    cv.style.width = "750px"; cv.style.display = "block";
+    document.body.appendChild(cv);
+    document.title = "card-ready-" + pref;
+  }
+  var i1 = new Image();
+  i1.onload = function () { boardImg = i1; step(); };
+  i1.src = m.img;
+  var i2 = new Image();
+  i2.onload = function () { bgImg = i2; step(); };
+  i2.src = "assets/" + ({ none: "bg-balanced.webp", short: "bg-flexible.webp", long: "bg-stable.webp" })[pref] + "?v=1";
+})();
+</script>
+</body>
+</html>

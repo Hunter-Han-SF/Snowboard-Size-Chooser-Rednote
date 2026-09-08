@@ -1,0 +1,6 @@
+# Real-ESRGAN 二进制与模型（45MB，可用 release 重新下载）
+tools/realesrgan/
+
+# 超分中间产物与临时文件
+tmp/
+__pycache__/
