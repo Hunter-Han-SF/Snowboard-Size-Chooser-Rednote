@@ -4,3 +4,6 @@ tools/realesrgan/
 # 超分中间产物与临时文件
 tmp/
 __pycache__/
+
+# Mimosa 安全扫描插件的会话状态（每会话自动生成，机器产物不入库）
+.mimosa/
