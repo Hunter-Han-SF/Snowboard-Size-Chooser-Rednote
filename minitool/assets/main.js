@@ -24,6 +24,7 @@
   };
 
   var PREF_NAME = { none: "均衡", short: "灵活优先", long: "稳定优先" };
+  var PREF_SHORT = { none: "均衡", short: "灵活", long: "稳定" };
 
   /* 滑行风格 -> 建议偏好（仅辅助自动选偏好，不影响尺码） */
   var STYLES = {
@@ -34,6 +35,7 @@
     freestyle: { label: "自由式",     pref: "short" },
     park:      { label: "公园",       pref: "short" },
     butter:    { label: "平花",       pref: "short" },
+    surf:      { label: "冲浪滑法",   pref: "none"  },  // 仅问卷模式使用
   };
 
   /* ---------- 站姿角度与出界估算 ---------- */
@@ -291,6 +293,7 @@
     input.__paint = paint;
     input.addEventListener("input", function () {
       state.bodyTouched = true;   // 手动调整后不再随人群联动
+      state.manualSize = null;    // 条件已变，手动选码失效，重测按新参数推荐
       paint();
     });
     paint();
@@ -335,6 +338,7 @@
       if (!btn) return;
       state.pref = btn.getAttribute("data-pref");
       state.prefManual = true;           // 手动选择后，风格只提示建议、不再覆盖
+      state.manualSize = null;           // 偏好已变，手动选码失效
       setPrefUI(state.pref);
     });
   }
@@ -355,6 +359,7 @@
       for (var i = 0; i < chips.length; i++) chips[i].classList.remove("is-on");
       btn.classList.add("is-on");
       state.style = key;
+      state.manualSize = null;             // 风格会影响偏好匹配，手动选码失效
       var st = STYLES[key];
       if (!state.prefManual) {
         state.pref = st.pref;              // 风格辅助：自动匹配偏好
@@ -377,7 +382,10 @@
       opt.textContent = "EU " + fmt(eu) + " · 内长 " + mm + " mm";
       sel.appendChild(opt);
     }
-    sel.addEventListener("change", syncBootPlaceholder);
+    sel.addEventListener("change", function () {
+      state.manualSize = null;    // 鞋码已变，手动选码失效
+      syncBootPlaceholder();
+    });
     syncBootPlaceholder();
   }
 
@@ -712,9 +720,12 @@
     if (m.isNew) addBadge(badges, "26-27 新品", false);
     if (r.manual) addBadge(badges, "手动选择", true);
 
-    // 一句话理由
+    // 一句话理由（问卷模式展示体重档，按档位中值计算）
     var wIn = s.wMin !== null && r.W >= s.wMin && r.W <= s.wMax;
-    var why = "你的体重 " + fmt(r.W) + "kg " + (wIn ? "落在" : "不在") + "该尺码官方区间 " + wRangeText(s) + " 内";
+    var why = (r.quiz
+      ? "体重档 " + r.bandW + "（按 " + fmt(r.W) + "kg 估算）"
+      : "你的体重 " + fmt(r.W) + "kg ")
+      + (wIn ? "落在" : "不在") + "该尺码官方区间 " + wRangeText(s) + " 内";
     if (r.EU && s.euMin !== null && r.EU >= s.euMin && (s.euMax === null || r.EU <= s.euMax)) {
       why += "，鞋码也在最佳范围 " + euRangeText(s) + " 内";
     }
@@ -749,23 +760,8 @@
       pick.appendChild(c);
     });
 
-    // 匹配依据行
-    var rows = $("rMatchRows");
-    rows.innerHTML = "";
-    addMatchRow(rows, "滑手体重", fmt(r.W) + " kg", true);
-    addMatchRow(rows, "官方体重区间", wRangeText(s), false);
-    if (r.EU) addMatchRow(rows, "官方最佳鞋码", euRangeText(s), s.euMin !== null && r.EU >= s.euMin && (s.euMax === null || r.EU <= s.euMax));
-    if (r.EU && r.EU >= 44) {
-      addMatchRow(rows, "大脚宽度校验",
-        r.widthOk ? "满足官方板腰下限 ≥" + fmt(r.widthMin) + " cm"
-                  : "板腰 " + fmt(s.waist) + " cm < 官方下限 " + fmt(r.widthMin) + " cm",
-        r.widthOk);
-    }
-    addMatchRow(rows, "滑行偏好", PREF_NAME[r.pref], true);
-    if (r.style) addMatchRow(rows, "滑行风格", STYLES[r.style].label, true);
-    if (r.stanceInfo) {
-      addMatchRow(rows, "站姿角度", fmtAngle(r.stanceInfo.fa) + " / " + fmtAngle(r.stanceInfo.ba), false);
-    }
+    // 匹配依据行（普通模式与问卷模式共用，容器不同）
+    fillMatchRows(r.quiz ? $("qrMatchRows") : $("rMatchRows"), r);
 
     // 规格表
     var spec = $("rSpecTable");
@@ -831,6 +827,22 @@
     } else {
       note.classList.remove("is-show");
     }
+
+    // 模式切换：问卷 = 分享卡结果页；普通 = 完整规格结果页
+    var isQuiz = !!r.quiz;
+    if (isQuiz) setPrefUI(r.pref);
+    $("resultCard").style.display = isQuiz ? "none" : "";
+    $("quizResult").classList.toggle("is-show", isQuiz);
+    $("saveBtn").textContent = isQuiz ? "保存卡片 · 发小红书" : "保存卡片并分享";
+    $("quizActions").classList.toggle("is-show", isQuiz);
+    $("backBtn").style.display = isQuiz ? "none" : "";
+    if (isQuiz) {
+      $("rqwText").textContent = quizWhyText(r);
+      renderQuizAlts(r);
+      // 单候选格子没有备选型号：整块隐藏，不露空框
+      $("rQuizAlts").style.display = (r.altModels && r.altModels.length) ? "" : "none";
+      renderQuizCard(r);
+    }
   }
 
   function addBadge(box, text, gold) {
@@ -849,6 +861,31 @@
     vEl.textContent = v + (ok ? " ✓" : "");
     row.appendChild(kEl); row.appendChild(vEl);
     box.appendChild(row);
+  }
+  // 匹配依据行：普通结果页与问卷结果页共用（容器不同）
+  function fillMatchRows(box, r) {
+    if (!box) return;
+    var s = r.best.s;
+    box.innerHTML = "";
+    addMatchRow(box, "滑手体重",
+      r.quiz ? r.bandW + " · 估算 " + fmt(r.W) + " kg" : fmt(r.W) + " kg", true);
+    var wIn = s.wMin !== null && r.W >= s.wMin && r.W <= s.wMax;
+    addMatchRow(box, "官方体重区间", wRangeText(s), wIn);
+    if (r.EU) {
+      addMatchRow(box, "官方最佳鞋码", euRangeText(s),
+        s.euMin !== null && r.EU >= s.euMin && (s.euMax === null || r.EU <= s.euMax));
+    }
+    if (r.EU && r.EU >= 44) {
+      addMatchRow(box, "大脚宽度校验",
+        r.widthOk ? "满足官方板腰下限 ≥" + fmt(r.widthMin) + " cm"
+                  : "板腰 " + fmt(s.waist) + " cm < 官方下限 " + fmt(r.widthMin) + " cm",
+        r.widthOk);
+    }
+    addMatchRow(box, "滑行偏好", PREF_NAME[r.pref], true);
+    if (r.style) addMatchRow(box, "滑行风格", STYLES[r.style].label, true);
+    if (r.stanceInfo) {
+      addMatchRow(box, "站姿角度", fmtAngle(r.stanceInfo.fa) + " / " + fmtAngle(r.stanceInfo.ba), false);
+    }
   }
   function addSpecRow(table, k, v) {
     var tr = document.createElement("tr");
@@ -1107,9 +1144,10 @@
     roundRect(ctx, px, py, pw, ph, 22); ctx.stroke();
 
     var rows = [
-      ["身高 / 体重", fmt(r.H) + " cm · " + fmt(r.W) + " kg"],
+      // 问卷模式铭牌显示档位区间（发给雪友参考比单个数字更实用）
+      ["身高 / 体重", r.quiz ? r.bandText : fmt(r.H) + " cm · " + fmt(r.W) + " kg"],
       ["鞋码", r.EU ? "EU " + fmt(r.EU) : "未填写"],
-      ["滑行偏好", PREF_NAME[r.pref] + (st1 ? " · " + st1 : "")],
+      ["滑行偏好", PREF_SHORT[r.pref] + (st1 ? " · " + st1 : "")],
     ];
     if (stanceRow) rows.push(["站姿角度", stanceRow]);
     rows.push(["官方体重区间", wRangeText(s) + (s.wMin !== null && r.W >= s.wMin && r.W <= s.wMax ? " ✓" : " 超范围")]);
@@ -1205,7 +1243,9 @@
       var s = r.best.s;
       await mt.postNote({
         title: noteTitle(r.model, s.size),
-        content: "用「Jones雪板尺寸选择助手」选定了本命板：" +
+        content: (r.quiz
+          ? "用「Jones本命板小测试」测出了我的本命板："
+          : "用「Jones雪板尺寸选择助手」选定了本命板：") +
           r.model.name + " " + s.size + "（" + r.model.category +
           (r.pref !== "none" ? " · " + PREF_NAME[r.pref] : "") +
           "）。卡片里有我的身高体重和鞋码，条件相近的雪友可以直接参考，纠结尺寸的快去测测吧！",
@@ -1235,6 +1275,542 @@
     ctx.arcTo(x, y + h, x, y, r);
     ctx.arcTo(x, y, x + w, y, r);
     ctx.closePath();
+  }
+
+  /* ---------- 问卷模式：30 秒测本命板 ----------
+     给还没想好买哪块的雪友：全点选问卷 -> 推荐型号 + 尺码，
+     复用 scoreSizes / pickBest 与结果页、分享卡链路。 */
+
+  // 身高体重档位：val = 档位中值，作为尺码算法输入
+  var QUIZ_BANDS_ADULT_H = [
+    ["150 以下", 148], ["150–159", 155], ["160–169", 165],
+    ["170–179", 175], ["180–189", 185], ["190+", 192]
+  ];
+  var QUIZ_BANDS_ADULT_W = [
+    ["40 以下", 38], ["40–49", 45], ["50–59", 55], ["60–69", 65],
+    ["70–79", 75], ["80–89", 85], ["90–99", 95], ["100+", 105]
+  ];
+  var QUIZ_BANDS_KID_H = [
+    ["120 以下", 115], ["120–129", 125], ["130–139", 135], ["140–149", 145], ["150+", 155]
+  ];
+  // 档位边界对齐 Junior 官方体重区间（20-29 / 25-39 / 29-45 / 34-50 / 41-54 / 45-71）
+  var QUIZ_BANDS_KID_W = [
+    ["25 以下", 22], ["25–29", 27], ["30–34", 32], ["35–39", 37], ["40–44", 42], ["45+", 50]
+  ];
+
+  var QUIZ_TERRAIN_LABEL = {
+    carve: "道内刻滑党", freeride: "道外野雪党", park: "公园平花党",
+    surf: "粉雪冲浪派", all: "全山全能派", piste: "机道练功型"
+  };
+  // 问卷玩法 -> 现有 STYLES key（卡片铭牌 / 首页风格高亮共用）
+  var QUIZ_STYLE_KEY = { carve: "carve", freeride: "freeride", park: "park", surf: "surf", all: "amfs", piste: "piste" };
+
+  // 地形 x 脾气 -> 候选型号（首位为主推；名字引号须与 data.js 一致的 ’）
+  var QUIZ_RECO_MALE = {
+    carve:    { long: ["Men’s Aviator 2.0", "Freecarver 9000s"], short: ["Men’s Mountain Twin", "Freecarver 6000s"], none: ["Men’s Aviator 2.0", "Men’s Mountain Twin"] },
+    freeride: { long: ["Men’s Flagship", "Men’s Flagship Pro"], short: ["Men’s Stratos", "Men’s Howler"], none: ["Men’s Howler", "Men’s Stratos"] },
+    park:     { long: ["Men’s Tweaker Pro", "Men’s Tweaker"], short: ["Men’s Tweaker", "Men’s Tweaker Pro"], none: ["Men’s Tweaker", "Men’s Rally Cat"] },
+    surf:     { long: ["Storm Wolf"], short: ["TwinCraft", "Men’s Stratos"], none: ["Mind Expander 2.0", "Men’s Howler"] },
+    all:      { long: ["Men’s Flagship", "Men’s Howler"], short: ["Men’s Stratos", "Men’s Mountain Twin"], none: ["Men’s Howler", "Men’s Aviator 2.0"] }
+  };
+  // 老炮独立矩阵（男女差异大，升级表表达不了顺序互换；女款老炮与进阶一致）
+  var QUIZ_RECO_PRO_MALE = {
+    carve:    { long: ["Freecarver 9000s", "Men’s Aviator 2.0"], short: ["Men’s Mountain Twin Pro", "Freecarver 6000s"], none: ["Freecarver 6000s", "Men’s Mountain Twin Pro"] },
+    freeride: { long: ["Men’s Flagship Pro", "Men’s Flagship"], short: ["Men’s Howler", "Men’s Stratos"], none: ["Men’s Howler", "Men’s Mountain Twin Pro"] },
+    park:     { long: ["Men’s Tweaker Pro", "Men’s Mountain Twin Pro"], short: ["Men’s Tweaker Pro", "Men’s Tweaker"], none: ["Men’s Tweaker Pro", "Men’s Mountain Twin Pro"] },
+    surf:     { long: ["Storm Wolf"], short: ["TwinCraft", "Men’s Stratos"], none: ["Mind Expander 2.0", "Men’s Howler"] },
+    all:      { long: ["Men’s Flagship Pro", "Men’s Flagship", "Men’s Howler"], short: ["Men’s Stratos", "Men’s Mountain Twin"], none: ["Men’s Howler", "Men’s Aviator 2.0"] }
+  };
+  var QUIZ_RECO_FEMALE = {
+    carve:    { long: ["Women’s Airheart 2.0"], short: ["Women’s Twin Sister"], none: ["Women’s Airheart 2.0", "Women’s Twin Sister"] },
+    freeride: { long: ["Women’s Flagship"], short: ["Women’s Stratos", "Women’s Howler"], none: ["Women’s Howler", "Women’s Stratos"] },
+    park:     { long: ["Women’s Tweaker", "Women’s Twin Sister"], short: ["Women’s Tweaker"], none: ["Women’s Tweaker", "Women’s Rally Cat"] },
+    surf:     { long: ["Storm Wolf", "Women’s Flagship"], short: ["TwinCraft", "Women’s Stratos"], none: ["Women’s Howler", "Mind Expander 2.0"] },
+    all:      { long: ["Women’s Flagship", "Women’s Howler"], short: ["Women’s Stratos", "Women’s Twin Sister"], none: ["Women’s Howler", "Women’s Airheart 2.0"] }
+  };
+  // 老炮独立矩阵（女款无 Pro 系，用对位硬板替代；通用款男女池通用）
+  var QUIZ_RECO_PRO_FEMALE = {
+    carve:    { long: ["Women’s Airheart 2.0"], short: ["Women’s Twin Sister", "Freecarver 6000s"], none: ["Freecarver 6000s", "Women’s Twin Sister"] },
+    freeride: { long: ["Women’s Flagship"], short: ["Women’s Howler", "Women’s Stratos"], none: ["Women’s Howler", "Women’s Flagship"] },
+    park:     { long: ["Women’s Tweaker", "Women’s Twin Sister"], short: ["Women’s Tweaker", "Women’s Twin Sister"], none: ["Women’s Tweaker", "Women’s Twin Sister"] },
+    surf:     { long: ["Storm Wolf"], short: ["TwinCraft", "Women’s Stratos"], none: ["Mind Expander 2.0", "Women’s Howler"] },
+    all:      { long: ["Women’s Flagship", "Women’s Howler"], short: ["Women’s Stratos", "Women’s Twin Sister"], none: ["Women’s Howler", "Women’s Airheart 2.0"] }
+  };
+  // 新手覆盖表：排除 Pro / 偏硬旗舰，只留宽容易控型号
+  var QUIZ_RECO_BEGINNER = {
+    male:   { carve: ["Men’s Mountain Twin", "Men’s Rally Cat"], freeride: ["Men’s Frontier 2.0", "Men’s Rally Cat"], park: ["Men’s Tweaker", "Men’s Rally Cat"], surf: ["Men’s Frontier 2.0", "Mind Expander 2.0"], all: ["Men’s Rally Cat", "Men’s Frontier 2.0"] },
+    female: { carve: ["Women’s Twin Sister", "Women’s Rally Cat"], freeride: ["Women’s Dream Weaver 2.0", "Women’s Rally Cat"], park: ["Women’s Tweaker", "Women’s Rally Cat"], surf: ["Women’s Dream Weaver 2.0", "Mind Expander 2.0"], all: ["Women’s Rally Cat", "Women’s Dream Weaver 2.0"] }
+  };
+  // 分离板映射：换成同定位 split 版；没有的退最接近款
+  var QUIZ_SPLIT_MAP = {
+    "Men’s Stratos": "Men’s Stratos Split",
+    "Men’s Frontier 2.0": "Men’s Frontier 2.0 Split",
+    "Men’s Howler": "Men’s Howler Split",
+    "Men’s Flagship": "Men’s Solution",
+    "Men’s Flagship Pro": "Men’s Ultralight Solution",
+    "Men’s Mountain Twin": "Men’s Stratos Split",
+    "Men’s Mountain Twin Pro": "Men’s Stratos Split",
+    "Men’s Rally Cat": "Men’s Stratos Split",
+    "Men’s Aviator 2.0": "Men’s Stratos Split",
+    "Freecarver 6000s": "Men’s Stratos Split",
+    "Freecarver 9000s": "Men’s Stratos Split",
+    "Men’s Tweaker": "Men’s Howler Split",
+    "Men’s Tweaker Pro": "Men’s Howler Split",
+    "Hovercraft 2.0": "Hovercraft 2.0 Split",
+    "Storm Chaser": "Storm Chaser Split",
+    "Storm Wolf": "Storm Chaser Split",
+    "Mind Expander 2.0": "Ultralight Butterfly Split",
+    "TwinCraft": "Storm Chaser Split",
+    "Women’s Stratos": "Women’s Stratos Split",
+    "Women’s Dream Weaver 2.0": "Women’s Dream Weaver 2.0 Split",
+    "Women’s Howler": "Women’s Howler Split",
+    "Women’s Flagship": "Women’s Solution",
+    "Women’s Twin Sister": "Women’s Stratos Split",
+    "Women’s Rally Cat": "Women’s Stratos Split",
+    "Women’s Airheart 2.0": "Women’s Stratos Split",
+    "Women’s Tweaker": "Women’s Howler Split"
+  };
+
+  function quizBootOpts(lo, hi) {
+    var arr = [];
+    for (var eu = lo; eu <= hi; eu += 1) arr.push({ id: String(eu), label: "EU " + eu });
+    return arr;
+  }
+  function quizBandOpts(bands, unit) {
+    return bands.map(function (b) { return { id: b[0], label: b[0] + " " + unit, val: b[1] }; });
+  }
+
+  function quizQuestions() {
+    if (quiz.flow === "kid") {
+      return [
+        { key: "height", title: "孩子身高在哪个段？", sub: "只用于微调尺码，不用很精确", layout: "grid", options: quizBandOpts(QUIZ_BANDS_KID_H, "cm") },
+        { key: "weight", title: "孩子体重落在哪一档？", sub: "尺码主要看体重", layout: "grid", options: quizBandOpts(QUIZ_BANDS_KID_W, "kg") },
+        { key: "boot", title: "雪鞋穿多大码？", sub: "不确定可以先跳过", layout: "grid", options: quizBootOpts(27, 40).concat([{ id: "skip", label: "不确定", cls: "qopt-skip" }]) },
+        { key: "level", title: "孩子现在什么水平？", options: [
+          { id: "new", emoji: "⛄", label: "刚上雪", sub: "第一次接触，还在学刹车和犁式" },
+          { id: "mid", emoji: "🧒", label: "会换刃了", sub: "能连续转弯，开始提速" },
+          { id: "adv", emoji: "🚀", label: "道内自如", sub: "机道都能下，想去更多地方" }
+        ] },
+        { key: "terrain", title: "主要在哪滑？", options: [
+          { id: "piste", emoji: "🎿", label: "机道练功", sub: "雪场道内为主，练技术" },
+          { id: "freeride", emoji: "🏔", label: "想玩野雪", sub: "道外粉雪、树林都想试试" }
+        ] }
+      ];
+    }
+    return [
+      { key: "who", title: "这块板是给谁滑的？", sub: "点一下选项，自动进入下一题", options: [
+        { id: "male", emoji: "🏂", label: "我自己（男）", sub: "男款 + 通用板池" },
+        { id: "female", emoji: "🎿", label: "我自己（女）", sub: "女款 + 通用板池" },
+        { id: "kid", emoji: "🧸", label: "给孩子挑", sub: "儿童系列（题流更短）" }
+      ] },
+      { key: "height", title: "你的身高在哪个段？", sub: "只用于微调尺码，不用很精确", layout: "grid", options: quizBandOpts(QUIZ_BANDS_ADULT_H, "cm") },
+      { key: "weight", title: "体重落在哪一档？", sub: "尺码主要看体重，选档即可", layout: "grid", options: quizBandOpts(QUIZ_BANDS_ADULT_W, "kg") },
+      { key: "boot", title: "雪鞋穿多大码？", sub: "EU 44.5+ 的大脚会自动匹配加宽版 / Big Horn", layout: "grid", options: quizBootOpts(35, 49).concat([{ id: "skip", label: "不确定，跳过", cls: "qopt-skip" }]) },
+      { key: "level", title: "你现在是什么段位？", options: [
+        { id: "new", emoji: "🌱", label: "新雪友", sub: "第 1–2 个雪季，还在打磨换刃" },
+        { id: "mid", emoji: "🎿", label: "进阶", sub: "3–5 季，道内自如，开始探索道外" },
+        { id: "pro", emoji: "🐺", label: "老炮", sub: "5 季+，黑道密林都敢进" }
+      ] },
+      { key: "terrain", title: "下个雪季最想解锁哪种快乐？", options: [
+        { id: "carve", emoji: "⚡", label: "道内刻滑", sub: "压刃走大弯，享受速度和咬刃" },
+        { id: "freeride", emoji: "🏔", label: "道外野雪", sub: "追着粉雪跑，浮力优先" },
+        { id: "park", emoji: "🛹", label: "公园平花", sub: "跳台、铁杆、360 和 butter" },
+        { id: "surf", emoji: "🌊", label: "粉雪冲浪", sub: "深粉里画浪线，surf 板型" },
+        { id: "all", emoji: "🃏", label: "全都要", sub: "一块板全山走天下" }
+      ] },
+      { key: "temper", title: "你希望它是什么脾气？", options: [
+        { id: "long", emoji: "🚀", label: "稳如老狗", sub: "高速不飘、刃咬得死（取偏长一档）" },
+        { id: "short", emoji: "🐒", label: "皮猴体质", sub: "轻巧灵活、说转就转（取偏短一档）" },
+        { id: "none", emoji: "⚖️", label: "六边形战士", sub: "均衡不偏科（官方推荐档）" }
+      ] },
+      { key: "split", title: "要背板上山吗？", options: [
+        { id: "no", emoji: "🚡", label: "缆车党", sub: "坐缆车上下，不爬山" },
+        { id: "yes", emoji: "🥾", label: "进山党", sub: "徒步解锁无人粉雪，需要分离板" }
+      ] }
+    ];
+  }
+
+  var quiz = { flow: "adult", idx: 0, answers: {}, busy: false };
+
+  function renderQuiz() {
+    var qs = quizQuestions();
+    var q = qs[quiz.idx];
+    var pg = $("quizProgress");
+    pg.innerHTML = "";
+    for (var i = 0; i < qs.length; i++) {
+      var dot = document.createElement("span");
+      dot.className = "qp" + (i < quiz.idx ? " is-done" : "") + (i === quiz.idx ? " is-on" : "");
+      pg.appendChild(dot);
+    }
+    $("quizCount").textContent = (quiz.idx + 1) + "/" + qs.length;
+
+    var body = $("quizBody");
+    body.innerHTML = "";
+    var title = document.createElement("h2");
+    title.className = "qq-title";
+    title.textContent = q.title;
+    body.appendChild(title);
+    if (q.sub) {
+      var sub = document.createElement("p");
+      sub.className = "qq-sub";
+      sub.textContent = q.sub;
+      body.appendChild(sub);
+    }
+    var opts = document.createElement("div");
+    opts.className = "quiz-opts" + (q.layout === "grid" ? " layout-grid" : "");
+    var chosen = quiz.answers[q.key];
+    q.options.forEach(function (o) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "qopt" + (o.cls ? " " + o.cls : "") + (chosen && chosen.id === o.id ? " is-on" : "");
+      if (o.emoji) {
+        var em = document.createElement("span");
+        em.className = "qopt-emoji";
+        em.textContent = o.emoji;
+        b.appendChild(em);
+      }
+      var main = document.createElement("span");
+      main.className = "qopt-main";
+      var lb = document.createElement("span");
+      lb.className = "qopt-label";
+      lb.textContent = o.label;
+      main.appendChild(lb);
+      if (o.sub) {
+        var sb = document.createElement("span");
+        sb.className = "qopt-sub";
+        sb.textContent = o.sub;
+        main.appendChild(sb);
+      }
+      b.appendChild(main);
+      b.setAttribute("data-opt-id", o.id);
+      opts.appendChild(b);
+    });
+    body.appendChild(opts);
+    body.classList.remove("is-anim");
+    void body.offsetWidth;
+    body.classList.add("is-anim");
+    $("quizPrev").disabled = quiz.flow === "adult" && quiz.idx === 0;
+  }
+
+  function onQuizBodyClick(e) {
+    var btn = e.target.closest ? e.target.closest(".qopt") : null;
+    if (!btn || quiz.busy) return;
+    var q = quizQuestions()[quiz.idx];
+    if (!q) return;
+    var id = btn.getAttribute("data-opt-id");
+    var opt = null;
+    for (var i = 0; i < q.options.length; i++) {
+      if (q.options[i].id === id) { opt = q.options[i]; break; }
+    }
+    if (!opt) return;
+    quiz.answers[q.key] = { id: opt.id, val: opt.val, label: opt.label };
+    var all = btn.parentNode.querySelectorAll(".qopt");
+    for (var k = 0; k < all.length; k++) all[k].classList.remove("is-on");
+    btn.classList.add("is-on");
+    quiz.busy = true;
+    setTimeout(function () {
+      quiz.busy = false;
+      quizAdvance(q);
+    }, 170);
+  }
+
+  function quizAdvance(q) {
+    if (q.key === "who") {
+      var toKid = quiz.answers.who.id === "kid";
+      if (quiz.flow !== (toKid ? "kid" : "adult")) {
+        // 切换人群后身高体重鞋码档位不同，清掉相关答案
+        ["height", "weight", "boot", "level", "terrain", "temper", "split"].forEach(function (k) {
+          delete quiz.answers[k];
+        });
+        quiz.flow = toKid ? "kid" : "adult";
+      }
+      quiz.idx = toKid ? 0 : 1;
+      renderQuiz();
+      return;
+    }
+    var qs = quizQuestions();
+    if (quiz.idx >= qs.length - 1) { finishQuiz(); return; }
+    quiz.idx++;
+    renderQuiz();
+  }
+
+  function quizPrev() {
+    if (quiz.busy) return;
+    if (quiz.flow === "kid" && quiz.idx === 0) {
+      quiz.flow = "adult";
+      quiz.idx = 0;   // 回到「给谁滑」一题
+    } else if (quiz.idx > 0) {
+      quiz.idx--;
+    }
+    renderQuiz();
+  }
+
+  function openQuiz() {
+    document.body.classList.remove("in-result");
+    $("resultView").classList.remove("is-show");
+    quiz.idx = 0;
+    $("quizView").classList.add("is-open");
+    renderQuiz();
+  }
+
+  function closeQuiz() {
+    $("quizView").classList.remove("is-open");
+    $("quizLoading").classList.remove("is-show");
+  }
+
+  function finishQuiz() {
+    $("quizLoading").classList.add("is-show");
+    setTimeout(function () {
+      var r = buildQuizResult();
+      $("quizLoading").classList.remove("is-show");
+      closeQuiz();
+      if (r) {
+        state.lastResult = r;
+        renderResult(r);
+      } else {
+        toast("出了点问题，请重新作答");
+        openQuiz();
+      }
+    }, 750);
+  }
+
+  function quizModelExists(name) { return !!findModel(name); }
+
+  function quizCandidates(who, level, terrain, temper, split) {
+    var list = [];
+    if (who === "kid") {
+      if (terrain === "freeride") {
+        list = level === "adv" ? ["Flagship Junior", "Solution Junior"]
+                               : ["Mountain Twin Junior", "Youth Prodigy"];
+      } else {
+        list = level === "adv" ? ["Mountain Twin Junior", "Flagship Junior"]
+                               : ["Youth Prodigy", "Mountain Twin Junior"];
+      }
+    } else {
+      var table = who === "female" ? QUIZ_RECO_FEMALE : QUIZ_RECO_MALE;
+      var cell = table[terrain] && table[terrain][temper];
+      list = cell ? cell.slice() : [];
+      if (level === "new") {
+        var beg = QUIZ_RECO_BEGINNER[who] && QUIZ_RECO_BEGINNER[who][terrain];
+        if (beg) list = beg.slice();
+      } else if (level === "pro") {
+        // 老炮查独立矩阵（男女各一张；查不到的格子回落进阶矩阵）
+        var proTables = { male: QUIZ_RECO_PRO_MALE, female: QUIZ_RECO_PRO_FEMALE };
+        var pt = proTables[who];
+        if (pt && pt[terrain] && pt[terrain][temper]) list = pt[terrain][temper].slice();
+      }
+      if (split) {
+        list = list.map(function (n) { return QUIZ_SPLIT_MAP[n] || null; })
+                   .filter(function (n) { return n && quizModelExists(n); });
+        // 同池 split 兜底 + 补足备选（格子映射后常常只剩一个型号）
+        var fb = (who === "female"
+          ? ["Women’s Stratos Split", "Women’s Solution", "Women’s Howler Split"]
+          : ["Men’s Stratos Split", "Men’s Solution", "Men’s Howler Split"]
+        ).filter(quizModelExists);
+        fb.forEach(function (n) { if (list.indexOf(n) < 0) list.push(n); });
+      }
+    }
+    var seen = {}, out = [];
+    list.forEach(function (n) {
+      if (n && !seen[n] && quizModelExists(n)) { seen[n] = 1; out.push(n); }
+    });
+    return out;
+  }
+
+  // 组装与 match() 同构的结果对象，直接喂 renderResult / drawCard
+  function buildQuizResult(mainName) {
+    var a = quiz.answers;
+    var who = quiz.flow === "kid" ? "kid" : (a.who ? a.who.id : "male");
+    if (!a.height || !a.weight) return null;
+    var H = a.height.val, W = a.weight.val;
+    var EU = (a.boot && a.boot.id !== "skip") ? parseFloat(a.boot.id) : null;
+    var level = a.level ? a.level.id : (quiz.flow === "kid" ? "new" : "mid");
+    var terrain = a.terrain ? a.terrain.id : "all";
+    var pref = a.temper ? a.temper.id : "none";
+    var split = quiz.flow === "adult" && a.split && a.split.id === "yes";
+
+    var cands = quizCandidates(who, level, terrain, pref, split);
+    if (!cands.length) return null;
+    var model = findModel(mainName && cands.indexOf(mainName) >= 0 ? mainName : cands[0]);
+    if (!model) model = findModel(cands[0]);
+    if (!model) return null;
+
+    var scored = scoreSizes(model, W, EU);
+    var ranked = pickBest(scored, W, EU, H, pref, model);
+    var best = ranked[0];
+    var balanced = pickBest(scored, W, EU, H, "none", model)[0];
+    var prefAdjusted = pref !== "none" && best.s.size !== balanced.s.size;
+    var widthStatus = ranked.widthStatus || "ok";
+    var widthMin = minWaistForEU(EU);
+    var widthOk = widthMin === null || best.s.waist + 0.05 >= widthMin;
+
+    var alts = [];
+    for (var i = 0; i < ranked.length && alts.length < 2; i++) {
+      if (ranked[i].s.len !== best.s.len) alts.push(ranked[i]);
+    }
+
+    var altModels = [];
+    cands.forEach(function (n) {
+      if (n === model.name || altModels.length >= 2) return;
+      var m2 = findModel(n);
+      if (!m2) return;
+      var rk = pickBest(scoreSizes(m2, W, EU), W, EU, H, pref, m2);
+      altModels.push({ name: n, tag: m2.tag || "", size: rk[0].s.size });
+    });
+
+    return {
+      model: model, W: W, H: H, EU: EU, best: best, ranked: ranked, alts: alts,
+      style: QUIZ_STYLE_KEY[terrain] || null, pref: pref, prefAdjusted: prefAdjusted,
+      widthStatus: widthStatus, widthMin: widthMin, widthOk: widthOk,
+      manual: false, autoSize: best.s.size,
+      stanceDir: "regular", stanceInfo: null,
+      quiz: true, quizWho: who, quizLevel: level, quizTerrain: terrain, quizSplit: split,
+      bandH: a.height.id + " cm", bandW: a.weight.id + " kg",
+      bandText: a.height.id + " cm · " + a.weight.id + " kg",
+      altModels: altModels
+    };
+  }
+
+  // 问卷结果页：分享卡（雪板图 + 尺码）直接作为视觉主体预览
+  function renderQuizCard(r) {
+    var wrap = $("qrCardWrap");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    var t = CARD_THEMES[r.pref] || CARD_THEMES.none;
+    var todo = (r.model.img ? 1 : 0) + 1, boardImg = null, bgImg = null;
+    function step() {
+      if (--todo > 0) return;
+      var cv = drawCard(r, boardImg, bgImg);
+      cv.className = "qr-canvas";
+      wrap.appendChild(cv);
+      wrap.classList.remove("is-in");
+      void wrap.offsetWidth;
+      wrap.classList.add("is-in");
+    }
+    if (r.model.img) {
+      var img = new Image();
+      img.onload = function () { boardImg = img; step(); };
+      img.onerror = step;
+      img.src = r.model.img;
+    }
+    var bg = new Image();
+    bg.onload = function () { bgImg = bg; step(); };
+    bg.onerror = step;
+    bg.src = "assets/" + t.bg + "?v=1";
+  }
+
+  function quizWhyText(r) {
+    var m = r.model;
+    var levelMap = r.quizWho === "kid"
+      ? { new: "刚上雪", mid: "会换刃", adv: "道内自如" }
+      : { new: "新雪友", mid: "进阶", pro: "老炮" };
+    var level = levelMap[r.quizLevel] || "";
+    var terr = QUIZ_TERRAIN_LABEL[r.quizTerrain] || "";
+    var temp = { long: "要稳如老狗", short: "要灵活好玩", none: "要均衡不偏科" }[r.pref] || "";
+    var txt = "你是" + level + " · " + terr + " · " + temp;
+    if (r.quizSplit) txt += " · 要背板进山";
+    txt += "\n" + m.name;
+    if (m.tag) txt += "：" + m.tag;
+    if (m.pitch) txt += "。" + m.pitch;
+    var top = null;
+    (m.scores || []).forEach(function (sc) { if (!top || sc.v > top.v) top = sc; });
+    if (top) txt += "。官方最拿手：" + top.l + " " + top.v + "/10。";
+    return txt;
+  }
+
+  function renderQuizAlts(r) {
+    var list = $("rqaList");
+    list.innerHTML = "";
+    (r.altModels || []).forEach(function (am) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "rqa-item";
+      var main = document.createElement("span");
+      main.className = "rqa-main";
+      var nm = document.createElement("span");
+      nm.className = "rqa-name";
+      nm.textContent = am.name;
+      main.appendChild(nm);
+      if (am.tag) {
+        var tg = document.createElement("span");
+        tg.className = "rqa-tag";
+        tg.textContent = am.tag;
+        main.appendChild(tg);
+      }
+      var sz = document.createElement("span");
+      sz.className = "rqa-size";
+      sz.textContent = "建议 " + am.size;
+      b.appendChild(main);
+      b.appendChild(sz);
+      b.addEventListener("click", function () {
+        var nr = buildQuizResult(am.name);
+        if (nr) {
+          state.lastResult = nr;
+          renderResult(nr);
+          window.scrollTo(0, 0);
+        }
+      });
+      list.appendChild(b);
+    });
+  }
+
+  // 出口 1：重新测试（保留答案，从第 1 题可改）
+  function quizRetake() {
+    document.body.classList.remove("in-result");
+    $("resultView").classList.remove("is-show");
+    openQuiz();
+  }
+
+  // 出口 2：已有明确型号 -> 回首页精确调参（预填问卷数据 + 主推型号）
+  function quizGoHome() {
+    var r = state.lastResult;
+    document.body.classList.remove("in-result");
+    $("resultView").classList.remove("is-show");
+    if (r && r.quiz) applyQuizToHome(r);
+    window.scrollTo(0, 0);
+  }
+
+  function applyQuizToHome(r) {
+    state.audience = "全部";
+    var chips = $("audienceChips").querySelectorAll(".chip");
+    for (var i = 0; i < chips.length; i++) {
+      chips[i].classList.toggle("is-on", chips[i].getAttribute("data-aud") === "全部");
+    }
+    renderModelSelect();
+    if (r.model) {
+      var sel = $("modelSelect");
+      for (var k = 0; k < sel.options.length; k++) {
+        if (sel.options[k].value === r.model.name) { sel.selectedIndex = k; break; }
+      }
+      state.model = findModel(sel.value) || r.model;
+    }
+    state.manualSize = null;
+    renderModelMeta();
+    // 滑杆按档位中值预填；手动化后不再随人群联动
+    $("heightInput").value = r.H;
+    $("weightInput").value = r.W;
+    state.bodyTouched = true;
+    $("heightInput").__paint();
+    $("weightInput").__paint();
+    $("bootSelect").value = r.EU ? String(r.EU) : "";
+    syncBootPlaceholder();
+    state.pref = r.pref;
+    state.prefManual = true;
+    setPrefUI(r.pref);
+    state.style = r.style;
+    var sc = $("styleChips").querySelectorAll(".schip");
+    for (var j = 0; j < sc.length; j++) {
+      sc[j].classList.toggle("is-on", r.style !== null && sc[j].getAttribute("data-style") === r.style);
+    }
+  }
+
+  function initQuiz() {
+    $("quizEntry").addEventListener("click", openQuiz);
+    $("quizClose").addEventListener("click", closeQuiz);
+    $("quizPrev").addEventListener("click", quizPrev);
+    $("quizBody").addEventListener("click", onQuizBodyClick);
+    $("quizRetest").addEventListener("click", quizRetake);
+    $("quizToHome").addEventListener("click", quizGoHome);
   }
 
   /* ---------- 背景大雪（Canvas 2D，页面隐藏时暂停） ---------- */
@@ -1360,6 +1936,8 @@
     });
 
     $("saveBtn").addEventListener("click", saveCard);
+
+    initQuiz();
   }
 
   if (document.readyState === "loading") {

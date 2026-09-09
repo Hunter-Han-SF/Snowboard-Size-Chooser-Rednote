@@ -93,6 +93,16 @@
 
     <main class="content">
 
+      <!-- 问卷入口：给还没想好买哪块的人 -->
+      <button class="quiz-entry" id="quizEntry" type="button">
+        <span class="qe-badge">NEW</span>
+        <span class="qe-main">
+          <b>不知道选哪块？</b>
+          <i>8 道快问快答 · 30 秒测出你的本命板</i>
+        </span>
+        <span class="qe-arrow">→</span>
+      </button>
+
       <!-- 第 1 步：选型号 -->
       <section class="card">
         <div class="step-head">
@@ -265,14 +275,57 @@
           <p class="rc-foot">数据来源：Jones 2026-27 官方目录 · 仅供参考</p>
         </div>
 
+        <!-- 问卷模式结果：分享卡为主体 -->
+        <div class="quiz-result" id="quizResult">
+          <p class="qr-kicker">❄ 30 秒小测试 · 本命板出炉</p>
+          <div class="qr-card-wrap" id="qrCardWrap"></div>
+
+          <div class="r-quiz-why" id="rQuizWhy">
+            <div class="rqw-title">为什么是它</div>
+            <p class="rqw-text" id="rqwText"></p>
+          </div>
+
+          <div class="qr-match" id="qrMatchRows"></div>
+
+          <div class="r-quiz-alts" id="rQuizAlts">
+            <div class="rqa-title">换个口味 · 备选型号</div>
+            <div class="rqa-list" id="rqaList"></div>
+            <p class="rqa-hint">点击备选即可切换主推荐</p>
+          </div>
+
+          <p class="rc-foot">数据来源：Jones 2026-27 官方目录 · 仅供参考</p>
+        </div>
+
         <div class="result-actions">
           <button class="btn-ghost" id="backBtn">重新调整</button>
           <button class="btn-primary" id="saveBtn">保存卡片并分享</button>
+        </div>
+
+        <div class="quiz-actions" id="quizActions">
+          <button class="btn-ghost" id="quizRetest" type="button">↻ 重新测试</button>
+          <button class="btn-ghost" id="quizToHome" type="button">已有明确型号？去精确调参</button>
         </div>
       </div>
     </section>
 
   </div>
+
+  <!-- 问卷模式：全屏覆盖层 -->
+  <section class="quiz" id="quizView">
+    <div class="quiz-sheet">
+      <header class="quiz-top">
+        <button class="quiz-close" id="quizClose" type="button" aria-label="关闭问卷">✕</button>
+        <div class="quiz-progress" id="quizProgress"></div>
+        <span class="quiz-count" id="quizCount"></span>
+      </header>
+      <div class="quiz-body" id="quizBody"></div>
+      <footer class="quiz-foot">
+        <button class="quiz-prev" id="quizPrev" type="button">‹ 上一题</button>
+        <span class="quiz-brand">JONES 本命板小测试</span>
+      </footer>
+    </div>
+    <div class="quiz-loading" id="quizLoading"><i>❄</i>正在测算你的本命板…</div>
+  </section>
 
   <div class="toast" id="toast"></div>
 
