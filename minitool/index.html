@@ -3,169 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>26-27 Jones 雪板尺码选择助手</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                   "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-  </style>
+  <meta name="theme-color" content="#edf5fb" />
+  <meta name="description" content="根据 Jones 26–27 官方规格，结合体重、鞋码与滑行偏好，找到适合你的雪板尺码。" />
   <link rel="stylesheet" href="./assets/style.css" />
 </head>
 <body class="theme-bal">
 
-  <!-- 固定背景：雪山夜景 -->
-  <div class="bg-scene" aria-hidden="true">
-    <svg viewBox="0 0 750 1334" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" class="sky1" stop-color="#081a2e"/>
-          <stop offset="0.42" class="sky2" stop-color="#12395c"/>
-          <stop offset="0.72" class="sky3" stop-color="#2e5f83"/>
-          <stop offset="1" class="sky4" stop-color="#6d95b3"/>
-        </linearGradient>
-        <radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
-          <stop offset="0.45" stop-color="#cfe3f2" stop-opacity="0.18"/>
-          <stop offset="1" stop-color="#cfe3f2" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#bcd6e8" stop-opacity="0.14"/>
-          <stop offset="1" stop-color="#bcd6e8" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-
-      <rect width="750" height="1334" fill="url(#sky)"/>
-      <circle cx="588" cy="168" r="150" fill="url(#moonGlow)"/>
-      <circle cx="588" cy="168" r="42" fill="#f3f8fc" opacity="0.95"/>
-      <circle cx="574" cy="158" r="7" fill="#dbe8f1" opacity="0.5"/>
-      <circle cx="602" cy="182" r="5" fill="#dbe8f1" opacity="0.4"/>
-
-      <g fill="#ffffff">
-        <circle cx="80" cy="90" r="1.6" opacity="0.9"/><circle cx="170" cy="52" r="1.1" opacity="0.6"/>
-        <circle cx="255" cy="128" r="1.4" opacity="0.8"/><circle cx="330" cy="70" r="1" opacity="0.55"/>
-        <circle cx="420" cy="140" r="1.3" opacity="0.7"/><circle cx="66" cy="210" r="1.1" opacity="0.5"/>
-        <circle cx="500" cy="60" r="1.5" opacity="0.85"/><circle cx="700" cy="120" r="1.2" opacity="0.65"/>
-        <circle cx="140" cy="300" r="1" opacity="0.45"/><circle cx="368" cy="240" r="1.2" opacity="0.55"/>
-        <circle cx="640" cy="300" r="1" opacity="0.4"/><circle cx="60" cy="380" r="1.2" opacity="0.5"/>
-        <circle cx="270" cy="410" r="1" opacity="0.4"/><circle cx="710" cy="420" r="1.2" opacity="0.45"/>
-        <circle cx="450" cy="330" r="1" opacity="0.4"/><circle cx="205" cy="180" r="1.8" opacity="0.95"/>
-      </g>
-
-      <!-- 远山 -->
-      <polygon class="m-far" points="0,760 120,600 210,690 320,560 430,700 540,585 650,720 750,640 750,900 0,900"
-               fill="#3d6787" opacity="0.75"/>
-      <!-- 中山 + 雪帽 -->
-      <polygon class="m-mid" points="0,880 90,700 190,810 300,650 410,800 520,670 630,810 750,700 750,1000 0,1000"
-               fill="#28506f"/>
-      <polygon points="262,712 300,650 338,712 322,704 310,718 296,702 282,716" fill="#e9f2f9"/>
-      <polygon points="482,732 520,670 558,732 542,724 530,738 516,722 500,736" fill="#dfeaf3"/>
-      <polygon points="600,812 630,810 668,872 640,864 622,880 606,862" fill="#d8e6f0"/>
-      <!-- 近山 + 雪帽 -->
-      <polygon class="m-near" points="0,1060 150,830 260,950 400,760 540,930 660,800 750,900 750,1334 0,1334"
-               fill="#14304a"/>
-      <polygon points="340,852 400,760 458,852 436,842 420,860 402,840 384,858 366,842" fill="#f4f9fd"/>
-      <polygon points="612,890 660,800 706,890 688,880 672,898 656,878 640,894" fill="#eef5fa"/>
-      <polygon points="92,918 150,830 206,918 188,908 170,926 152,906 132,922" fill="#e9f1f8"/>
-
-      <rect y="880" width="750" height="240" fill="url(#mist)"/>
-    </svg>
-    <div class="bg-dim"></div>
-  </div>
-
-  <!-- 大雪纷飞 -->
-  <canvas id="snowCanvas" aria-hidden="true"></canvas>
-
+  <a class="skip-link" href="#modelSection">跳到选板工具</a>
   <div class="page" id="page">
-
-    <header class="hero">
-      <div class="hero-chip">JONES SNOWBOARDS</div>
-      <h1 class="hero-title"><span class="hero-line1">26-27 JONES</span>雪板尺码选择助手</h1>
-      <p class="hero-sub">输入你的身体数据，基于 Jones 官方规格表<br/>找到最适合你的雪板长度</p>
-    </header>
-
-    <main class="content">
-
-      <!-- 问卷入口：给还没想好买哪块的人 -->
-      <button class="quiz-entry" id="quizEntry" type="button">
-        <span class="qe-badge">NEW</span>
-        <span class="qe-main">
-          <b>不知道选哪块？</b>
-          <i>8 道快问快答 · 30 秒测出你的本命板</i>
-        </span>
-        <span class="qe-arrow">→</span>
-      </button>
-
-      <!-- 第 1 步：选型号 -->
-      <section class="card">
-        <div class="step-head">
-          <span class="step-no">1</span>
-          <div class="step-title">选择雪板型号</div>
-        </div>
-        <div class="chips" id="audienceChips">
-          <button class="chip is-on" data-aud="全部">全部</button>
-          <button class="chip" data-aud="男款">男款</button>
-          <button class="chip" data-aud="女款">女款</button>
-          <button class="chip" data-aud="通用">通用</button>
-          <button class="chip" data-aud="儿童">儿童</button>
-        </div>
-        <div class="select-wrap">
-          <select id="modelSelect" class="select"></select>
-        </div>
-        <p class="model-meta" id="modelMeta"></p>
-
+    <header class="site-header"><span class="brand-name">JONES</span><h1>雪板尺码助手</h1></header>
+    <main class="content" id="mainContent">
+      <section class="model-card" id="modelSection" aria-label="当前雪板">
+        <div class="alpine-scene" aria-hidden="true"></div>
         <div class="board-preview" id="boardPreview">
-          <div class="bp-img">
-            <div class="bp-glow"></div>
-            <img id="bpImg" alt="雪板产品图" />
+          <div class="bp-info"><p class="board-season">26/27 · <span id="heroCategory">全山野雪</span></p><h2 class="bp-name" id="bpName"></h2><p class="bp-tagline" id="bpTagline"></p>
+            <button class="change-board" id="changeBoard" type="button" aria-haspopup="dialog">更换雪板 <span aria-hidden="true">↗</span></button>
           </div>
-          <div class="bp-info">
-            <div class="bp-name" id="bpName"></div>
-            <div class="bp-tagline" id="bpTagline"></div>
-            <p class="bp-pitch" id="bpPitch"></p>
-            <div class="bp-tags" id="bpTags"></div>
-            <div class="bp-specs" id="bpSpecs"></div>
-            <div class="bp-scores" id="bpScores"></div>
-            <p class="bp-desc" id="bpDesc"></p>
-            <div class="bp-bullets" id="bpBullets"></div>
-          </div>
+          <div class="bp-img"><img id="bpImg" alt="雪板产品图" decoding="async" /></div>
         </div>
       </section>
-
-      <!-- 第 2 步：身体数据 -->
-      <section class="card">
-        <div class="step-head">
-          <span class="step-no">2</span>
-          <div class="step-title">输入你的身体数据</div>
+      <button class="quiz-entry" id="quizEntry" type="button">还没选好雪板？<span>30秒测一测</span><span aria-hidden="true">→</span></button>
+      <div class="rider-column">
+        <section class="card" id="bodySection" aria-labelledby="bodyTitle"><h2 class="step-title" id="bodyTitle">你的身体数据</h2><div class="body-grid">
+        <div class="field">
+          <div class="field-label"><label for="heightVal">身高</label><input id="heightVal" class="number-input" type="number" min="120" max="205" step="1" value="175" inputmode="numeric" aria-label="身高，厘米" /><i>cm</i></div>
+          <input type="range" id="heightInput" aria-label="调节身高" class="slider" min="120" max="205" step="1" value="175" /><div class="range-labels"><span>120 cm</span><span>205 cm</span></div>
         </div>
 
         <div class="field">
-          <div class="field-label"><span>身高</span><b id="heightVal">175</b><i>cm</i></div>
-          <input type="range" id="heightInput" class="slider" min="120" max="205" step="1" value="175" />
+          <div class="field-label"><label for="weightVal">体重</label><input id="weightVal" class="number-input" type="number" min="20" max="120" step="1" value="70" inputmode="numeric" aria-label="体重，千克" /><i>kg</i></div>
+          <input type="range" id="weightInput" aria-label="调节体重" class="slider" min="20" max="120" step="1" value="70" /><div class="range-labels"><span>20 kg</span><span>120 kg</span></div>
         </div>
 
+        </div></section>
+<section class="equipment-settings" aria-label="雪鞋与站姿设置">
         <div class="field">
-          <div class="field-label"><span>体重</span><b id="weightVal">70</b><i>kg</i></div>
-          <input type="range" id="weightInput" class="slider" min="20" max="120" step="1" value="70" />
-        </div>
-
-        <div class="field">
-          <div class="field-label"><span>鞋码（欧码，可选）</span></div>
+          <div class="field-label"><label for="bootSelect">雪鞋尺码 <span class="optional-label">选填 · 欧码 EU</span></label></div>
           <div class="select-wrap">
             <select id="bootSelect" class="select">
               <option value="">不确定 / 跳过</option>
             </select>
           </div>
-          <p class="field-hint">内长 = 适合的脚长（Mondopoint，非鞋底外长）。量脚：脚跟贴墙站立，标记最长脚趾，紧脚 +5mm / 标准 +10mm / 宽松 +15mm（女款 +10/+15/+20）。EU ≥ 44（US 10+）将按官方宽度表校验板腰，必要时推荐 W / Big Horn 加宽尺码</p>
+          <details class="help-details"><summary>如何确认雪鞋尺码？</summary><p class="field-hint">内长 = 适合的脚长（Mondopoint，非鞋底外长）。量脚：脚跟贴墙站立，标记最长脚趾，紧脚 +5mm / 标准 +10mm / 宽松 +15mm（女款 +10/+15/+20）。EU ≥ 44（US 10+）将按官方宽度表校验板腰，必要时推荐 W / Big Horn 加宽尺码</p></details>
         </div>
 
+        <section class="stance-settings" aria-label="站姿与角度">
         <div class="field">
           <div class="field-label">
             <span>站姿角度（可选）</span>
@@ -176,7 +60,7 @@
           </div>
           <div class="stance-grid" id="stanceGrid">
             <div class="stance-col">
-              <label class="stance-cap">前脚角度</label>
+              <label class="stance-cap" for="frontAngle">前脚角度</label>
               <div class="select-wrap">
                 <select id="frontAngle" class="select is-placeholder">
                   <option value="">未填写</option>
@@ -184,7 +68,7 @@
               </div>
             </div>
             <div class="stance-col">
-              <label class="stance-cap">后脚角度</label>
+              <label class="stance-cap" for="backAngle">后脚角度</label>
               <div class="select-wrap">
                 <select id="backAngle" class="select is-placeholder">
                   <option value="">未填写</option>
@@ -200,28 +84,13 @@
             <button class="chip" data-f="18" data-b="-6">全山 +18/-6</button>
           </div>
           <p class="field-hint">+ = 朝板头，− = 朝板尾；一正一负自动取正为前脚，双正为一顺站姿</p>
-          <p class="field-hint">填写角度 + 鞋码后，将按官方腰宽估算靴子出界量（前脚朝向：右脚前填正角即常规 Regular）</p>
+          <p class="field-hint">填写雪鞋尺码和前后脚角度后，结果页将显示靴子出界估算。</p>
         </div>
-      </section>
-
-      <!-- 第 3 步：滑行偏好 -->
-      <section class="card">
-        <div class="step-head">
-          <span class="step-no">3</span>
-          <div class="step-title">滑行偏好<span class="step-optional">（可选）</span></div>
-        </div>
-        <div class="pref-grid" id="prefGrid">
-          <button class="pref is-on" data-pref="none">
-            <b>均衡</b><span>官方推荐即最佳</span>
-          </button>
-          <button class="pref" data-pref="short">
-            <b>灵活优先</b><span>交界尺码取短</span>
-          </button>
-          <button class="pref" data-pref="long">
-            <b>稳定优先</b><span>交界尺码取长</span>
-          </button>
-        </div>
-
+        </section>
+</section>
+        <section class="card" id="prefSection" aria-labelledby="prefTitle"><h2 class="step-title" id="prefTitle">你的滑行偏好</h2>
+          <div class="pref-grid" id="prefGrid" role="group" aria-label="滑行偏好"><span class="pref-indicator" aria-hidden="true"></span><button class="pref" data-pref="short" type="button">灵活</button><button class="pref is-on" data-pref="none" type="button">均衡</button><button class="pref" data-pref="long" type="button">稳定</button></div>
+        </section>
         <div class="style-block">
           <div class="style-label">滑行风格<span class="step-optional">（可选，自动匹配偏好）</span></div>
           <div class="style-chips" id="styleChips">
@@ -235,38 +104,39 @@
           </div>
           <p class="field-hint" id="styleHint">选风格自动匹配上方偏好；尺码始终以滑行偏好为准（默认均衡）</p>
         </div>
-      </section>
-
-      <div class="form-error" id="formError"></div>
-
-      <button class="cta" id="matchBtn">找到我的尺码</button>
+        <div class="form-error" id="formError" role="alert"></div>
+        <div class="form-actions"><span id="selectionSummary" class="sr-only" aria-live="polite"></span><button class="cta" id="matchBtn" type="button">查看推荐尺码 <span aria-hidden="true">→</span></button></div>
+        <p class="privacy-note">数据仅用于本次计算，无需登录。</p>
+      </div>
     </main>
 
     <!-- 结果页 -->
     <section class="result" id="resultView">
       <div class="result-inner">
+        <div class="result-heading"><p class="eyebrow">YOUR MOUNTAIN COMPANION</p><h1 id="resultTitle" tabindex="-1">为你找到的合适尺码</h1><p>根据你的身体数据与滑行偏好</p></div>
 
         <div class="result-card" id="resultCard">
-          <div class="rc-top">
+          <div class="rc-top"><img class="result-board" id="resultBoard" alt="推荐雪板" /><span class="result-label">YOUR FIT / 建议板长</span>
             <p class="rc-kicker" id="rModelName"></p>
             <div class="rc-size-row">
               <div class="rc-size"><b id="rSizeNum">158</b><i>cm</i></div>
               <div class="rc-badges" id="rBadges"></div>
             </div>
-            <p class="rc-why" id="rWhy"></p>
           </div>
+          <p class="rc-why" id="rWhy"></p>
 
           <div class="rc-size-pick" id="rSizePick"></div>
 
-          <div class="rc-match" id="rMatchRows"></div>
-
-          <table class="rc-spec" id="rSpecTable"></table>
-
           <div class="rc-stance" id="rStance">
-            <div class="rc-stance-title">站姿出界检测</div>
+            <h2 class="rc-stance-title">站姿出界检测</h2>
             <canvas id="stanceCanvas"></canvas>
             <p class="rc-stance-verdict" id="stanceVerdict"></p>
           </div>
+
+          <section class="result-evidence"><h2 class="result-section-title">匹配依据</h2><div class="rc-match" id="rMatchRows"></div></section>
+
+          <section class="result-specs"><h2 class="result-section-title">官方规格</h2><table class="rc-spec" id="rSpecTable" aria-label="当前尺码官方规格"></table></section>
+
 
           <div class="rc-alt" id="rAlt"></div>
 
@@ -308,15 +178,34 @@
       </div>
     </section>
 
+    <footer class="site-footer"><b>为下一场雪，做好准备。</b><span>Jones 2026–27 官方目录数据 · 非官方选板工具</span><small>推荐仅供参考，请结合官方建议与实际试滑体验选择。</small></footer>
   </div>
 
+  <section class="model-picker" id="modelPicker" role="dialog" aria-modal="true" aria-labelledby="modelTitle" tabindex="-1"><div class="picker-sheet"><header class="picker-header"><div><p class="eyebrow">FIND YOUR BOARD</p><h2 id="modelTitle">选择你的雪板 <span id="modelCount"></span></h2></div><button class="quiz-close" id="modelClose" type="button" aria-label="关闭选板">×</button></header><div class="picker-content">
+        <div class="chips" id="audienceChips" role="group" aria-label="雪板人群">
+          <button class="chip is-on" data-aud="全部">全部</button>
+          <button class="chip" data-aud="男款">男款</button>
+          <button class="chip" data-aud="女款">女款</button>
+          <button class="chip" data-aud="通用">通用</button>
+          <button class="chip" data-aud="儿童">儿童</button>
+        </div>
+        <div class="search-wrap"><label class="sr-only" for="modelSearch">搜索雪板型号</label><input id="modelSearch" class="search-input" type="search" placeholder="搜索型号，如 Mountain Twin" autocomplete="off" /><button id="clearSearch" class="search-clear" type="button" hidden>清除</button></div>
+        <label class="sr-only" for="modelSelect">雪板型号</label>
+        <div class="select-wrap">
+          <select id="modelSelect" class="select"></select>
+        </div>
+        <p class="model-meta" id="modelMeta" role="status"></p>
+
+<p class="bp-pitch" id="bpPitch"></p><div class="bp-tags" id="bpTags"></div><div class="bp-scores" id="bpScores"></div>
+          <details class="board-details"><summary>板型、硬度与官方介绍</summary><div class="bp-specs" id="bpSpecs"></div><p class="bp-desc" id="bpDesc"></p><div class="bp-bullets" id="bpBullets"></div></details></div><button class="cta" id="confirmBoard" type="button">就选这块雪板 <span aria-hidden="true">→</span></button></div></section>
+
   <!-- 问卷模式：全屏覆盖层 -->
-  <section class="quiz" id="quizView">
+  <section class="quiz" id="quizView" role="dialog" aria-modal="true" aria-label="选板小测试" tabindex="-1">
     <div class="quiz-sheet">
       <header class="quiz-top">
         <button class="quiz-close" id="quizClose" type="button" aria-label="关闭问卷">✕</button>
-        <div class="quiz-progress" id="quizProgress"></div>
-        <span class="quiz-count" id="quizCount"></span>
+        <div class="quiz-progress" id="quizProgress" aria-hidden="true"></div>
+        <span class="quiz-count" id="quizCount" aria-live="polite"></span>
       </header>
       <div class="quiz-body" id="quizBody"></div>
       <footer class="quiz-foot">
@@ -327,7 +216,10 @@
     <div class="quiz-loading" id="quizLoading"><i>❄</i>正在测算你的本命板…</div>
   </section>
 
-  <div class="toast" id="toast"></div>
+  <section class="share-preview" id="sharePreview" role="dialog" aria-modal="true" aria-labelledby="shareTitle" tabindex="-1">
+    <div class="share-sheet"><div class="share-heading"><h2 id="shareTitle">你的专属雪板卡片</h2><button class="quiz-close" id="shareClose" type="button" aria-label="关闭分享预览">✕</button></div><p>浏览器中可长按图片或右键保存；小红书内可直接保存并分享。</p><img id="shareImage" alt="包含雪板型号、推荐尺码和身体数据的分享卡片" /></div>
+  </section>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="./assets/data.js"></script>
   <script src="./assets/main.js"></script>

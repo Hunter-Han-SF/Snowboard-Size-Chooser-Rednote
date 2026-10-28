@@ -104,7 +104,10 @@
   }
 
   /* ---------- 第 1 步：型号列表 ---------- */
-  function renderModelSelect() {
+  function renderModelSelect(preserve) {
+    var previous = preserve && state.model ? state.model.name : "";
+    var query = $("modelSearch").value.trim().toLowerCase().replace(/[’']/g, "");
+    function matches(m) { return !query || (m.name + " " + m.category).toLowerCase().replace(/[’']/g, "").indexOf(query) >= 0; }
     var sel = $("modelSelect");
     sel.innerHTML = "";
     var cats = window.JONES_CATEGORIES || [];
@@ -112,7 +115,7 @@
     // 普通板按分类分组（儿童款、分离板除外，另组放后面）
     cats.forEach(function (cat) {
       var models = DATA.filter(function (m) {
-        return m.category === cat && !m.isSplit && m.audience !== "儿童" &&
+        return matches(m) && m.category === cat && !m.isSplit && m.audience !== "儿童" &&
           (state.audience === "全部" || m.audience === state.audience);
       });
       if (!models.length) return;
@@ -125,7 +128,7 @@
     });
     // 儿童款 / 分离板单独收集（不依赖上方分类组是否为空，儿童过滤下也能列出）
     DATA.forEach(function (m) {
-      if (state.audience !== "全部" && m.audience !== state.audience) return;
+      if (!matches(m) || (state.audience !== "全部" && m.audience !== state.audience)) return;
       if (m.audience === "儿童" && !m.isSplit) kids.push(m);
       else if (m.isSplit) splits.push(m);
     });
@@ -150,9 +153,17 @@
           if (sel.options[i].value === preferred) { sel.selectedIndex = i; break; }
         }
       }
+      if (previous && Array.prototype.some.call(sel.options, function (o) { return o.value === previous; })) sel.value = previous;
       state.model = findModel(sel.value);
       state.manualSize = null;          // 切人群换了默认型号，手动选码失效
     }
+    if (!sel.options.length) state.model = null;
+    sel.disabled = !state.model;
+    $("matchBtn").disabled = !state.model;
+    $("confirmBoard").disabled = !state.model;
+    $("boardPreview").hidden = !state.model;
+    $("modelCount").textContent = sel.options.length + " 款";
+    $("clearSearch").hidden = !query;
     renderModelMeta();
   }
 
@@ -175,7 +186,7 @@
 
   function renderModelMeta() {
     var el = $("modelMeta");
-    if (!state.model) { el.textContent = ""; return; }
+    if (!state.model) { el.textContent = "没有找到匹配的雪板，试试其他关键词或切换人群。"; return; }
     var m = state.model;
     var sizes = m.sizes.map(function (s) { return s.size; }).join(" / ");
     el.innerHTML = "";
@@ -193,12 +204,15 @@
     var img = $("bpImg");
     if (m.img) {
       img.style.display = "";
+      img.alt = m.name + " 雪板产品图";
       img.src = m.img;
       img.onerror = function () { img.style.display = "none"; };
     } else {
       img.style.display = "none";
     }
     $("bpName").textContent = m.name;
+    $("bpName").classList.toggle("is-long", m.name.length > 19);
+    $("heroCategory").textContent = m.category;
 
     // 官方标语（短）与一句话定位（长）分行展示
     var tl = $("bpTagline");
@@ -285,11 +299,35 @@
   function bindSlider(inputId, valId) {
     var input = $(inputId), val = $(valId);
     function paint() {
-      val.textContent = input.value;
+      val.value = input.value;
+      input.setAttribute("aria-valuetext", input.value + (inputId === "heightInput" ? " 厘米" : " 千克"));
+      syncSelectionUI();
       var pct = (input.value - input.min) / (input.max - input.min) * 100;
       // 用 CSS 变量传给 ::-webkit-slider-runnable-track 伪元素
       input.style.setProperty("--fill", pct + "%");
     }
+    function commitNumber() {
+      var n = Number(val.value);
+      if (!val.value.trim() || !isFinite(n)) { paint(); return; }
+      var bounded = Math.max(Number(input.min), Math.min(Number(input.max), Math.round(n)));
+      input.value = bounded;
+      state.bodyTouched = true;
+      state.manualSize = null;
+      if (bounded !== n) toast("已调整至有效范围：" + input.min + "–" + input.max);
+      paint();
+    }
+    val.addEventListener("change", commitNumber);
+    val.addEventListener("blur", commitNumber);
+    val.addEventListener("input", function () {
+      var n = Number(val.value);
+      if (val.value && isFinite(n) && n >= Number(input.min) && n <= Number(input.max) && n % 1 === 0) {
+        input.value = n;
+        state.bodyTouched = true;
+        state.manualSize = null;
+        paint();
+      }
+    });
+    val.addEventListener("keydown", function (e) { if (e.key === "Enter") val.blur(); });
     input.__paint = paint;
     input.addEventListener("input", function () {
       state.bodyTouched = true;   // 手动调整后不再随人群联动
@@ -307,6 +345,7 @@
       for (var i = 0; i < chips.length; i++) chips[i].classList.remove("is-on");
       btn.classList.add("is-on");
       state.audience = btn.getAttribute("data-aud");
+      $("modelSearch").value = "";
       renderModelSelect();
       // 未手动调整过身体数据时，切到该人群的平均身高体重
       if (!state.bodyTouched && BODY_DEFAULTS[state.audience]) {
@@ -326,10 +365,11 @@
     for (var i = 0; i < prefs.length; i++) {
       prefs[i].classList.toggle("is-on", prefs[i].getAttribute("data-pref") === pref);
     }
-    // 主题跟随偏好：均衡蓝 / 灵活绿 / 稳定红
+    // 整个界面随偏好切换，CSS 负责连续的色彩与滑块过渡。
     var b = document.body;
     b.classList.remove("theme-bal", "theme-flex", "theme-stab");
     b.classList.add(THEME[pref] || "theme-bal");
+    syncSelectionUI();
   }
 
   function bindPrefs() {
@@ -699,7 +739,10 @@
   }
 
   function renderResult(r) {
+    var wasSizePick = document.activeElement && document.activeElement.classList.contains("rsp-chip");
     var m = r.model, s = r.best.s;
+    $("resultBoard").src = m.img || "";
+    $("resultBoard").alt = m.name + " 雪板";
     $("rModelName").textContent = m.name + " · " + m.category + (m.isSplit ? " · 分离板" : "");
 
     var numEl = $("rSizeNum");
@@ -833,7 +876,8 @@
     if (isQuiz) setPrefUI(r.pref);
     $("resultCard").style.display = isQuiz ? "none" : "";
     $("quizResult").classList.toggle("is-show", isQuiz);
-    $("saveBtn").textContent = isQuiz ? "保存卡片 · 发小红书" : "保存卡片并分享";
+    $("saveBtn").textContent = window.xhs && window.xhs.miniTool && window.xhs.miniTool.saveImageToPhotosAlbum ? "保存卡片并分享" : "生成分享卡片";
+    $("resultTitle").textContent = isQuiz ? "你的山野搭档，找到了。" : "为你找到的合适尺码";
     $("quizActions").classList.toggle("is-show", isQuiz);
     $("backBtn").style.display = isQuiz ? "none" : "";
     if (isQuiz) {
@@ -842,6 +886,13 @@
       // 单候选格子没有备选型号：整块隐藏，不露空框
       $("rQuizAlts").style.display = (r.altModels && r.altModels.length) ? "" : "none";
       renderQuizCard(r);
+    }
+    syncSelectionUI();
+    if (wasSizePick) {
+      var picked = $("rSizePick").querySelector(".is-on");
+      if (picked) picked.focus();
+    } else {
+      $("resultTitle").focus();
     }
   }
 
@@ -1179,7 +1230,9 @@
   window.__drawCard = drawCard;  // 调试/预览钩子
 
   function saveCard() {
-    if (!state.lastResult) return;
+    if (!state.lastResult || $("saveBtn").disabled) return;
+    $("saveBtn").disabled = true;
+    $("saveBtn").setAttribute("aria-busy", "true");
     var r = state.lastResult;
     var img = new Image();
     var t = CARD_THEMES[r.pref] || CARD_THEMES.none;
@@ -1189,11 +1242,15 @@
       // 2x 画布下 PNG 解码后约 4MB，远超单条 Base64 1MiB 预算；
       // 卡片为全不透明照片类内容，JPEG q0.92 视觉无损且体积可控
       var dataUri = cv.toDataURL("image/jpeg", 0.92);
+      $("saveBtn").disabled = false;
+      $("saveBtn").removeAttribute("aria-busy");
       var mt = window.xhs && window.xhs.miniTool;
       if (mt && mt.saveImageToPhotosAlbum) {
         shareCard(mt, r, dataUri);
       } else {
-        toast("保存与分享需在小红书 App 内打开使用");
+        $("shareImage").src = dataUri;
+        openModal($("sharePreview"));
+        $("shareClose").focus();
       }
     }
     if (r.model.img) {
@@ -1448,6 +1505,7 @@
     body.innerHTML = "";
     var title = document.createElement("h2");
     title.className = "qq-title";
+    title.tabIndex = -1;
     title.textContent = q.title;
     body.appendChild(title);
     if (q.sub) {
@@ -1483,6 +1541,7 @@
       }
       b.appendChild(main);
       b.setAttribute("data-opt-id", o.id);
+      b.setAttribute("aria-pressed", chosen && chosen.id === o.id ? "true" : "false");
       opts.appendChild(b);
     });
     body.appendChild(opts);
@@ -1490,6 +1549,8 @@
     void body.offsetWidth;
     body.classList.add("is-anim");
     $("quizPrev").disabled = quiz.flow === "adult" && quiz.idx === 0;
+    body.scrollTop = 0;
+    title.focus();
   }
 
   function onQuizBodyClick(e) {
@@ -1508,7 +1569,7 @@
     for (var k = 0; k < all.length; k++) all[k].classList.remove("is-on");
     btn.classList.add("is-on");
     quiz.busy = true;
-    setTimeout(function () {
+    quiz.timer = setTimeout(function () {
       quiz.busy = false;
       quizAdvance(q);
     }, 170);
@@ -1549,18 +1610,20 @@
     document.body.classList.remove("in-result");
     $("resultView").classList.remove("is-show");
     quiz.idx = 0;
-    $("quizView").classList.add("is-open");
+    openModal($("quizView"));
     renderQuiz();
   }
 
   function closeQuiz() {
-    $("quizView").classList.remove("is-open");
+    clearTimeout(quiz.timer);
+    quiz.busy = false;
+    closeModal();
     $("quizLoading").classList.remove("is-show");
   }
 
   function finishQuiz() {
     $("quizLoading").classList.add("is-show");
-    setTimeout(function () {
+    quiz.timer = setTimeout(function () {
       var r = buildQuizResult();
       $("quizLoading").classList.remove("is-show");
       closeQuiz();
@@ -1763,14 +1826,21 @@
 
   // 出口 2：已有明确型号 -> 回首页精确调参（预填问卷数据 + 主推型号）
   function quizGoHome() {
-    var r = state.lastResult;
-    document.body.classList.remove("in-result");
-    $("resultView").classList.remove("is-show");
-    if (r && r.quiz) applyQuizToHome(r);
-    window.scrollTo(0, 0);
+    transitionScreen($("resultView"), function () {
+      var r = state.lastResult;
+      document.body.classList.remove("in-result");
+      $("resultView").classList.remove("is-show");
+      if (r && r.quiz) applyQuizToHome(r);
+      $("mainContent").classList.remove("is-returning");
+      void $("mainContent").offsetWidth;
+      $("mainContent").classList.add("is-returning");
+      $("changeBoard").focus();
+      window.scrollTo(0, 0);
+    });
   }
 
   function applyQuizToHome(r) {
+    $("modelSearch").value = "";
     state.audience = "全部";
     var chips = $("audienceChips").querySelectorAll(".chip");
     for (var i = 0; i < chips.length; i++) {
@@ -1813,103 +1883,111 @@
     $("quizToHome").addEventListener("click", quizGoHome);
   }
 
-  /* ---------- 背景大雪（Canvas 2D，页面隐藏时暂停） ---------- */
-  function initSnow() {
-    var canvas = document.getElementById("snowCanvas");
-    if (!canvas || !canvas.getContext) return;
-    var ctx = canvas.getContext("2d");
-    var W = 0, H = 0, flakes = [], t = 0, running = false, rafId = 0;
-    var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  /* ---------- 前端交互与可访问性 ---------- */
+  var activeModal = null, modalReturnFocus = null, formScroll = 0, modalScroll = 0;
 
-    // 大颗柔边雪花用预渲染精灵，避免每帧径向渐变
-    var sprite = document.createElement("canvas");
-    sprite.width = 48; sprite.height = 48;
-    var sctx = sprite.getContext("2d");
-    var sg = sctx.createRadialGradient(24, 24, 2, 24, 24, 22);
-    sg.addColorStop(0, "rgba(255,255,255,0.85)");
-    sg.addColorStop(0.6, "rgba(255,255,255,0.35)");
-    sg.addColorStop(1, "rgba(255,255,255,0)");
-    sctx.fillStyle = sg;
-    sctx.fillRect(0, 0, 48, 48);
+  function syncSelectionUI() {
+    var selected = document.querySelectorAll(".chip, .pref, .schip, .dt-btn, .rsp-chip");
+    for (var i = 0; i < selected.length; i++) selected[i].setAttribute("aria-pressed", selected[i].classList.contains("is-on") ? "true" : "false");
+    $("selectionSummary").textContent = $("heightInput").value + " cm · " + $("weightInput").value + " kg · " + PREF_NAME[state.pref];
+  }
 
-    function resize() {
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = document.documentElement.clientWidth;
-      H = window.innerHeight;
-      canvas.width = Math.round(W * dpr);
-      canvas.height = Math.round(H * dpr);
-      canvas.style.width = W + "px";
-      canvas.style.height = H + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  function openModal(el) {
+    modalReturnFocus = document.activeElement;
+    modalScroll = window.pageYOffset;
+    activeModal = el;
+    el.classList.add("is-open");
+    document.body.style.top = -modalScroll + "px";
+    document.body.classList.add("modal-open");
+    el.focus();
+    $("page").setAttribute("aria-hidden", "true");
+    document.querySelector(".skip-link").setAttribute("tabindex", "-1");
+  }
+
+  function closeModal() {
+    if (!activeModal) return;
+    if (activeModal.id === "modelPicker" && !state.model) {
+      $("modelSearch").value = "";
+      renderModelSelect(true);
     }
+    activeModal.classList.remove("is-open");
+    activeModal = null;
+    document.body.classList.remove("modal-open");
+    document.body.style.top = "";
+    $("page").removeAttribute("aria-hidden");
+    document.querySelector(".skip-link").removeAttribute("tabindex");
+    if (modalReturnFocus && modalReturnFocus.offsetHeight) modalReturnFocus.focus();
+    else $("quizEntry").focus();
+    window.scrollTo(0, modalScroll);
+  }
 
-    function spawn() {
-      flakes = [];
-      var count = W > 600 ? 150 : 110;
-      for (var i = 0; i < count; i++) {
-        var big = Math.random() < 0.18;
-        flakes.push({
-          x: Math.random() * W, y: Math.random() * H,
-          r: big ? 4 + Math.random() * 4 : 0.8 + Math.random() * 2.2,
-          s: big ? 1.2 + Math.random() * 1.2 : 0.5 + Math.random() * 1.1,
-          a: big ? 0.4 + Math.random() * 0.3 : 0.35 + Math.random() * 0.55,
-          ph: Math.random() * Math.PI * 2,
-          sw: 0.3 + Math.random() * 0.9,
-          big: big
-        });
-      }
+  function bindEnhancedUI() {
+    // iPhone 输入时收起底栏，避免键盘上方的按钮挡住输入区域。
+    function syncEditing() {
+      var focused = document.activeElement;
+      document.body.classList.toggle("is-editing", !!(focused && focused.tagName === "INPUT" && focused.type !== "range"));
     }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < flakes.length; i++) {
-        var f = flakes[i];
-        ctx.globalAlpha = f.a;
-        if (f.big) {
-          ctx.drawImage(sprite, f.x - f.r * 2.2, f.y - f.r * 2.2, f.r * 4.4, f.r * 4.4);
-        } else {
-          ctx.fillStyle = "#fff";
-          ctx.beginPath();
-          ctx.arc(f.x, f.y, f.r, 0, 6.2832);
-          ctx.fill();
-        }
-      }
-      ctx.globalAlpha = 1;
-    }
-
-    function frame() {
-      if (!running) return;
-      t += 0.016;
-      for (var i = 0; i < flakes.length; i++) {
-        var f = flakes[i];
-        f.y += f.s * (1 + f.r * 0.18);
-        f.x += Math.sin(t * 1.3 + f.ph) * f.sw * 0.45 - 0.12;
-        if (f.y > H + 8) { f.y = -8; f.x = Math.random() * W; }
-        if (f.x < -10) f.x = W + 8; else if (f.x > W + 10) f.x = -8;
-      }
-      draw();
-      rafId = requestAnimationFrame(frame);
-    }
-
-    function start() {
-      if (!running && !reduced) { running = true; rafId = requestAnimationFrame(frame); }
-    }
-    function stop() { running = false; cancelAnimationFrame(rafId); }
-
-    resize();
-    spawn();
-    if (reduced) { draw(); return; }
-    start();
-
-    window.addEventListener("resize", function () { resize(); spawn(); if (reduced) draw(); });
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) stop(); else start();
+    document.addEventListener("focusin", syncEditing);
+    document.addEventListener("focusout", function () { setTimeout(syncEditing, 0); });
+    $("modelSearch").addEventListener("input", function () { renderModelSelect(true); });
+    $("clearSearch").addEventListener("click", function () {
+      $("modelSearch").value = "";
+      renderModelSelect(true);
+      $("modelSearch").focus();
     });
+    $("changeBoard").addEventListener("click", function () { openModal($("modelPicker")); });
+    $("modelClose").addEventListener("click", closeModal);
+    $("confirmBoard").addEventListener("click", closeModal);
+    $("modelPicker").addEventListener("click", function (e) { if (e.target === this) closeModal(); });
+    $("shareClose").addEventListener("click", closeModal);
+    $("sharePreview").addEventListener("click", function (e) { if (e.target === this) closeModal(); });
+    document.body.addEventListener("click", syncSelectionUI);
+    document.body.addEventListener("change", syncSelectionUI);
+    document.addEventListener("keydown", function (e) {
+      if (!activeModal) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        if (activeModal.id === "quizView") closeQuiz(); else closeModal();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      var nodes = activeModal.querySelectorAll("button:not([disabled]), input, select, summary, [tabindex='0']");
+      var focusable = Array.prototype.filter.call(nodes, function (n) { return n.offsetWidth || n.offsetHeight; });
+      if (!focusable.length) { e.preventDefault(); return; }
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      var outside = focusable.indexOf(document.activeElement) === -1;
+      if (e.shiftKey && (document.activeElement === first || outside)) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (document.activeElement === last || outside)) { e.preventDefault(); first.focus(); }
+    });
+    syncSelectionUI();
+  }
+
+  // Animate only compositor-friendly properties. Old webviews and reduced motion switch immediately.
+  var screenBusy = false;
+  function transitionScreen(outgoing, update) {
+    if (screenBusy) return;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !outgoing.animate) { update(); return; }
+    screenBusy = true;
+    outgoing.style.pointerEvents = "none";
+    var anim = outgoing.animate([{ opacity: 1, transform: "translateY(0)" },
+      { opacity: 0, transform: "translateY(-10px)" }], { duration: 160, easing: "ease-in", fill: "forwards" });
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      anim.cancel();
+      outgoing.style.pointerEvents = "";
+      screenBusy = false;
+      update();
+    }
+    anim.onfinish = finish;
+    // A backgrounded webview can suspend animation callbacks.
+    setTimeout(finish, 240);
   }
 
   /* ---------- 事件绑定与启动 ---------- */
   function init() {
-    initSnow();
     renderModelSelect();
     buildBootSelect();
     buildStanceSelects();
@@ -1926,18 +2004,26 @@
     });
 
     $("matchBtn").addEventListener("click", function () {
-      rerunMatch();
+      formScroll = window.pageYOffset;
+      transitionScreen($("mainContent"), rerunMatch);
     });
 
     $("backBtn").addEventListener("click", function () {
-      document.body.classList.remove("in-result");
-      $("resultView").classList.remove("is-show");
-      window.scrollTo(0, 0);
+      transitionScreen($("resultView"), function () {
+        document.body.classList.remove("in-result");
+        $("resultView").classList.remove("is-show");
+        $("mainContent").classList.remove("is-returning");
+        void $("mainContent").offsetWidth;
+        $("mainContent").classList.add("is-returning");
+        $("matchBtn").focus();
+        window.scrollTo(0, formScroll);
+      });
     });
 
     $("saveBtn").addEventListener("click", saveCard);
 
     initQuiz();
+    bindEnhancedUI();
   }
 
   if (document.readyState === "loading") {
