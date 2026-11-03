@@ -91,3 +91,43 @@ final result: passed
 - 三色流动：保留均衡蓝（#38bdf8）、灵活绿（#34d399）、稳定红（#fb7185）三套先锋主题，在黑曜石座舱中实现自发光能量流动；
 - 物料交付：已生成 7 张超清 WebP/JPG 素材于 materials/ 目录（宽屏背景 3 张、9:16 小红书分享底图 3 张、等高线 Banner 1 张），并在 materials/previews/ 提供全套 4 屏联动真机渲染稿；
 - 交接就绪：产出 docs/AI_HANDOFF_GUIDE.md 与 docs/color_style_specification.md，记录完整的技术红线、CSS 变量令牌与实施步骤。
+
+
+## 2026-11-03 · Obsidian implementation, complete content retained
+
+Source of truth: astra `72b6e22` for all content and interactions; user-approved blue/green/red mountain motion prototype for visual treatment. Reviewed `images/blue-main.png` from the November 3 visual exploration alongside the real 390px page and complete result capture. The concept simplified fields and specifications; the user's latest instruction explicitly requires the production page to retain them. This deliberate content/layout difference takes precedence over pixel cloning.
+
+### Visual review and evidence
+
+Real browser captures live in `tmp/obsidian-qa/` (local QA artifacts, not shipped):
+
+- `before-home.jpg`: original full page baseline.
+- `blue-home-full.jpg`, `green-home-full.jpg`, `red-home-full.jpg`: complete forms, preserving every field, five stance presets, seven riding styles, explanatory copy and footer.
+- `blue-result-full.jpg`: full result including manual size selector, stance, matching evidence, official specifications and alternatives.
+- `blue-share.jpg`: share preview retaining the existing complete card.
+- `red-quiz-audience.jpg`, `red-quiz-weight.jpg`, `red-adult-result-full.jpg`, `child-result-full.jpg`: questionnaire and recommendation evidence.
+- `long-model-320-full.jpg`, `result-320-full.jpg`, `result-430.jpg`, `desktop.jpg`: responsive review.
+- `final-home-390.jpg`: final default hero and form entry.
+
+The original mock's compressed data fields and collapsed stance/specification areas were intentionally rejected. Real model names, real board aspect ratios, all help text and natural vertical scrolling remain. The existing card artwork is intentionally retained to avoid dropping baked-in headings or card details. Warm gold actions and size numerals, theme-colored active states, dark surfaces, bright readable labels, scenic depth and diffuse light are implemented across the actual views.
+
+Fixed during QA: rotating hero extended 8px beyond the mobile viewport; gave the decorative hero its own clipping boundary and adjusted board inset. The outer page remains unclipped so sticky result actions still work. Development browser reused old CSS; versioned the stylesheet URL and reloaded to verify the actual new rules. All continuous animation now uses opacity/transform, including the button light sweep.
+
+### Content and functional checks
+
+- Exact preservation check: all 88 original IDs/attributes, 51 controls/expansion states, 101 body text segments. Main business JS and complete data unchanged.
+- Main sample: Howler, 175cm / 70kg / EU45, +15/-15. Initial 155: waist 25.4cm, overhang 2.9cm. Manual 157W: waist 26.4cm, overhang 1.9cm; explanation, table and bars update together.
+- All five stance presets set their original angle pairs; right-foot-first reverses field order. Empty shoe/angles do not display stance estimates. Numeric 180/80 inputs synchronize their sliders.
+- Picker: 46 boards, women's filter 12; search empty state disables confirmation; clear/filter restores options; full official description/specification disclosures remain open. Long Ultralight Hovercraft 2.0 Split title and change-board action fit at 320px.
+- Keyboard: details summary → confirm → close focus cycle; Escape closes picker and restores change-board focus.
+- Adult: all 8 questions including options and progress verified; 170–179cm / 70–79kg / EU45 / intermediate / freeride / stable / lift leads to Flagship 162W. Alternative switches to Flagship Pro; return fills 175cm / 75kg / EU45 with stable preference.
+- Child: all 5 questions, previous-answer retention; 130–139cm / 30–34kg / EU33 / linked turns / piste leads to Youth Prodigy. Return fills 135cm / 32kg / EU33.
+- Browser share image natural dimensions 1500×2360. Save/preview/close controls work; unchanged native bridge implementation retained.
+- Widths 320, 390, 430 and 1280: document scroll width equals viewport width. Result dock remains visible; specifications and long descriptions remain naturally scrollable.
+- Browser warning/error log empty. Motion unit checks cover pause/resume, legacy media-query listener, reduced-motion precedence, background suspend/resume with pause retained, pointer-frame cancellation and no touch parallax.
+
+### Independent review and boundaries
+
+Read-only independent code review approved with no actionable regressions. Accepted review boundaries: manual pause stops continuous decorative motion, while user-triggered theme/view transitions remain; the system reduced-motion setting disables both. Native Android 8.1 / Rednote bridges, true keyboard/safe areas and device frame rates require device testing; no device performance claim made. Picker thumbnail `bpPreviewImg` was already unassigned in the baseline and remains unchanged; no previously visible information was removed. Its existing textual specifications, official description and model selection remain functional.
+
+Final package and static check results are recorded in `tmp/obsidian-qa/verification.txt`. Package contains only local runtime assets. Final result: passed (browser and static checks; native device verification not performed).

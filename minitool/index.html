@@ -5,15 +5,16 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>26-27 Jones 雪板尺码选择助手</title>
-  <meta name="theme-color" content="#edf5fb" />
+  <meta name="theme-color" content="#080c11" />
   <meta name="description" content="根据 Jones 26–27 官方规格，结合体重、鞋码与滑行偏好，找到适合你的雪板尺码。" />
-  <link rel="stylesheet" href="./assets/style.css" />
+  <link rel="stylesheet" href="./assets/style.css?v=obsidian-3" />
 </head>
 <body class="theme-bal">
 
+  <div class="mountain-atmosphere" aria-hidden="true"><span class="scene-layer scene-blue"></span><span class="scene-layer scene-green"></span><span class="scene-layer scene-red"></span><span class="ambient-light"></span></div>
   <a class="skip-link" href="#modelSection">跳到选板工具</a>
   <div class="page" id="page">
-    <header class="site-header"><span class="brand-name">JONES</span><h1>雪板尺码助手</h1></header>
+    <header class="site-header"><span class="brand-name">JONES</span><h1>雪板尺码助手</h1><button class="motion-toggle" id="motionToggle" type="button" aria-label="光影动效" aria-pressed="false" hidden>动效开</button></header>
     <main class="content" id="mainContent">
       <section class="model-card" id="modelSection" aria-label="当前雪板">
         <div class="alpine-scene" aria-hidden="true"></div>
@@ -227,5 +228,6 @@
 
   <script src="./assets/data.js"></script>
   <script src="./assets/main.js"></script>
+  <script src="./assets/motion.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """打包 minitool -> dist/jones-26-27-size-helper.zip
 
-包含: index.html + assets/{data,main,style} + assets/alpine-day.webp + assets/bg-*.webp + assets/boards/*.webp
+包含: index.html + assets/{data,main,motion,style} + assets/hero-*.webp + assets/bg-*.webp + assets/boards/*.webp
 不含: card_test.html（本地调试页）
 """
 import zipfile
@@ -16,8 +16,9 @@ files = [
     SRC / "assets" / "data.js",
     SRC / "assets" / "main.js",
     SRC / "assets" / "style.css",
-    SRC / "assets" / "alpine-day.webp",
+    SRC / "assets" / "motion.js",
 ]
+files += [SRC / "assets" / ("hero-" + color + ".webp") for color in ("blue", "green", "red")]
 files += sorted((SRC / "assets").glob("bg-*.webp"))
 files += sorted((SRC / "assets" / "boards").glob("*.webp"))
 
