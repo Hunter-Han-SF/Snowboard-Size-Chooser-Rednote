@@ -821,23 +821,11 @@
     $("resultView").classList.add("is-show");
     window.scrollTo(0, 0);
 
-    // 站姿出界检测
+    // 站姿出界检测（DOM 条形图，文字原生渲染避免 Canvas 缩放发虚）
     var stanceBox = $("rStance");
     if (r.stanceInfo) {
       stanceBox.style.display = "";
-      drawStanceDiagram($("stanceCanvas"), r);
-      var sv = $("stanceVerdict");
-      sv.innerHTML = "";
-      sv.appendChild(document.createTextNode(
-        (r.stanceDir === "goofy" ? "右脚前 · " : "左脚前 · ") +
-        "前脚 " + fmtAngle(r.stanceInfo.fa) + " · 后脚 " + fmtAngle(r.stanceInfo.ba) +
-        (r.stanceInfo.oneWay ? "（一顺站姿）" : "") +
-        "：最大出界 " + fmt(r.stanceInfo.fOh) + " / " + fmt(r.stanceInfo.bOh) +
-        " cm（按板腰最窄处；脚位板宽处约 " + fmt(r.stanceInfo.fOhPos) + " / " + fmt(r.stanceInfo.bOhPos) + " cm）— "));
-      var vb = document.createElement("b");
-      vb.className = r.stanceInfo.verdict.cls;
-      vb.textContent = r.stanceInfo.verdict.text;
-      sv.appendChild(vb);
+      renderStancePanel(r);
     } else {
       stanceBox.style.display = "none";
     }
@@ -946,146 +934,110 @@
     table.appendChild(tr);
   }
 
-  /* ---------- 站姿出界检测（条形图数据展示） ---------- */
-  function drawStanceDiagram(canvas, r) {
+  /* ---------- 站姿出界检测（DOM 渲染） ---------- */
+  var RCS_STATUS = {
+    ok: "边刃干净",
+    warn: "轻微蹭雪",
+    bad: "建议加宽"
+  };
+
+  function stanceFootState(oh) {
+    if (oh > 0.15) return { cls: "bad", label: "出界 " + fmt(oh) + " cm", txt: "最大出界 " + fmt(oh) + " cm" };
+    if (oh > -0.5) return { cls: "warn", label: "贴边", txt: "贴边" };
+    return { cls: "ok", label: "余量 " + fmt(-oh) + " cm", txt: "余量 " + fmt(-oh) + " cm" };
+  }
+
+  function renderStancePanel(r) {
     var s = r.best.s, si = r.stanceInfo;
-    var W = 660, H = 226;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    canvas.style.height = Math.round((canvas.clientWidth || W) * H / W) + "px";
-    var ctx = canvas.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-
     var d = bootDims(r.EU);
-    var COL = {
-      ok: "#8ee6bd", warn: "#f4c34d", bad: "#ff9d9d",
-      ink: "rgba(255,255,255,0.92)", sub: "rgba(255,255,255,0.58)",
-      faint: "rgba(255,255,255,0.36)"
-    };
-
     function projOf(a) {
       var rad = Math.abs(a) * Math.PI / 180;
       return d.len * Math.cos(rad) + d.wid * Math.sin(rad);
     }
-    function footState(oh) {
-      if (oh > 0.15) return { cls: "bad", txt: "最大出界 " + fmt(oh) + " cm" };
-      if (oh > -0.5) return { cls: "warn", txt: "贴边" };
-      return { cls: "ok", txt: "余量 " + fmt(-oh) + " cm" };
-    }
-
     var feet = [
       { name: "前脚", a: si.fa, oh: si.fOh, w: si.wF, ohPos: si.fOhPos },
       { name: "后脚", a: si.ba, oh: si.bOh, w: si.wB, ohPos: si.bOhPos }
     ];
     var projs = feet.map(function (f) { return projOf(f.a); });
-
-    // 横轴比例尺：覆盖板腰、脚位板宽与两脚投影，留 12% 余量
+    // 双脚共用同一比例尺，条形长度可直接对比
     var scaleMax = Math.ceil(Math.max(s.waist, si.wF, si.wB, projs[0], projs[1]) * 1.12 * 2) / 2;
-    var gx = 168, gw = 300;
-    function pxOf(v) { return gx + gw * v / scaleMax; }
+    function pct(v) { return Math.max(0, Math.min(100, v / scaleMax * 100)); }
 
+    var st = $("rcsStatus");
+    st.className = "rcs-status " + si.verdict.cls;
+    st.textContent = RCS_STATUS[si.verdict.cls];
+
+    var rows = $("rcsRows");
+    rows.innerHTML = "";
     feet.forEach(function (f, i) {
-      var y = 58 + i * 80;
-      var st = footState(f.oh);
+      var fs = stanceFootState(f.oh);
       var proj = projs[i];
 
-      // 脚名
-      ctx.textAlign = "left";
-      ctx.font = "700 17px sans-serif";
-      ctx.fillStyle = COL.ink;
-      ctx.fillText(f.name, 18, y + 6);
+      var row = document.createElement("div");
+      row.className = "rcs-row " + fs.cls;
 
-      // 角度胶囊
-      var at = fmtAngle(f.a);
-      ctx.font = "600 14px sans-serif";
-      var aw = ctx.measureText(at).width + 26;
-      roundRect(ctx, 68, y - 12, aw, 25, 12);
-      ctx.fillStyle = "rgba(255,255,255,0.10)";
-      ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.22)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
-      ctx.fillText(at, 81, y + 5);
+      var top = document.createElement("div");
+      top.className = "rcs-top";
+      var name = document.createElement("span");
+      name.className = "rcs-foot";
+      name.appendChild(document.createTextNode(f.name + " "));
+      var ang = document.createElement("b");
+      ang.textContent = fmtAngle(f.a);
+      name.appendChild(ang);
+      top.appendChild(name);
+      var state = document.createElement("span");
+      state.className = "rcs-state";
+      state.textContent = fs.label;
+      top.appendChild(state);
+      row.appendChild(top);
 
-      // 轨道
-      roundRect(ctx, gx, y - 8, gw, 16, 8);
-      ctx.fillStyle = "rgba(255,255,255,0.09)";
-      ctx.fill();
-
-      // 板腰阈值线（官方口径：最大出界基准）
-      ctx.strokeStyle = "rgba(255,255,255,0.60)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(pxOf(s.waist), y - 17);
-      ctx.lineTo(pxOf(s.waist), y + 17);
-      ctx.stroke();
-      ctx.font = "500 12px sans-serif";
-      ctx.fillStyle = COL.faint;
-      ctx.textAlign = "center";
-      ctx.fillText("板腰 " + fmt(s.waist), pxOf(s.waist), y - 23);
-
-      // 靴子投影条：板腰内绿色，越线部分红色
-      var inW = Math.min(proj, s.waist) / scaleMax * gw;
-      var overW = Math.max(0, proj - s.waist) / scaleMax * gw;
-      if (inW > 1) {
-        roundRect(ctx, gx, y - 8, inW, 16, 8);
-        ctx.fillStyle = (st.cls === "ok") ? "#5ecf9f" : "rgba(142,230,189,0.60)";
-        ctx.fill();
+      // 轨道 0 → scaleMax：绿色 = 板腰内投影，红色 = 越过板腰的出界，竖线 = 板腰阈值
+      var track = document.createElement("div");
+      track.className = "rcs-track";
+      var fill = document.createElement("i");
+      fill.className = "rcs-fill";
+      fill.style.width = pct(Math.min(proj, s.waist)) + "%";
+      track.appendChild(fill);
+      var overW = pct(Math.max(0, proj - s.waist));
+      if (overW > 0.4) {
+        var over = document.createElement("i");
+        over.className = "rcs-over";
+        over.style.left = pct(s.waist) + "%";
+        over.style.width = overW + "%";
+        track.appendChild(over);
       }
-      if (overW > 1) {
-        roundRect(ctx, pxOf(s.waist) - 1, y - 8, overW + 1, 16, 3);
-        ctx.fillStyle = "#ff8f8a";
-        ctx.fill();
-      }
+      var mark = document.createElement("i");
+      mark.className = "rcs-mark";
+      mark.style.left = pct(s.waist) + "%";
+      var markLbl = document.createElement("span");
+      markLbl.className = "rcs-mark-lbl" + (pct(s.waist) > 76 ? " right-anchored" : "");
+      markLbl.textContent = "板腰 " + fmt(s.waist);
+      mark.appendChild(markLbl);
+      track.appendChild(mark);
+      row.appendChild(track);
 
-      // 右侧数值 + 状态 + 脚位板宽参考
-      ctx.textAlign = "left";
-      ctx.font = "500 13.5px sans-serif";
-      ctx.fillStyle = COL.sub;
-      ctx.fillText("靴子投影 " + fmt(proj) + " cm", 498, y - 1);
-      ctx.font = "700 15px sans-serif";
-      ctx.fillStyle = COL[st.cls];
-      ctx.fillText(st.txt, 498, y + 21);
-      ctx.font = "400 11.5px sans-serif";
-      ctx.fillStyle = COL.faint;
-      var posTxt = "脚位板宽 " + fmt(f.w) + " · " +
-        (f.ohPos > 0.15 ? "出界 " + fmt(f.ohPos) : (f.ohPos > -0.5 ? "贴边" : "余量 " + fmt(-f.ohPos))) + " cm";
-      ctx.fillText(posTxt, 498, y + 40);
+      var meta = document.createElement("div");
+      meta.className = "rcs-meta";
+      var m1 = document.createElement("span");
+      m1.textContent = "靴长投影 " + fmt(proj) + " cm";
+      var m2 = document.createElement("span");
+      m2.textContent = "脚位板宽 " + fmt(f.w) + " cm（" + (f.ohPos > 0.15 ? "出界 " + fmt(f.ohPos) : (f.ohPos > -0.5 ? "贴边" : "余量 " + fmt(-f.ohPos))) + "）";
+      meta.appendChild(m1);
+      meta.appendChild(m2);
+      row.appendChild(meta);
+
+      rows.appendChild(row);
     });
 
-    // 刻度轴（两行下方）
-    var ay = 182;
-    var step = scaleMax > 26 ? 10 : 5;
-    ctx.strokeStyle = "rgba(255,255,255,0.25)";
-    ctx.lineWidth = 1;
-    for (var v = 0; v <= scaleMax + 0.01; v += step) {
-      var x = pxOf(v);
-      ctx.beginPath();
-      ctx.moveTo(x, ay);
-      ctx.lineTo(x, ay + 5);
-      ctx.stroke();
-      ctx.textAlign = "center";
-      ctx.font = "400 11px sans-serif";
-      ctx.fillStyle = COL.faint;
-      ctx.fillText(String(v), x, ay + 18);
-    }
-    ctx.beginPath();
-    ctx.moveTo(gx, ay);
-    ctx.lineTo(gx + gw, ay);
-    ctx.stroke();
+    var summary = document.createElement("div");
+    summary.className = "rcs-summary";
+    summary.innerHTML = (r.stanceDir === "goofy" ? "右脚前" : "左脚前") + " · 前脚 " + fmtAngle(si.fa) + " / 后脚 " + fmtAngle(si.ba) + (si.oneWay ? "（一顺）" : "") + "，最大出界 <b>" + fmt(Math.max(si.fOh, si.bOh)) + " cm</b>（按板腰最窄处）。";
+    rows.appendChild(summary);
 
-    // 底注
-    ctx.font = "400 12px sans-serif";
-    ctx.fillStyle = COL.faint;
-    ctx.textAlign = "left";
-    ctx.fillText("出界按板腰（板最窄处）计算 = 最大情况；脚位板宽为固定器孔位处实际宽度", 18, H - 10);
-    if (si.oneWay) {
-      ctx.textAlign = "right";
-      ctx.fillText("一顺站姿 · 双脚同向板头", W - 18, H - 10);
-    }
-    ctx.textAlign = "left";
+    var hint = document.createElement("p");
+    hint.className = "rcs-hint";
+    hint.textContent = "注：基于靴底投影与板腰估算，实际受固定器底座垫高、立刃角度与雪质综合影响。";
+    rows.appendChild(hint);
   }
 
   /* ---------- 结果卡片（Canvas）与保存 ---------- */

@@ -54,11 +54,22 @@
 │   ├── gen_specs_md.py        # 生成 Markdown 规格总表
 │   ├── build_data.py          # data/*.json + 文案 -> minitool/assets/data.js
 │   └── dev_server.py          # 本地开发服务器（SSE 热刷新）
+├── materials/                 # 高清视觉物料（黑曜石暗夜座舱风全套 WebP/JPG 素材）
+│   ├── hero_obsidian_*.webp   # 蓝/绿/红三套先锋主题 Hero 卡片宽屏背景
+│   ├── share_backdrop_*.webp  # 蓝/绿/红 9:16 小红书社交分享卡超清底图
+│   ├── topographic_carbon_banner.webp # 等高线钛金科技感 Banner
+│   └── previews/              # 全套 4 屏联动与三色主题真机概念预览图
+├── docs/                      # 架构文档、设计规范与交接手册
+│   ├── AI_HANDOFF_GUIDE.md    # 跨机器 / AI 接力开发完整交接指南
+│   ├── color_style_specification.md # 黑曜石暗夜座舱颜色风格标准与设计令牌
+│   └── frontend-upgrade.md    # 前端版本演进与验证记录
 ├── dist/
 │   └── jones-26-27-size-helper.zip  # 上传小红书的小工具压缩包（约 2.0 MiB）
 ├── card_v3.png                # 分享卡片样式预览
 └── LICENSE                    # MIT License
-```
+`
+
+> **📌 换电脑继续开发？** 请先查阅 [docs/AI_HANDOFF_GUIDE.md](docs/AI_HANDOFF_GUIDE.md)，内含完整的环境要求、设计规范、物料清单与实施路线。``
 
 ## 🚀 本地开发
 

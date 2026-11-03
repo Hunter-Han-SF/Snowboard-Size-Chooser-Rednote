@@ -54,3 +54,40 @@ Resolved P1: hidden shoe/angle input affordances. Resolved P1: flat white result
 Verified: all form controls visible without details expansion; full stance computation; manual 159→158W recalculates 1.6→0.6cm; 320/390/430px no horizontal overflow; sticky controls at viewport bottom; main.js equality and data check. Earlier device/bridge testing limits still apply.
 
 final result: passed
+
+## Polish pass · 2026-10-28 (v2.1)
+
+在 ASTRA 版本基础上的系统性整理，主 JS 算法与交互逻辑未改动（main.js 仅验证未修改）。
+
+- style.css 整体重写：清除四层补丁叠加（同一选择器多次定义互相覆盖），改为单一组织结构；建立 6 档圆角令牌（6/10/14/18/24px + 胶囊），输入框 14 / chips 10 / 主卡 20 / 弹层 24 / 分段控件与徽章胶囊化，全站圆角统一。
+- 排版修复：站姿角度标题行重排（主标签 + 小注 + 右侧胶囊切换，360px 以下切换条整行铺开）；结果页雪板图下移避开 YOUR FIT 标签重叠；结果页底部改为悬浮玻璃操作坞（sticky + 毛玻璃）。
+- 缺陷修复：恢复 body.is-editing 收起底部操作坞规则（ASTRA 重写时丢失）；修复问卷结果页 quiz-actions 与 result-actions 双 sticky 重叠导致的按钮误触（elementFromPoint 命中验证）。
+- 回归验证（puppeteer-core + 本机 Chrome，tmp/qa2）：19 项交互链路全部通过（选板/搜索/匹配/手动改码/主题切换/问卷全流程/分享卡生成）；320/390/430px 九个视图 docOverflow=0、元素级横向溢出 0；无 JS 报错（仅本地服务器 favicon 404，与产物无关）。
+
+## Stance panel rework · 2026-10-28 (v2.2)
+
+站姿出界检测从 Canvas 改为 DOM 渲染。动机：Canvas 逻辑宽 660px 显示在约 310px 面板内，全部文字被等比缩至约 0.47 倍（最小字号实际 ~6px），是可读性差的主因。
+
+- 新结构：面板头（标题 + 状态徽标 边刃干净/轻微蹭雪/建议加宽）→ 每脚一行（脚名+角度、状态值、共用比例尺的圆角条形图：绿色板腰内投影 + 红色出界段 + 白色板腰阈值线及标签、参考数值行）→ 结论卡（参数行/数值行/彩色判定行三层层级）→ 底注。
+- 出界口径不变：阈值判定（>0.15 出界 / >-0.5 贴边）与数值来源（fOh/bOh/wF/wB/fOhPos/bOhPos）沿用原逻辑；删除 drawStanceDiagram（约 140 行），新增 renderStancePanel。阈值标签在 >76% 位置时右锚定防溢出。
+- 验证：19 项交互回归通过（stanceRows=2、状态徽标随场景变化）；warn（EU44 +15/-15）与 bad（EU49，红色出界段 + 建议加宽）双场景视觉审查通过；320/390/430px 溢出审计全 0。
+
+## Picker sheet rework · 2026-10-28 (v2.3)
+
+用户反馈「选择你的雪板」弹层不如之前好看。新旧对比定位到三处回归：搜索框与型号下拉同为灰底圆角框同质化（主次不分）、评分条轨道对比度不足（亮点数据被埋没）、纯文字预览区缺少视觉锚点。
+
+- 搜索框升级为主输入：白底 + 边框 + 放大镜图标（SVG data URI，无外部请求）；型号下拉弱化为次级：浅底无边框 44px/14px。
+- 新增 `.bp-preview` 组件：雪板缩略图（max-height 148px，比例不变形）+ 可选尺码/标语/标签左图右文布局；缩略图与首页大图在 renderModelMeta 中同步，无图型号自动隐藏占位。
+- 评分条：轨道 4px→6px、底色 line→ice、标签/数值加粗右对齐。
+- 板型、硬度与官方介绍 details 默认展开（open 属性）。
+- 验证：弹层视觉审查通过（主次区分/缩略图/评分条/详情区均无问题）；溢出审计 0；19 项交互回归全过。
+- 追加（用户反馈"两边蹭到边缘"）：实测弹层内容左右边距原本为 20/22/24px 三种不一致，统一为 26px（sheet 左右 padding 22→26，picker-content 去掉 2px 内补），chips 可见缘与标题/搜索/CTA 完全对齐；复测三档视口（390/520/760）边距一致，视觉审查确认贴边感消除。
+- 追加（用户反馈"点击搜索框/下拉框后两侧出界"）：真机 in-app browser 中 iOS 对字号 <16px 的可聚焦控件会整页自动放大，放大后两侧内容切出屏幕（桌面 Chrome 复现不了）。根因是本轮把 search-input（15px）与 select（15/14px）从 ASTRA 版的 16px 下调所致。修复：所有 select 与 search-input 字号恢复 16px（次级下拉仅保留浅底无边框作层次，不再用小字号）。回归 19 项通过，溢出审计 0。
+
+## Obsidian cockpit & visual materials · 2026-11-03 (v2.4)
+
+针对小红书移动端高级感重构，确立【黑曜石暗夜座舱风 (Obsidian Alpine)】视觉标准并完成全套高清物料生产：
+- 风格确立：矿物黑曜石冷暗底（#080c11）+ 碳素烟熏毛玻璃卡片（blur 20px）+ 钛金属高光线，搭配贯穿全场的香槟金（#f1d29a）金属压舱色；
+- 三色流动：保留均衡蓝（#38bdf8）、灵活绿（#34d399）、稳定红（#fb7185）三套先锋主题，在黑曜石座舱中实现自发光能量流动；
+- 物料交付：已生成 7 张超清 WebP/JPG 素材于 materials/ 目录（宽屏背景 3 张、9:16 小红书分享底图 3 张、等高线 Banner 1 张），并在 materials/previews/ 提供全套 4 屏联动真机渲染稿；
+- 交接就绪：产出 docs/AI_HANDOFF_GUIDE.md 与 docs/color_style_specification.md，记录完整的技术红线、CSS 变量令牌与实施步骤。

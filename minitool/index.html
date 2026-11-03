@@ -51,8 +51,8 @@
 
         <section class="stance-settings" aria-label="站姿与角度">
         <div class="field">
-          <div class="field-label">
-            <span>站姿角度（可选）</span>
+          <div class="field-label stance-head">
+            <span class="stance-name">站姿角度<span class="step-optional">（可选）</span></span>
             <div class="dir-toggle" id="stanceDir">
               <button type="button" class="dt-btn is-on" data-dir="regular">左脚前</button>
               <button type="button" class="dt-btn" data-dir="goofy">右脚前</button>
@@ -128,9 +128,13 @@
           <div class="rc-size-pick" id="rSizePick"></div>
 
           <div class="rc-stance" id="rStance">
-            <h2 class="rc-stance-title">站姿出界检测</h2>
-            <canvas id="stanceCanvas"></canvas>
+            <div class="rcs-head">
+              <h2 class="rc-stance-title">站姿出界检测</h2>
+              <span class="rcs-status" id="rcsStatus"></span>
+            </div>
+            <div class="rcs-rows" id="rcsRows"></div>
             <p class="rc-stance-verdict" id="stanceVerdict"></p>
+            <p class="rcs-note">出界按板腰（板最窄处）计算 = 最大情况；脚位板宽为固定器孔位处实际宽度</p>
           </div>
 
           <section class="result-evidence"><h2 class="result-section-title">匹配依据</h2><div class="rc-match" id="rMatchRows"></div></section>
@@ -194,10 +198,10 @@
         <div class="select-wrap">
           <select id="modelSelect" class="select"></select>
         </div>
-        <p class="model-meta" id="modelMeta" role="status"></p>
+        <div class="bp-preview"><div class="bp-preview-img"><img id="bpPreviewImg" alt="" decoding="async" /></div><div class="bp-preview-main"><p class="model-meta" id="modelMeta" role="status"></p>
 
-<p class="bp-pitch" id="bpPitch"></p><div class="bp-tags" id="bpTags"></div><div class="bp-scores" id="bpScores"></div>
-          <details class="board-details"><summary>板型、硬度与官方介绍</summary><div class="bp-specs" id="bpSpecs"></div><p class="bp-desc" id="bpDesc"></p><div class="bp-bullets" id="bpBullets"></div></details></div><button class="cta" id="confirmBoard" type="button">就选这块雪板 <span aria-hidden="true">→</span></button></div></section>
+<p class="bp-pitch" id="bpPitch"></p><div class="bp-tags" id="bpTags"></div></div></div><div class="bp-scores" id="bpScores"></div>
+          <details class="board-details" open><summary>板型、硬度与官方介绍</summary><div class="bp-specs" id="bpSpecs"></div><p class="bp-desc" id="bpDesc"></p><div class="bp-bullets" id="bpBullets"></div></details></div><button class="cta" id="confirmBoard" type="button">就选这块雪板 <span aria-hidden="true">→</span></button></div></section>
 
   <!-- 问卷模式：全屏覆盖层 -->
   <section class="quiz" id="quizView" role="dialog" aria-modal="true" aria-label="选板小测试" tabindex="-1">
