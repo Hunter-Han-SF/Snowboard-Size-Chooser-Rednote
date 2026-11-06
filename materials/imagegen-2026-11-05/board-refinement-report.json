@@ -1,0 +1,554 @@
+[
+  {
+    "name": "flagship-junior",
+    "size": [
+      448,
+      2162
+    ],
+    "alpha_levels": 128,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1043449,
+    "webp_bytes": 109910
+  },
+  {
+    "name": "freecarver-6000s",
+    "size": [
+      470,
+      2148
+    ],
+    "alpha_levels": 122,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 766691,
+    "webp_bytes": 57078
+  },
+  {
+    "name": "freecarver-9000s",
+    "size": [
+      455,
+      2141
+    ],
+    "alpha_levels": 116,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 789645,
+    "webp_bytes": 71488
+  },
+  {
+    "name": "hovercraft-2-0",
+    "size": [
+      452,
+      2156
+    ],
+    "alpha_levels": 118,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 864417,
+    "webp_bytes": 44398
+  },
+  {
+    "name": "hovercraft-2-0-split",
+    "size": [
+      447,
+      2152
+    ],
+    "alpha_levels": 118,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 746878,
+    "webp_bytes": 41672
+  },
+  {
+    "name": "kids-prodigy-package",
+    "size": [
+      557,
+      2164
+    ],
+    "alpha_levels": 126,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1342339,
+    "webp_bytes": 183696
+  },
+  {
+    "name": "mens-aviator-2-0",
+    "size": [
+      430,
+      2152
+    ],
+    "alpha_levels": 119,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1334640,
+    "webp_bytes": 227970
+  },
+  {
+    "name": "mens-flagship",
+    "size": [
+      423,
+      2164
+    ],
+    "alpha_levels": 123,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1083224,
+    "webp_bytes": 131670
+  },
+  {
+    "name": "mens-flagship-pro",
+    "size": [
+      418,
+      2170
+    ],
+    "alpha_levels": 127,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 756196,
+    "webp_bytes": 30318
+  },
+  {
+    "name": "mens-frontier-2-0",
+    "size": [
+      429,
+      2151
+    ],
+    "alpha_levels": 123,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 889429,
+    "webp_bytes": 57598
+  },
+  {
+    "name": "mens-frontier-2-0-split",
+    "size": [
+      432,
+      2159
+    ],
+    "alpha_levels": 126,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 887346,
+    "webp_bytes": 51526
+  },
+  {
+    "name": "mens-howler",
+    "size": [
+      434,
+      2154
+    ],
+    "alpha_levels": 116,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1018086,
+    "webp_bytes": 59708
+  },
+  {
+    "name": "mens-howler-split",
+    "size": [
+      426,
+      2147
+    ],
+    "alpha_levels": 119,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 947143,
+    "webp_bytes": 61820
+  },
+  {
+    "name": "mens-mountain-twin",
+    "size": [
+      430,
+      2150
+    ],
+    "alpha_levels": 125,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 841758,
+    "webp_bytes": 50760
+  },
+  {
+    "name": "mens-mountain-twin-pro",
+    "size": [
+      426,
+      2157
+    ],
+    "alpha_levels": 118,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 827631,
+    "webp_bytes": 49736
+  },
+  {
+    "name": "mens-rally-cat",
+    "size": [
+      428,
+      2156
+    ],
+    "alpha_levels": 125,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1093351,
+    "webp_bytes": 118120
+  },
+  {
+    "name": "mens-solution",
+    "size": [
+      422,
+      2169
+    ],
+    "alpha_levels": 124,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 712022,
+    "webp_bytes": 32646
+  },
+  {
+    "name": "mens-stratos",
+    "size": [
+      429,
+      2145
+    ],
+    "alpha_levels": 120,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 729877,
+    "webp_bytes": 36098
+  },
+  {
+    "name": "mens-stratos-split",
+    "size": [
+      434,
+      2153
+    ],
+    "alpha_levels": 126,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 737102,
+    "webp_bytes": 36732
+  },
+  {
+    "name": "mens-tweaker",
+    "size": [
+      433,
+      2148
+    ],
+    "alpha_levels": 119,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 743873,
+    "webp_bytes": 46798
+  },
+  {
+    "name": "mens-tweaker-pro",
+    "size": [
+      434,
+      2160
+    ],
+    "alpha_levels": 125,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 841902,
+    "webp_bytes": 59686
+  },
+  {
+    "name": "mens-ultralight-project-x",
+    "size": [
+      430,
+      2157
+    ],
+    "alpha_levels": 129,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 719187,
+    "webp_bytes": 37138
+  },
+  {
+    "name": "mens-ultralight-solution",
+    "size": [
+      425,
+      2160
+    ],
+    "alpha_levels": 123,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 779705,
+    "webp_bytes": 38464
+  },
+  {
+    "name": "mind-expander-2-0",
+    "size": [
+      441,
+      2160
+    ],
+    "alpha_levels": 122,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 860805,
+    "webp_bytes": 39826
+  },
+  {
+    "name": "mountain-twin-junior",
+    "size": [
+      460,
+      2158
+    ],
+    "alpha_levels": 114,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1012911,
+    "webp_bytes": 63850
+  },
+  {
+    "name": "solution-junior",
+    "size": [
+      443,
+      2162
+    ],
+    "alpha_levels": 121,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 809930,
+    "webp_bytes": 37680
+  },
+  {
+    "name": "storm-chaser",
+    "size": [
+      472,
+      2160
+    ],
+    "alpha_levels": 132,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 864317,
+    "webp_bytes": 54296
+  },
+  {
+    "name": "storm-chaser-split",
+    "size": [
+      474,
+      2158
+    ],
+    "alpha_levels": 127,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 875681,
+    "webp_bytes": 55022
+  },
+  {
+    "name": "storm-wolf",
+    "size": [
+      427,
+      2148
+    ],
+    "alpha_levels": 121,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 745025,
+    "webp_bytes": 45660
+  },
+  {
+    "name": "twin-sister-junior",
+    "size": [
+      452,
+      2159
+    ],
+    "alpha_levels": 114,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 818921,
+    "webp_bytes": 36890
+  },
+  {
+    "name": "twincraft",
+    "size": [
+      446,
+      2168
+    ],
+    "alpha_levels": 127,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 897770,
+    "webp_bytes": 43484
+  },
+  {
+    "name": "ultralight-butterfly-split",
+    "size": [
+      441,
+      2157
+    ],
+    "alpha_levels": 122,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 737598,
+    "webp_bytes": 41392
+  },
+  {
+    "name": "ultralight-hovercraft-2-0-split",
+    "size": [
+      443,
+      2157
+    ],
+    "alpha_levels": 112,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 759271,
+    "webp_bytes": 39676
+  },
+  {
+    "name": "womens-airheart-2-0",
+    "size": [
+      428,
+      2155
+    ],
+    "alpha_levels": 122,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1179795,
+    "webp_bytes": 99936
+  },
+  {
+    "name": "womens-dream-weaver-2-0",
+    "size": [
+      430,
+      2160
+    ],
+    "alpha_levels": 127,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1172727,
+    "webp_bytes": 127618
+  },
+  {
+    "name": "womens-dream-weaver-2-0-split",
+    "size": [
+      436,
+      2154
+    ],
+    "alpha_levels": 121,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1196229,
+    "webp_bytes": 130818
+  },
+  {
+    "name": "womens-flagship",
+    "size": [
+      424,
+      2157
+    ],
+    "alpha_levels": 123,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 850113,
+    "webp_bytes": 53794
+  },
+  {
+    "name": "womens-howler",
+    "size": [
+      444,
+      2162
+    ],
+    "alpha_levels": 121,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1040012,
+    "webp_bytes": 60398
+  },
+  {
+    "name": "womens-howler-split",
+    "size": [
+      442,
+      2159
+    ],
+    "alpha_levels": 121,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 998626,
+    "webp_bytes": 61378
+  },
+  {
+    "name": "womens-rally-cat",
+    "size": [
+      436,
+      2163
+    ],
+    "alpha_levels": 122,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1156571,
+    "webp_bytes": 128088
+  },
+  {
+    "name": "womens-solution",
+    "size": [
+      430,
+      2164
+    ],
+    "alpha_levels": 125,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 728832,
+    "webp_bytes": 33744
+  },
+  {
+    "name": "womens-stratos",
+    "size": [
+      438,
+      2158
+    ],
+    "alpha_levels": 125,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 668406,
+    "webp_bytes": 39530
+  },
+  {
+    "name": "womens-stratos-split",
+    "size": [
+      434,
+      2149
+    ],
+    "alpha_levels": 120,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 685923,
+    "webp_bytes": 34190
+  },
+  {
+    "name": "womens-tweaker",
+    "size": [
+      430,
+      2160
+    ],
+    "alpha_levels": 130,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 801696,
+    "webp_bytes": 52574
+  },
+  {
+    "name": "womens-twin-sister",
+    "size": [
+      432,
+      2155
+    ],
+    "alpha_levels": 122,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 687930,
+    "webp_bytes": 32528
+  },
+  {
+    "name": "youth-prodigy",
+    "size": [
+      574,
+      2148
+    ],
+    "alpha_levels": 100,
+    "opaque_components": 1,
+    "holes": 0,
+    "png_bytes": 1913752,
+    "webp_bytes": 251734
+  }
+]

@@ -59,7 +59,13 @@ assert before.ids == after.ids, "Existing DOM IDs or attributes changed"
 assert before.controls == after.controls, "Existing control, value or expansion state changed"
 assert before.text == after.text, "Existing page copy changed or was omitted"
 for file in ("minitool/assets/main.js", "minitool/assets/data.js"):
-    # Git may normalize CRLF; ignore line endings only.
-    assert original(file).replace(b"\r\n", b"\n") == (ROOT / file).read_bytes().replace(b"\r\n", b"\n"), file + " changed"
+    # Git may normalize CRLF. Asset refreshes may update only the image cache key.
+    previous = original(file).replace(b"\r\n", b"\n")
+    current = (ROOT / file).read_bytes().replace(b"\r\n", b"\n")
+    if file == "minitool/assets/data.js":
+        image_version = rb'("img":"\./assets/boards/[a-z0-9-]+\.webp\?v=)\d+(")'
+        previous = re.sub(image_version, rb'\g<1>CACHE\2', previous)
+        current = re.sub(image_version, rb'\g<1>CACHE\2', current)
+    assert previous == current, file + " changed"
 print(f"PASS: {len(before.ids)} existing IDs, {len(before.controls)} controls, {len(before.text)} text segments preserved")
 print("PASS: calculation, quiz, share/bridge logic and complete model/spec data unchanged")

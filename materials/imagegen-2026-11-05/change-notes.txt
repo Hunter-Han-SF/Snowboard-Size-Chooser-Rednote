@@ -1,0 +1,91 @@
+2026-11-06 — 雪板高清化、透明边缘精修与三色备用背景
+目标分支：astra
+
+一、改动目的与最终效果
+
+原有 46 款雪板 WebP 高度为 1200 像素，部分外轮廓存在锯齿、白边或彩边。
+本次逐款进行 AI 高清修复，再用本地精确遮罩清理边缘，产出高度
+2141–2170 像素的透明 PNG 与网页用 WebP。应用中的 46 张产品图已替换。
+另新增六张独立构图的备用背景，蓝、红、绿每种颜色各一张横版和竖版。
+
+二、雪板资产与精修方式
+
+- original-boards/：46 张原始 WebP 备份，逐文件与修改前 Git 版本核对一致。
+- boards/：46 张图像工具原始输出 PNG，保留 AI 编辑的原始结果。
+- boards-clean/：46 张最终透明 PNG，完成轮廓平滑、杂边清理和抗锯齿。
+- boards-webp/：46 张质量参数 92 的透明 WebP，合计 3,199,136 字节。
+  WebP 与 PNG 的透明通道已逐像素核对一致。
+
+本地处理保留主要连通轮廓，平滑轮廓及中部侧切，进行内缩收边，
+以 3 倍分辨率绘制遮罩后用 Lanczos 采样到成品尺寸，并保留透明留白。
+该精修步骤已获用户明确同意。
+
+针对 Mind Expander 2.0、Storm Chaser、Storm Chaser Split、Storm Wolf、
+TwinCraft 的局部错误 AI 文字，回贴原图对应标识区域；Youth Prodigy
+恢复原始包装标题区域。回贴区域沿用原始画面信息，清晰度受原图限制。
+
+三、备用背景清单
+
+每张均提供 PNG 与 WebP；六张 WebP 合计 841,798 字节。
+横版实测 1672 × 941，竖版实测 941 × 1672，不宣称为原生 4K。
+
+蓝色：
+  blue-glacier-wide       横版：冰川、雪山与冷蓝光轨。
+  blue-ice-portal-portrait 竖版：冰拱、月光与远方雪峰。
+红色：
+  red-storm-wide          横版：赤红风暴天空与雪山山脊。
+  red-eclipse-ridge-portrait 竖版：红色日食光环与陡峭雪峰。
+绿色：
+  green-aurora-wide       横版：绿色极光、雪山与冰面倒影。
+  green-aurora-couloir-portrait 竖版：极光与纵深雪谷。
+
+背景作为备用素材保存，应用默认主题背景保持原配置。
+
+四、应用与构建文件
+
+- minitool/assets/boards/*.webp：替换全部 46 款运行时图片。
+- tools/build_data.py：图片 URL 缓存参数由 v=5 更新到 v=6。
+- minitool/assets/data.js：重新生成，逐字核对仅图片缓存参数变化。
+  46 款、270 条尺码规格及产品文案保持一致。
+- tools/check_ui_preservation.py：校验仅忽略 img 字段中雪板图片 URL 的
+  数字缓存版本，继续严格检查图片路径、规格数据、主逻辑与页面内容。
+- dist/jones-26-27-size-helper.zip：更新离线运行包，57 个文件，
+  4,167,634 字节；ZIP 内各文件与 minitool 对应文件逐字节核对一致。
+- README.md：补充素材与本说明的入口，更新目录和发布包体积。
+
+五、交付记录与复现入口
+
+README.txt：目录用途与使用说明。
+prompts.json：图像编辑/生成提示词及模式记录。
+refine_assets.py：本地透明遮罩精修及原文字区域恢复。
+finalize_assets.py：完整性校验、背景 WebP 导出、清单和预览生成。
+asset-manifest.json：原图、AI 输出、PNG/WebP 成品的尺寸、体积与 SHA-256。
+board-refinement-report.json：46 款透明通道、轮廓连通性及尺寸报告。
+verification-report.json：项目、素材和 ZIP 一致性检查结果。
+before-after.jpg、boards-preview-1~3.jpg、boards-contact-sheet.jpg：雪板预览。
+backgrounds-preview.jpg：六张背景总览。
+badge-check.jpg 与 badge-check-final.jpg：局部文字修正前后的质量检查记录。
+
+精修和校验脚本依赖 Python、Pillow、NumPy、SciPy 和 OpenCV。
+预览脚本使用 Windows 的 Arial 字体路径；在其他系统需调整该路径。
+这些脚本不调用图像模型；重新生成 AI 母版需使用记录中的提示词与原图。
+
+六、提交前验证
+
+- python -X utf8 tools/check_specs.py：通过，46 款 / 270 条尺码。
+  保留目录原有的两条 Big Horn 警告：Men’s Rally Cat 154 / 155W。
+- python -X utf8 tools/check_ui_preservation.py：通过，88 个已有 ID、
+  51 个控件、101 段页面文本及计算/问答/分享逻辑保持一致。
+- node tools/test_motion.cjs：5 项动效回归检查全部通过。
+- python -X utf8 materials/imagegen-2026-11-05/finalize_assets.py：通过。
+  46 款雪板和六张背景齐全；每款有超过 30 级透明度、单一主要实体、
+  无意外透明孔洞，画布外边界透明，PNG 与 WebP 透明通道一致。
+- 全部清单 SHA-256、46 个运行时图片、46 份原图备份及 ZIP 内容一致性通过。
+- git diff --check：通过。
+
+七、已知限制
+
+用户要求使用 image 2.6；当前内置 image_gen 工具未提供可选择或可验证的
+模型版本标识，因此无法确认实际模型为 image 2.6。
+AI 修复可能重绘细小画面细节。原图、AI 母版及最终结果均保留用于复核。
+本次没有执行小红书平台上传或发布；推送内容为 Git 仓库文件与本地构建包。

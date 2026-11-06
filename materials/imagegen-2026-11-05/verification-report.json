@@ -1,0 +1,17 @@
+{
+  "boards": 46,
+  "backgrounds": 6,
+  "all_manifest_hashes_match": true,
+  "all_runtime_boards_match": true,
+  "package_entries": 57,
+  "all_package_files_match_runtime": true,
+  "only_data_change": "image cache v5 -> v6",
+  "package_bytes": 4167634,
+  "checks": {
+    "specs": "passed; 2 existing catalog Big Horn warnings",
+    "ui_preservation": "passed: 88 IDs, 51 controls, 101 text segments",
+    "alpha": "passed for all 46 boards",
+    "motion": "passed: 5 checks"
+  },
+  "all_original_backups_match_pre_update_git": true
+}

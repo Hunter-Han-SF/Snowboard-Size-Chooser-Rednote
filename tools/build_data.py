@@ -89,7 +89,7 @@ for m in sorted(src, key=lambda x: (CAT_ORDER.index(x["category"]),
         })
     img_path = ROOT / "minitool" / "assets" / "boards" / (slug(m["name"]) + ".webp")
     # ?v= 缓存版本号：图片更新后改 v 值即可强制刷新
-    img_url = ("./assets/boards/" + slug(m["name"]) + ".webp?v=5") if img_path.exists() else ""
+    img_url = ("./assets/boards/" + slug(m["name"]) + ".webp?v=6") if img_path.exists() else ""
     c = copy.get(m["name"], {})
     row = {
         "name": m["name"], "audience": m["audience"], "category": m["category"],

@@ -1,0 +1,1872 @@
+{
+  "started": "2026-11-05",
+  "finished": "2026-11-06",
+  "timezone": "Asia/Shanghai",
+  "generation": "built-in image_gen.imagegen; exact model version not exposed",
+  "local_refinement": "User-authorized alpha smoothing, 3x coverage antialiasing, matte cleanup, original lettering restoration",
+  "count": {
+    "boards": 46,
+    "backgrounds": 6
+  },
+  "boards": [
+    {
+      "name": "flagship-junior",
+      "original": {
+        "file": "original-boards/flagship-junior.webp",
+        "width": 254,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 25248,
+        "sha256": "f2b7b0deaec454c0d0c7ce81ffffc218bee962e858cfccdb21712c8aa7aadec8"
+      },
+      "ai_master": {
+        "file": "boards/flagship-junior.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1287985,
+        "sha256": "f4ca7b1613a251782af7814e654d203d9182845df596844b374b50d07bfe0bd7"
+      },
+      "png": {
+        "file": "boards-clean/flagship-junior.png",
+        "width": 448,
+        "height": 2162,
+        "mode": "RGBA",
+        "bytes": 1043449,
+        "sha256": "42a6340fdf4f1e298b03e71f7f15acc607852c5a53d5ec4b14d3a2a1f30560e5"
+      },
+      "webp": {
+        "file": "boards-webp/flagship-junior.webp",
+        "width": 448,
+        "height": 2162,
+        "mode": "RGBA",
+        "bytes": 109910,
+        "sha256": "41265df84faf6630b87eee68144e9680d353c7b43badfd95c9597c65a1d37383"
+      },
+      "alpha_levels": 128,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "freecarver-6000s",
+      "original": {
+        "file": "original-boards/freecarver-6000s.webp",
+        "width": 270,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 21456,
+        "sha256": "57ae405e64c3e8a0eeeb32d3be3bc29195f0922b75e771dafe3bd7d03d095e88"
+      },
+      "ai_master": {
+        "file": "boards/freecarver-6000s.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1027987,
+        "sha256": "a95ddd44741c5ee3b520c46b00245325d3cda40d51ef963479e90eb3bbd53ec6"
+      },
+      "png": {
+        "file": "boards-clean/freecarver-6000s.png",
+        "width": 470,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 766691,
+        "sha256": "99831d0661ca2076c29f3c3d99e4afb195d7b4534407d6738e59aa2a51f612e4"
+      },
+      "webp": {
+        "file": "boards-webp/freecarver-6000s.webp",
+        "width": 470,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 57078,
+        "sha256": "2e6885b8e768358f51f55b5a2509a29faf824cc7966c82a8bb6eee2473080050"
+      },
+      "alpha_levels": 122,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "freecarver-9000s",
+      "original": {
+        "file": "original-boards/freecarver-9000s.webp",
+        "width": 262,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 22544,
+        "sha256": "1c2e120d68111406e9756174644a2b3075f68ed8e2a09cbcd4340f83135d8f2d"
+      },
+      "ai_master": {
+        "file": "boards/freecarver-9000s.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1008321,
+        "sha256": "d657a39b861a60e5a99880df582ce03d3e3ea591ffdb8a349bb6d83c20bed173"
+      },
+      "png": {
+        "file": "boards-clean/freecarver-9000s.png",
+        "width": 455,
+        "height": 2141,
+        "mode": "RGBA",
+        "bytes": 789645,
+        "sha256": "cf58505324055de7c6a76ef0aa30af5ef21bbfa08ad70825fb385d9ffade067b"
+      },
+      "webp": {
+        "file": "boards-webp/freecarver-9000s.webp",
+        "width": 455,
+        "height": 2141,
+        "mode": "RGBA",
+        "bytes": 71488,
+        "sha256": "3926cbc1fcd75250ee8e537dd63c429d8d7b16a1f7e06259a20ac5b77fef3849"
+      },
+      "alpha_levels": 116,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "hovercraft-2-0",
+      "original": {
+        "file": "original-boards/hovercraft-2-0.webp",
+        "width": 259,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 17604,
+        "sha256": "e4f35902abf7cce0b60d33e2a345d4a397e8d2c73ea897de920b00d21e78e7fb"
+      },
+      "ai_master": {
+        "file": "boards/hovercraft-2-0.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1127595,
+        "sha256": "f1312b3f0041140cfad4c4ef2933a51bb077df9460a4d8cedc936f238206027a"
+      },
+      "png": {
+        "file": "boards-clean/hovercraft-2-0.png",
+        "width": 452,
+        "height": 2156,
+        "mode": "RGBA",
+        "bytes": 864417,
+        "sha256": "f1e184662265f1c04e5af35f41c99991a20867d4f788fca57c739a969ade1e8b"
+      },
+      "webp": {
+        "file": "boards-webp/hovercraft-2-0.webp",
+        "width": 452,
+        "height": 2156,
+        "mode": "RGBA",
+        "bytes": 44398,
+        "sha256": "894aef97577c66fa13896ec45dca0cbaf94c3b39c7273595a4aaa3b36ada8f75"
+      },
+      "alpha_levels": 118,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "hovercraft-2-0-split",
+      "original": {
+        "file": "original-boards/hovercraft-2-0-split.webp",
+        "width": 260,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 18544,
+        "sha256": "072d5c1ac016b63c82a7eda4b765c2aaf3bca1fdb005ccb113ff47b321f19264"
+      },
+      "ai_master": {
+        "file": "boards/hovercraft-2-0-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1024064,
+        "sha256": "df704f9fbad7b18b2cd9b2a3368b8c75e5d3fe399f028b39bbac4a3254881188"
+      },
+      "png": {
+        "file": "boards-clean/hovercraft-2-0-split.png",
+        "width": 447,
+        "height": 2152,
+        "mode": "RGBA",
+        "bytes": 746878,
+        "sha256": "467311433bfc96cfa37cc4d8c4a068b0c298ca3b3d86d3f96f56f55260abee18"
+      },
+      "webp": {
+        "file": "boards-webp/hovercraft-2-0-split.webp",
+        "width": 447,
+        "height": 2152,
+        "mode": "RGBA",
+        "bytes": 41672,
+        "sha256": "b6354537102cfb38361c14fc8d9924f206b21c7f587b722615c37683b55a2836"
+      },
+      "alpha_levels": 118,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "kids-prodigy-package",
+      "original": {
+        "file": "original-boards/kids-prodigy-package.webp",
+        "width": 324,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 57594,
+        "sha256": "067bb5285a87a395e38a20bef9db2ee7cda806d3ef0cf957d816ec5d0765a63e"
+      },
+      "ai_master": {
+        "file": "boards/kids-prodigy-package.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1483959,
+        "sha256": "f6ba34babd84000a18a3ea46186f22d4d457a002fa6a6d61b07519593406db37"
+      },
+      "png": {
+        "file": "boards-clean/kids-prodigy-package.png",
+        "width": 557,
+        "height": 2164,
+        "mode": "RGBA",
+        "bytes": 1342339,
+        "sha256": "8db33a51c95a06c586d33c3429fab9853a95889e332bac1579cf77d09b0d766f"
+      },
+      "webp": {
+        "file": "boards-webp/kids-prodigy-package.webp",
+        "width": 557,
+        "height": 2164,
+        "mode": "RGBA",
+        "bytes": 183696,
+        "sha256": "316dc965eb289995add1ff15b4234c86b0c038adc9d70d91a2f26f64c70b9974"
+      },
+      "alpha_levels": 126,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-aviator-2-0",
+      "original": {
+        "file": "original-boards/mens-aviator-2-0.webp",
+        "width": 247,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 68724,
+        "sha256": "a8fff0907004a0d11f2f6119c395766bdee2d838a8595d123830cf1d2d09f8f9"
+      },
+      "ai_master": {
+        "file": "boards/mens-aviator-2-0.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1511063,
+        "sha256": "e9b8714365478c77916a07eca45f9717f7c29610577783e829db1331538ad0cb"
+      },
+      "png": {
+        "file": "boards-clean/mens-aviator-2-0.png",
+        "width": 430,
+        "height": 2152,
+        "mode": "RGBA",
+        "bytes": 1334640,
+        "sha256": "0daf321e1ef96d6bbb00b8a45500394efe2c7ef7f147a1b739a448c6d6d01dc4"
+      },
+      "webp": {
+        "file": "boards-webp/mens-aviator-2-0.webp",
+        "width": 430,
+        "height": 2152,
+        "mode": "RGBA",
+        "bytes": 227970,
+        "sha256": "8ec21f55ed77188b07cace09eab6c8a7c15233ea670860449076f525444292af"
+      },
+      "alpha_levels": 119,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-flagship",
+      "original": {
+        "file": "original-boards/mens-flagship.webp",
+        "width": 243,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 22340,
+        "sha256": "9f13840a017d9e93d8f3becba5589da5c930e6493da4a0ea57f94ea9d1d29ef2"
+      },
+      "ai_master": {
+        "file": "boards/mens-flagship.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1345072,
+        "sha256": "4889bc44aba471918cf14e01998a7d8f07a889b358c412656d4941b13a571b2b"
+      },
+      "png": {
+        "file": "boards-clean/mens-flagship.png",
+        "width": 423,
+        "height": 2164,
+        "mode": "RGBA",
+        "bytes": 1083224,
+        "sha256": "bb027253fc330e423665f0bc9ffb91bd3384c5b3ba3417aac9886abd5e8181ec"
+      },
+      "webp": {
+        "file": "boards-webp/mens-flagship.webp",
+        "width": 423,
+        "height": 2164,
+        "mode": "RGBA",
+        "bytes": 131670,
+        "sha256": "d079d4f54d9e8b37f7908fe6b1b8293f95bf9ddc49ebb1b130b79dd21104594a"
+      },
+      "alpha_levels": 123,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-flagship-pro",
+      "original": {
+        "file": "original-boards/mens-flagship-pro.webp",
+        "width": 244,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 16908,
+        "sha256": "4aa9d0b51f32610898e1b7b2b6e9da09a6d1af6d98eb3a0c015a9918da6ef476"
+      },
+      "ai_master": {
+        "file": "boards/mens-flagship-pro.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1018267,
+        "sha256": "f4f6ac3e3c00352a9df3d46d5e07b71b32ad9e8b1110336dc2e3abb456727527"
+      },
+      "png": {
+        "file": "boards-clean/mens-flagship-pro.png",
+        "width": 418,
+        "height": 2170,
+        "mode": "RGBA",
+        "bytes": 756196,
+        "sha256": "c506db7a9b363d2a0ea45a4ff2646aa3e76ed364e23260deb1bd8dc5f648021c"
+      },
+      "webp": {
+        "file": "boards-webp/mens-flagship-pro.webp",
+        "width": 418,
+        "height": 2170,
+        "mode": "RGBA",
+        "bytes": 30318,
+        "sha256": "6d654e20a96c60e14ab594e20fc4958b1f473a3efb2d8d8cfab24520d91aad41"
+      },
+      "alpha_levels": 127,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-frontier-2-0",
+      "original": {
+        "file": "original-boards/mens-frontier-2-0.webp",
+        "width": 250,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 19562,
+        "sha256": "156ee6292660790c142a01acad5779ed66346a7990c754ea275b8c934a8e2077"
+      },
+      "ai_master": {
+        "file": "boards/mens-frontier-2-0.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1123483,
+        "sha256": "7eab4a9458bd6e105aabda48b29c072c8282a85b8c7837901597a3a4f3cc3457"
+      },
+      "png": {
+        "file": "boards-clean/mens-frontier-2-0.png",
+        "width": 429,
+        "height": 2151,
+        "mode": "RGBA",
+        "bytes": 889429,
+        "sha256": "0cbc41d8e9344a1bd92c4d71ba7ec0bbe9b8a230e7e830372541d8ddd08f23be"
+      },
+      "webp": {
+        "file": "boards-webp/mens-frontier-2-0.webp",
+        "width": 429,
+        "height": 2151,
+        "mode": "RGBA",
+        "bytes": 57598,
+        "sha256": "66546fc0b9446161b878410982e6f7ae28f77591d8d1d59723d7be886a4ff38a"
+      },
+      "alpha_levels": 123,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-frontier-2-0-split",
+      "original": {
+        "file": "original-boards/mens-frontier-2-0-split.webp",
+        "width": 250,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 19406,
+        "sha256": "e3d66fc9849678f478a01cd511f09c99c45b3071f7179b7cd9b16522887adf7b"
+      },
+      "ai_master": {
+        "file": "boards/mens-frontier-2-0-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1124833,
+        "sha256": "558f37dc163742d2d2aaa3f39c7801bc47142f3147f5500cf3e31097c84a0d3a"
+      },
+      "png": {
+        "file": "boards-clean/mens-frontier-2-0-split.png",
+        "width": 432,
+        "height": 2159,
+        "mode": "RGBA",
+        "bytes": 887346,
+        "sha256": "d48a54732fa1c6d2fa8eceb5976dcfe1bbbec7dd8a6798d8da76354d8c3d289b"
+      },
+      "webp": {
+        "file": "boards-webp/mens-frontier-2-0-split.webp",
+        "width": 432,
+        "height": 2159,
+        "mode": "RGBA",
+        "bytes": 51526,
+        "sha256": "1c649cf7170592dbc7c87b52a4eba7cb6557c3f672c0cf14dec8cb094c176533"
+      },
+      "alpha_levels": 126,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-howler",
+      "original": {
+        "file": "original-boards/mens-howler.webp",
+        "width": 253,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 23846,
+        "sha256": "217ca06701e1af37c429a1216b5387990c8932b694189f79e7668e6bb8226b6f"
+      },
+      "ai_master": {
+        "file": "boards/mens-howler.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1202623,
+        "sha256": "480a6753d69730d0c4bc420f72708e19e755f950823ac46d159b0863072078ba"
+      },
+      "png": {
+        "file": "boards-clean/mens-howler.png",
+        "width": 434,
+        "height": 2154,
+        "mode": "RGBA",
+        "bytes": 1018086,
+        "sha256": "bccbc2df5077207673aa682ba0aa14d4c4460186b4be94751ff489687e55c868"
+      },
+      "webp": {
+        "file": "boards-webp/mens-howler.webp",
+        "width": 434,
+        "height": 2154,
+        "mode": "RGBA",
+        "bytes": 59708,
+        "sha256": "9d4cbeb7af10f1a38994520b84d01e470b7f05e1d4fd9eee20f50f27f8655448"
+      },
+      "alpha_levels": 116,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-howler-split",
+      "original": {
+        "file": "original-boards/mens-howler-split.webp",
+        "width": 246,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 22966,
+        "sha256": "c85317bddb72c645699696b8cfa7629ad2f252708e93b671e8fcefe953ecb5f8"
+      },
+      "ai_master": {
+        "file": "boards/mens-howler-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1137085,
+        "sha256": "a29b754ce1108525554a236d064c6ede9ac072c5cb1e1b6415d5b63c5db47dd1"
+      },
+      "png": {
+        "file": "boards-clean/mens-howler-split.png",
+        "width": 426,
+        "height": 2147,
+        "mode": "RGBA",
+        "bytes": 947143,
+        "sha256": "2372fbba81dd1154b0d4440b7955542e76def881aa05a19cf0a3bbee798d778f"
+      },
+      "webp": {
+        "file": "boards-webp/mens-howler-split.webp",
+        "width": 426,
+        "height": 2147,
+        "mode": "RGBA",
+        "bytes": 61820,
+        "sha256": "9fb987b792b9160250f217febde2d3fa4558cd970bfe5c9c70e3cb640e8b5476"
+      },
+      "alpha_levels": 119,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-mountain-twin",
+      "original": {
+        "file": "original-boards/mens-mountain-twin.webp",
+        "width": 249,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 21852,
+        "sha256": "bbe0016a9f0ea007f252c40e7f2139fc171e57871528d22c0839a4b1162919c1"
+      },
+      "ai_master": {
+        "file": "boards/mens-mountain-twin.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1067256,
+        "sha256": "b8c2b694cbe50bb277147ec2807069ec336c06af27f6209afc5c55055554fdaa"
+      },
+      "png": {
+        "file": "boards-clean/mens-mountain-twin.png",
+        "width": 430,
+        "height": 2150,
+        "mode": "RGBA",
+        "bytes": 841758,
+        "sha256": "a7fa8ca0d1bf142e10fc36846ad06d172d5c6657504845854e64ffe58deab02c"
+      },
+      "webp": {
+        "file": "boards-webp/mens-mountain-twin.webp",
+        "width": 430,
+        "height": 2150,
+        "mode": "RGBA",
+        "bytes": 50760,
+        "sha256": "d079aad923f3806cbf536bf502d485b711ced32fa1183834e946ff502da868e5"
+      },
+      "alpha_levels": 125,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-mountain-twin-pro",
+      "original": {
+        "file": "original-boards/mens-mountain-twin-pro.webp",
+        "width": 248,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 19780,
+        "sha256": "b4d9e984a3dd70f1ba90edc5e1d28c961f1a0ad0b998bfe5ee4a5e3898aa6e4e"
+      },
+      "ai_master": {
+        "file": "boards/mens-mountain-twin-pro.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1074663,
+        "sha256": "c3f21463755e360a985370e3f553a5a636fd8c422ef40d71f72d7d49719ce280"
+      },
+      "png": {
+        "file": "boards-clean/mens-mountain-twin-pro.png",
+        "width": 426,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 827631,
+        "sha256": "ea5395501bbbaa5a37a4ef61d6db48f182945bf2414b6f44dbe68e8e33707c3d"
+      },
+      "webp": {
+        "file": "boards-webp/mens-mountain-twin-pro.webp",
+        "width": 426,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 49736,
+        "sha256": "6ae05b973ae5dbd05a09ecb0d8e15deb0c498c5f7f90e8907b4cd2e0c053bd0c"
+      },
+      "alpha_levels": 118,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-rally-cat",
+      "original": {
+        "file": "original-boards/mens-rally-cat.webp",
+        "width": 250,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 32864,
+        "sha256": "6e8e5377d251f836867cf588c5c92084db0cbf49b8dd263715ceeffc96c3d291"
+      },
+      "ai_master": {
+        "file": "boards/mens-rally-cat.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1362800,
+        "sha256": "03b1d67bc2dd381e6762aed604ee30763f8c9fc4d38fabb4f26940d703eb87fe"
+      },
+      "png": {
+        "file": "boards-clean/mens-rally-cat.png",
+        "width": 428,
+        "height": 2156,
+        "mode": "RGBA",
+        "bytes": 1093351,
+        "sha256": "b9c7784af1b4d53867e6161e3bd90635144512dfac2374319cf799360489c2a7"
+      },
+      "webp": {
+        "file": "boards-webp/mens-rally-cat.webp",
+        "width": 428,
+        "height": 2156,
+        "mode": "RGBA",
+        "bytes": 118120,
+        "sha256": "754c0299d9b3667fd925a2a95964334ee279885566764bf7887c043e62fd1d61"
+      },
+      "alpha_levels": 125,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-solution",
+      "original": {
+        "file": "original-boards/mens-solution.webp",
+        "width": 246,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 17482,
+        "sha256": "ab2e34c637e89fecd8fbd4d39be8e22a086f4387b5c38477e609bd4f4c103823"
+      },
+      "ai_master": {
+        "file": "boards/mens-solution.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 997475,
+        "sha256": "aefbebb2d243c46d07fb8d3ac7e65797f0fecbf4f435f2a5254c055c2611817f"
+      },
+      "png": {
+        "file": "boards-clean/mens-solution.png",
+        "width": 422,
+        "height": 2169,
+        "mode": "RGBA",
+        "bytes": 712022,
+        "sha256": "508cad66cd6506bce07d698d2e98e80e3cfe518996b75be3e419319a6a35b5af"
+      },
+      "webp": {
+        "file": "boards-webp/mens-solution.webp",
+        "width": 422,
+        "height": 2169,
+        "mode": "RGBA",
+        "bytes": 32646,
+        "sha256": "449cabecbb2298e8c3faa416fcf35c981f95422b16f9703c94c48dc05a6ef340"
+      },
+      "alpha_levels": 124,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-stratos",
+      "original": {
+        "file": "original-boards/mens-stratos.webp",
+        "width": 255,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 17558,
+        "sha256": "66aadd539d82320fb7d8f1840160ff38ee8142a508054d32e47ab6e568b0ba77"
+      },
+      "ai_master": {
+        "file": "boards/mens-stratos.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1007704,
+        "sha256": "83979a5caf5c9f208916054cff972dfe063cb7fa398aea0a163cf87c9acc3b26"
+      },
+      "png": {
+        "file": "boards-clean/mens-stratos.png",
+        "width": 429,
+        "height": 2145,
+        "mode": "RGBA",
+        "bytes": 729877,
+        "sha256": "ebe6b7dcc04bb6bdf2fcb97803afcc3072fe50be8afeb7033346a98b73effd5e"
+      },
+      "webp": {
+        "file": "boards-webp/mens-stratos.webp",
+        "width": 429,
+        "height": 2145,
+        "mode": "RGBA",
+        "bytes": 36098,
+        "sha256": "b5649a66b236b7955db814e0e3522b49d5168530f981bcad760f37efa84ed4a0"
+      },
+      "alpha_levels": 120,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-stratos-split",
+      "original": {
+        "file": "original-boards/mens-stratos-split.webp",
+        "width": 252,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 18010,
+        "sha256": "38232aed2db42c46f95bdb1fa0ff1b7e0607d9f3fb0e4e69828a70ea7fd82f88"
+      },
+      "ai_master": {
+        "file": "boards/mens-stratos-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1022076,
+        "sha256": "dc6424338c90273ac35ff8e3866b5457cf8d713e8630d3229afa84bcabfa9aea"
+      },
+      "png": {
+        "file": "boards-clean/mens-stratos-split.png",
+        "width": 434,
+        "height": 2153,
+        "mode": "RGBA",
+        "bytes": 737102,
+        "sha256": "470f4a72371607f8fafba73edd097d3ba6b6cb8632047b133d382e91b71c882d"
+      },
+      "webp": {
+        "file": "boards-webp/mens-stratos-split.webp",
+        "width": 434,
+        "height": 2153,
+        "mode": "RGBA",
+        "bytes": 36732,
+        "sha256": "a3a516da1a0b393aed6b9f2028aa8518b6297556d998a159796e4e581ef1c1d3"
+      },
+      "alpha_levels": 126,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-tweaker",
+      "original": {
+        "file": "original-boards/mens-tweaker.webp",
+        "width": 252,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 22714,
+        "sha256": "cfdd4255b233e183c4a8dfd9e1e9f0c69396c270a27ba4ca84a6df436298bd40"
+      },
+      "ai_master": {
+        "file": "boards/mens-tweaker.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 987410,
+        "sha256": "23791bd3652d135cd24e8f0a307ef1904d107ae5b7ed9fdf41bea80aace5dc24"
+      },
+      "png": {
+        "file": "boards-clean/mens-tweaker.png",
+        "width": 433,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 743873,
+        "sha256": "1ad827489402fa14aaaa8663d3f4a14754974b50e4872e666514fa2865dad872"
+      },
+      "webp": {
+        "file": "boards-webp/mens-tweaker.webp",
+        "width": 433,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 46798,
+        "sha256": "4e931127956808e76906f0759f69516202a7e2f8c2bd4844201d2c7fb030aee1"
+      },
+      "alpha_levels": 119,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-tweaker-pro",
+      "original": {
+        "file": "original-boards/mens-tweaker-pro.webp",
+        "width": 253,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 22532,
+        "sha256": "1e6b4dcc334346059afd02993960cefb2ec9a25af38ea17e80deb7399f165998"
+      },
+      "ai_master": {
+        "file": "boards/mens-tweaker-pro.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1052908,
+        "sha256": "5bf0a95e7bb6058f45232c2b8343bddbf4ad749cb4dc4c11b5469d173047af1f"
+      },
+      "png": {
+        "file": "boards-clean/mens-tweaker-pro.png",
+        "width": 434,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 841902,
+        "sha256": "ffcc5af2ea5385fc6c9f49ec6c470109a4e06eacdae6ceeae9f0fa2027cbd2d0"
+      },
+      "webp": {
+        "file": "boards-webp/mens-tweaker-pro.webp",
+        "width": 434,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 59686,
+        "sha256": "782643b714597da191297c6e16c33a20f890b136f362f5ab48e134f72d5edf20"
+      },
+      "alpha_levels": 125,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-ultralight-project-x",
+      "original": {
+        "file": "original-boards/mens-ultralight-project-x.webp",
+        "width": 250,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 15302,
+        "sha256": "dc5e3a89480515eea7c366d14fb798028a74f4800024374a80507e4b6a146ceb"
+      },
+      "ai_master": {
+        "file": "boards/mens-ultralight-project-x.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1018220,
+        "sha256": "1d13447aa3c6f4ef872954fd59a4becd6ee80fefa93db8307eabcd5b6507eae6"
+      },
+      "png": {
+        "file": "boards-clean/mens-ultralight-project-x.png",
+        "width": 430,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 719187,
+        "sha256": "529121ce205f91077b71b36b19774de0e9b2e66542a48cb2d93bc0da73f20903"
+      },
+      "webp": {
+        "file": "boards-webp/mens-ultralight-project-x.webp",
+        "width": 430,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 37138,
+        "sha256": "c2ec746311ec8de05e9ebd98835aef88f40d30e2660ccb05eb87a216b3abaa25"
+      },
+      "alpha_levels": 129,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mens-ultralight-solution",
+      "original": {
+        "file": "original-boards/mens-ultralight-solution.webp",
+        "width": 243,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 17982,
+        "sha256": "f30235e01e5f3cc89d7a73cc898beb2c2a131f95c9279d1da3f01872b7288836"
+      },
+      "ai_master": {
+        "file": "boards/mens-ultralight-solution.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1075124,
+        "sha256": "124eadd140bc59059c14c51072f3b0938a382f1486ec9bcd92e104b0801d089e"
+      },
+      "png": {
+        "file": "boards-clean/mens-ultralight-solution.png",
+        "width": 425,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 779705,
+        "sha256": "6a9f6fe39652c8a167e2059fa846e79a0474f5c65f8cfc42092a3f4e69b7d2a8"
+      },
+      "webp": {
+        "file": "boards-webp/mens-ultralight-solution.webp",
+        "width": 425,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 38464,
+        "sha256": "50a2e41bfad268721f48f0e9eab69fb7f67fbcc873c330ce66eeb5a2b907f3cc"
+      },
+      "alpha_levels": 123,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mind-expander-2-0",
+      "original": {
+        "file": "original-boards/mind-expander-2-0.webp",
+        "width": 252,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 15860,
+        "sha256": "464e079ebbfe33aa47c1a45a0967a04730eb40aa89bbd13ed5bebbc2140380d6"
+      },
+      "ai_master": {
+        "file": "boards/mind-expander-2-0.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1117299,
+        "sha256": "2ddabc6fe54534ee15226a3f47481630c255d909f7441e5916d80e2b570b13aa"
+      },
+      "png": {
+        "file": "boards-clean/mind-expander-2-0.png",
+        "width": 441,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 860805,
+        "sha256": "e736fa691d8922755dd41b4bdbf2a68abaf095dab2ce23448c589c251c9e0104"
+      },
+      "webp": {
+        "file": "boards-webp/mind-expander-2-0.webp",
+        "width": 441,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 39826,
+        "sha256": "c0a2bc3901b3104641e033a8aa5f6523eac455022c486d1391ff1bc493e656d8"
+      },
+      "alpha_levels": 122,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "mountain-twin-junior",
+      "original": {
+        "file": "original-boards/mountain-twin-junior.webp",
+        "width": 265,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 22566,
+        "sha256": "08894abcac991e5c00c846d77833e1a7e3a0590c70bf941eaca963433c1dfe3d"
+      },
+      "ai_master": {
+        "file": "boards/mountain-twin-junior.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1240526,
+        "sha256": "6b5101761832d18495ac693b5debc27ce67a8be62fe7ffa824f747a074bd05db"
+      },
+      "png": {
+        "file": "boards-clean/mountain-twin-junior.png",
+        "width": 460,
+        "height": 2158,
+        "mode": "RGBA",
+        "bytes": 1012911,
+        "sha256": "2233c8e53c53873aa993eff362889627438aba116b3d7dd51af1d53c633d525d"
+      },
+      "webp": {
+        "file": "boards-webp/mountain-twin-junior.webp",
+        "width": 460,
+        "height": 2158,
+        "mode": "RGBA",
+        "bytes": 63850,
+        "sha256": "a66536669a166ce666eb1f5cc26837eefe422ad4bb8a95d965651e58e745902e"
+      },
+      "alpha_levels": 114,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "solution-junior",
+      "original": {
+        "file": "original-boards/solution-junior.webp",
+        "width": 256,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 17310,
+        "sha256": "a909f038740e5fc3d69e7fd2f8e8cae4f419265707ba821f252f83da37f7bdef"
+      },
+      "ai_master": {
+        "file": "boards/solution-junior.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1090627,
+        "sha256": "4195e8a3fc34fdab9207bd08773a45ef56ec6dca382f372f633118e8dc360bd9"
+      },
+      "png": {
+        "file": "boards-clean/solution-junior.png",
+        "width": 443,
+        "height": 2162,
+        "mode": "RGBA",
+        "bytes": 809930,
+        "sha256": "7f06615755ca83678bd6b996730a8958795f24d92f0052847fb10a10687b42b6"
+      },
+      "webp": {
+        "file": "boards-webp/solution-junior.webp",
+        "width": 443,
+        "height": 2162,
+        "mode": "RGBA",
+        "bytes": 37680,
+        "sha256": "63ea40e5ac91f9e7d7040263f1a9602bd74066d24a269ada3179574a34ede3d5"
+      },
+      "alpha_levels": 121,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "storm-chaser",
+      "original": {
+        "file": "original-boards/storm-chaser.webp",
+        "width": 273,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 21794,
+        "sha256": "aaf83bcebe8800063693728fb422157affe0a70db18709f1c8cd85e44afb953d"
+      },
+      "ai_master": {
+        "file": "boards/storm-chaser.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1128609,
+        "sha256": "18648f674c6c3c653cbd39d63bd2ef5bc0edbbcd70ed26c6bf8d4338d35c1ffd"
+      },
+      "png": {
+        "file": "boards-clean/storm-chaser.png",
+        "width": 472,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 864317,
+        "sha256": "bf3b1881b6251c07c320eeccd921eb33a70a0aeb3adb1ccc702f7edd184925cc"
+      },
+      "webp": {
+        "file": "boards-webp/storm-chaser.webp",
+        "width": 472,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 54296,
+        "sha256": "182d1c3811a138d57d862da49a3a00235c790895e3b839832d05b1464206f211"
+      },
+      "alpha_levels": 132,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "storm-chaser-split",
+      "original": {
+        "file": "original-boards/storm-chaser-split.webp",
+        "width": 275,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 21258,
+        "sha256": "614c9bc80b1241331bab0a42af18882b66038ba5b56f38c67ac1cd90f57b030e"
+      },
+      "ai_master": {
+        "file": "boards/storm-chaser-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1133398,
+        "sha256": "13f2942f652a73450925898a21c2ac5f5d65c02f27845fcf260e277064fa8095"
+      },
+      "png": {
+        "file": "boards-clean/storm-chaser-split.png",
+        "width": 474,
+        "height": 2158,
+        "mode": "RGBA",
+        "bytes": 875681,
+        "sha256": "6ae7c1854ff82558af6249fd3af9d5dbc259402900af555b3efe126e1166698c"
+      },
+      "webp": {
+        "file": "boards-webp/storm-chaser-split.webp",
+        "width": 474,
+        "height": 2158,
+        "mode": "RGBA",
+        "bytes": 55022,
+        "sha256": "fb8308e50d586367736a4e9e6a6373e66b85745f9c6384e5394b545f203cf893"
+      },
+      "alpha_levels": 127,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "storm-wolf",
+      "original": {
+        "file": "original-boards/storm-wolf.webp",
+        "width": 248,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 18428,
+        "sha256": "cf0f7898a86006e910fd7bfa192afe1f81e300d616ac6a3ee2b44d0c3ef4ced0"
+      },
+      "ai_master": {
+        "file": "boards/storm-wolf.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 995848,
+        "sha256": "6020c473bc348b1e07099b7a9e2cdb4fbdea2fadbb89d2322ec9d58c46cce088"
+      },
+      "png": {
+        "file": "boards-clean/storm-wolf.png",
+        "width": 427,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 745025,
+        "sha256": "c3af295dda33e4ed4781a224462449e0dc2854559e0e183d74c5f5f34cb5667a"
+      },
+      "webp": {
+        "file": "boards-webp/storm-wolf.webp",
+        "width": 427,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 45660,
+        "sha256": "66173ed0bf9f9e7e5151d6acda30c3d51b079ee427c3c22e71b60abde0588869"
+      },
+      "alpha_levels": 121,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "twin-sister-junior",
+      "original": {
+        "file": "original-boards/twin-sister-junior.webp",
+        "width": 261,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 14720,
+        "sha256": "854bf2e199cf2c995280c6c0e9c0783cc4efef7a3e524d92bcd100d7046bc15c"
+      },
+      "ai_master": {
+        "file": "boards/twin-sister-junior.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1086916,
+        "sha256": "331a33700a079a64d22ee129e1b4bb5b7ca37d2e166e8eb487c8308884b22855"
+      },
+      "png": {
+        "file": "boards-clean/twin-sister-junior.png",
+        "width": 452,
+        "height": 2159,
+        "mode": "RGBA",
+        "bytes": 818921,
+        "sha256": "44f66b706ff0532bdb5df1cf91932094927322c7fcdf4606c869dad94248acce"
+      },
+      "webp": {
+        "file": "boards-webp/twin-sister-junior.webp",
+        "width": 452,
+        "height": 2159,
+        "mode": "RGBA",
+        "bytes": 36890,
+        "sha256": "c59b8b0a4ebf4afe99e443812a37aa631d79e505b342e2bc5e62d1502d2d02ab"
+      },
+      "alpha_levels": 114,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "twincraft",
+      "original": {
+        "file": "original-boards/twincraft.webp",
+        "width": 255,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 16452,
+        "sha256": "e6cfaeb2c26518aa9370c9d6500162bb68adb242e72427e348bf503e8d514e8a"
+      },
+      "ai_master": {
+        "file": "boards/twincraft.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1140313,
+        "sha256": "140a45e823b464199953afe1f01522d12806b3c9f65af101f396cb1b111d151b"
+      },
+      "png": {
+        "file": "boards-clean/twincraft.png",
+        "width": 446,
+        "height": 2168,
+        "mode": "RGBA",
+        "bytes": 897770,
+        "sha256": "f5fdea5333f793a8f78bd13514bb0f60f611db994d9adfa1bc5ff90cb3daa312"
+      },
+      "webp": {
+        "file": "boards-webp/twincraft.webp",
+        "width": 446,
+        "height": 2168,
+        "mode": "RGBA",
+        "bytes": 43484,
+        "sha256": "1265e16ac59755dcb769a07e7e1c1c4e864364bd29b6bc945518e910b88dc058"
+      },
+      "alpha_levels": 127,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "ultralight-butterfly-split",
+      "original": {
+        "file": "original-boards/ultralight-butterfly-split.webp",
+        "width": 255,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 18068,
+        "sha256": "b1213e6c2c2b1d6ed6b6df414e79c4621e4ea66bca2e405ad6af4ded5fd04d4b"
+      },
+      "ai_master": {
+        "file": "boards/ultralight-butterfly-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1041781,
+        "sha256": "b248c47929d58cc96609bbc35758b37e7348c83099e6b6d10e1b3ec9348fc935"
+      },
+      "png": {
+        "file": "boards-clean/ultralight-butterfly-split.png",
+        "width": 441,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 737598,
+        "sha256": "8794b142ba930ed9f19c54f1d62bbeb1ec63fe63a24231f790d632c892d33191"
+      },
+      "webp": {
+        "file": "boards-webp/ultralight-butterfly-split.webp",
+        "width": 441,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 41392,
+        "sha256": "602e8157828afa41154663756c52f364efd840f8bf33a72dbc557f7948a3c1c6"
+      },
+      "alpha_levels": 122,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "ultralight-hovercraft-2-0-split",
+      "original": {
+        "file": "original-boards/ultralight-hovercraft-2-0-split.webp",
+        "width": 255,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 17126,
+        "sha256": "3e268095aa6e4fca02a3135fdf036519ef3365af9ba55c873bd9d710f6b469d3"
+      },
+      "ai_master": {
+        "file": "boards/ultralight-hovercraft-2-0-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1074584,
+        "sha256": "caf9fd1cfdf5ee3e41a32d59802fc1de82cf59ba7cd59550b48a2381eb637aaf"
+      },
+      "png": {
+        "file": "boards-clean/ultralight-hovercraft-2-0-split.png",
+        "width": 443,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 759271,
+        "sha256": "9e86c896d9accf0594ee6a598bc2a0034b8fe95295682e0b176a12eac8bcd2a5"
+      },
+      "webp": {
+        "file": "boards-webp/ultralight-hovercraft-2-0-split.webp",
+        "width": 443,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 39676,
+        "sha256": "e73c4220c08b7af1d3b82ec4195eb7ba508ba55d1116146b9e8b985098718430"
+      },
+      "alpha_levels": 112,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-airheart-2-0",
+      "original": {
+        "file": "original-boards/womens-airheart-2-0.webp",
+        "width": 247,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 25126,
+        "sha256": "080d6c8500da6b4e7270dc94d769c3cb4eb9a94349cca0d67a9041c3e4902389"
+      },
+      "ai_master": {
+        "file": "boards/womens-airheart-2-0.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1384655,
+        "sha256": "5a2e433b439fc2d34e5d867567d48422ee517b1073f3ef752ac81d018a6bf85f"
+      },
+      "png": {
+        "file": "boards-clean/womens-airheart-2-0.png",
+        "width": 428,
+        "height": 2155,
+        "mode": "RGBA",
+        "bytes": 1179795,
+        "sha256": "8e09921f9dba77643d666f325f3c89b20e16750cbf2955b4c33af50f106b5b35"
+      },
+      "webp": {
+        "file": "boards-webp/womens-airheart-2-0.webp",
+        "width": 428,
+        "height": 2155,
+        "mode": "RGBA",
+        "bytes": 99936,
+        "sha256": "8827fd4e177185e67c48a344ea03409a870eae8de6d9bd060a35516cf2715206"
+      },
+      "alpha_levels": 122,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-dream-weaver-2-0",
+      "original": {
+        "file": "original-boards/womens-dream-weaver-2-0.webp",
+        "width": 250,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 27276,
+        "sha256": "fa028e57284ca9cdf03ce76edbc9a077d82d5a04d3111482d5ea850f7d9ddd8f"
+      },
+      "ai_master": {
+        "file": "boards/womens-dream-weaver-2-0.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1403762,
+        "sha256": "148cbfa56ad4378eb9e213a8071061fc97e51f7ab80dc7cac1cc90981c140421"
+      },
+      "png": {
+        "file": "boards-clean/womens-dream-weaver-2-0.png",
+        "width": 430,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 1172727,
+        "sha256": "e15bc37d32cdaf2bc2dd2ee55ca2e61409f0f24ee649aac9baaa5c2f9dcbbf8c"
+      },
+      "webp": {
+        "file": "boards-webp/womens-dream-weaver-2-0.webp",
+        "width": 430,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 127618,
+        "sha256": "1891c14cb0973060fd3c9fd8907e4eb987c2ea4b6b1cd102d79426aa6e647236"
+      },
+      "alpha_levels": 127,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-dream-weaver-2-0-split",
+      "original": {
+        "file": "original-boards/womens-dream-weaver-2-0-split.webp",
+        "width": 247,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 26184,
+        "sha256": "ab579522909aab33d30a5adb8b3556efa5c64a6e87e96e9895a13d24dcc95656"
+      },
+      "ai_master": {
+        "file": "boards/womens-dream-weaver-2-0-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1439290,
+        "sha256": "2aba6da68df0ecb95aca13a0886d6406b63b906a02efe6915b090b1229a391a4"
+      },
+      "png": {
+        "file": "boards-clean/womens-dream-weaver-2-0-split.png",
+        "width": 436,
+        "height": 2154,
+        "mode": "RGBA",
+        "bytes": 1196229,
+        "sha256": "42d710bad519a5c083dc516e6bd16364a7f5baf91e1f2fbf70f23acb1da8ad79"
+      },
+      "webp": {
+        "file": "boards-webp/womens-dream-weaver-2-0-split.webp",
+        "width": 436,
+        "height": 2154,
+        "mode": "RGBA",
+        "bytes": 130818,
+        "sha256": "7359ea27ab8bc10871012022e325d1a1fd7431ef7325f5faf1d4ab010a9d6ea3"
+      },
+      "alpha_levels": 121,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-flagship",
+      "original": {
+        "file": "original-boards/womens-flagship.webp",
+        "width": 245,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 18836,
+        "sha256": "fced1097019a0039cb58c3d61582ed973c63c38ec191709a153f95fb4647c4b5"
+      },
+      "ai_master": {
+        "file": "boards/womens-flagship.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1098832,
+        "sha256": "ef70343b5097a4d721b09f28109264b9e6df91913f983583a3b1ff854b7053a7"
+      },
+      "png": {
+        "file": "boards-clean/womens-flagship.png",
+        "width": 424,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 850113,
+        "sha256": "1868469857cfd16f0d4721771dddadb64388dcd5c6dcb3e242579e67a399b10f"
+      },
+      "webp": {
+        "file": "boards-webp/womens-flagship.webp",
+        "width": 424,
+        "height": 2157,
+        "mode": "RGBA",
+        "bytes": 53794,
+        "sha256": "bf81ecb7802763161aba24ba7054ecf352f88b0600776091dbae830f5fa4591e"
+      },
+      "alpha_levels": 123,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-howler",
+      "original": {
+        "file": "original-boards/womens-howler.webp",
+        "width": 253,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 21028,
+        "sha256": "5800064cab83bdb003ca7cd7b7a78be6d57ddf2b7163cea012ef0d4d8f50a269"
+      },
+      "ai_master": {
+        "file": "boards/womens-howler.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1231336,
+        "sha256": "391372763931e2910a3615f4d232f1ac796c10271624338efa57523ee7388515"
+      },
+      "png": {
+        "file": "boards-clean/womens-howler.png",
+        "width": 444,
+        "height": 2162,
+        "mode": "RGBA",
+        "bytes": 1040012,
+        "sha256": "73c2070b3c1bf02e9391e9167cd8bb935593d4921bd34c616a114d6f9d20632b"
+      },
+      "webp": {
+        "file": "boards-webp/womens-howler.webp",
+        "width": 444,
+        "height": 2162,
+        "mode": "RGBA",
+        "bytes": 60398,
+        "sha256": "9602c5dbbaf6ecdbf5dea7f930a93a16b42a3897034b987b1dcaf545c9074200"
+      },
+      "alpha_levels": 121,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-howler-split",
+      "original": {
+        "file": "original-boards/womens-howler-split.webp",
+        "width": 254,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 21720,
+        "sha256": "eec34661edad7578153d8af00ac93220f9e4d21eeb003367a0255257b0579d94"
+      },
+      "ai_master": {
+        "file": "boards/womens-howler-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1192216,
+        "sha256": "02c6dce027c7d4536df6a9fc521a30f0e292fbc50ae56eb79df633e059aaa200"
+      },
+      "png": {
+        "file": "boards-clean/womens-howler-split.png",
+        "width": 442,
+        "height": 2159,
+        "mode": "RGBA",
+        "bytes": 998626,
+        "sha256": "ef14e264cd76dea4d1b30681152a39771e116e808dececce52c804864f1c2dee"
+      },
+      "webp": {
+        "file": "boards-webp/womens-howler-split.webp",
+        "width": 442,
+        "height": 2159,
+        "mode": "RGBA",
+        "bytes": 61378,
+        "sha256": "44ee6ad1c5a9f8bb1b3a01d4026d6c61d75dec2dd80437dfede19efef903df3f"
+      },
+      "alpha_levels": 121,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-rally-cat",
+      "original": {
+        "file": "original-boards/womens-rally-cat.webp",
+        "width": 255,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 34118,
+        "sha256": "5e799336b82201fec04ea0bd10f4070ed0ee4b019789d8952d22b437b7275c5c"
+      },
+      "ai_master": {
+        "file": "boards/womens-rally-cat.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1416494,
+        "sha256": "38dae50dec810e2d559c8dbf7cda230122e97b71445aea53b547c58e3ff89758"
+      },
+      "png": {
+        "file": "boards-clean/womens-rally-cat.png",
+        "width": 436,
+        "height": 2163,
+        "mode": "RGBA",
+        "bytes": 1156571,
+        "sha256": "6a55ace444da9fda249f5aceb27addc232addc3326ac2b6452ec5f42fe837b67"
+      },
+      "webp": {
+        "file": "boards-webp/womens-rally-cat.webp",
+        "width": 436,
+        "height": 2163,
+        "mode": "RGBA",
+        "bytes": 128088,
+        "sha256": "2a18e5cdcc7d49c4beabb2b18b5a37e75ef82cd708967b8b21684b2369a69467"
+      },
+      "alpha_levels": 122,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-solution",
+      "original": {
+        "file": "original-boards/womens-solution.webp",
+        "width": 247,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 16108,
+        "sha256": "ddf2aaa9efaf94f9d5bb4ef86386ca21b5fba72dd814b3021087511a50ae8e83"
+      },
+      "ai_master": {
+        "file": "boards/womens-solution.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1013523,
+        "sha256": "b63a04be8be6c77c4e538b1c1825122593701f017fc4f96e6d5cf46b03fa2d99"
+      },
+      "png": {
+        "file": "boards-clean/womens-solution.png",
+        "width": 430,
+        "height": 2164,
+        "mode": "RGBA",
+        "bytes": 728832,
+        "sha256": "fea2564b68c8c5baa71f6b57c384cb13b3cb07f6b801dbcd0c61e44406ed19c7"
+      },
+      "webp": {
+        "file": "boards-webp/womens-solution.webp",
+        "width": 430,
+        "height": 2164,
+        "mode": "RGBA",
+        "bytes": 33744,
+        "sha256": "a49cee6da91199a8455a9727be4043ec74ecaf83ac7a5f8e575ee7e91bbb41f7"
+      },
+      "alpha_levels": 125,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-stratos",
+      "original": {
+        "file": "original-boards/womens-stratos.webp",
+        "width": 253,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 15920,
+        "sha256": "fc7ae1b656187103da8c0ef18092623bee7fb253757f98c3a54a46cdf41adfb0"
+      },
+      "ai_master": {
+        "file": "boards/womens-stratos.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 913622,
+        "sha256": "a09d6b4d04aac9110b783168067d170ed5b5c02822fa40513ef673bd5c4b9a98"
+      },
+      "png": {
+        "file": "boards-clean/womens-stratos.png",
+        "width": 438,
+        "height": 2158,
+        "mode": "RGBA",
+        "bytes": 668406,
+        "sha256": "89f9969692f9070a635e9c78ef032f75be0caf922fc2172333084da22197fea8"
+      },
+      "webp": {
+        "file": "boards-webp/womens-stratos.webp",
+        "width": 438,
+        "height": 2158,
+        "mode": "RGBA",
+        "bytes": 39530,
+        "sha256": "1fb337d59389b396f39fb47e7731e8873dd1bda168d343aa52a9847c8fd5cd35"
+      },
+      "alpha_levels": 125,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-stratos-split",
+      "original": {
+        "file": "original-boards/womens-stratos-split.webp",
+        "width": 253,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 17362,
+        "sha256": "bc6b1fcd160779761851dbacd5528964c8dd603e212eda3c3af4a8f5c2c7b872"
+      },
+      "ai_master": {
+        "file": "boards/womens-stratos-split.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 964040,
+        "sha256": "baac51ff2e4d1c4b4810ad4f1087b443129d5af4e1e93d696df7f6fd8867c977"
+      },
+      "png": {
+        "file": "boards-clean/womens-stratos-split.png",
+        "width": 434,
+        "height": 2149,
+        "mode": "RGBA",
+        "bytes": 685923,
+        "sha256": "f6066589dce3302ee25e28c2058c5451f9ef0a0cb3280aed1c6a69245ebe71b5"
+      },
+      "webp": {
+        "file": "boards-webp/womens-stratos-split.webp",
+        "width": 434,
+        "height": 2149,
+        "mode": "RGBA",
+        "bytes": 34190,
+        "sha256": "d7b342b3eace7c107ba650d066aba2efdef461e99830103ab816bb6288932e16"
+      },
+      "alpha_levels": 120,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-tweaker",
+      "original": {
+        "file": "original-boards/womens-tweaker.webp",
+        "width": 249,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 20376,
+        "sha256": "98f1af1776714ed6448e8d96b191cc31838468be5d836548a54f2f775c96ca01"
+      },
+      "ai_master": {
+        "file": "boards/womens-tweaker.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 1058499,
+        "sha256": "9201833d05b0de11d6e4ee1541db75b9a09eb8d3a645ae8bb785a0fd0c74a0c7"
+      },
+      "png": {
+        "file": "boards-clean/womens-tweaker.png",
+        "width": 430,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 801696,
+        "sha256": "a4a1dff72c074874634d3d4db09fbdc714880ba22a48f813b63507cac0e8a472"
+      },
+      "webp": {
+        "file": "boards-webp/womens-tweaker.webp",
+        "width": 430,
+        "height": 2160,
+        "mode": "RGBA",
+        "bytes": 52574,
+        "sha256": "8bcc28bded8210c2bae34f295294d7c43a34957b292bb8024ac5d9fe6b0faa00"
+      },
+      "alpha_levels": 130,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "womens-twin-sister",
+      "original": {
+        "file": "original-boards/womens-twin-sister.webp",
+        "width": 248,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 13188,
+        "sha256": "cb5558f69924e73e4be5cc9af88c2aacc1ed9034be6900c70462dd1f7749f744"
+      },
+      "ai_master": {
+        "file": "boards/womens-twin-sister.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 959748,
+        "sha256": "a6160ad9d2959074c27ab98d1c628acd3d1b9f427f2f30cbdaeab374b08ba268"
+      },
+      "png": {
+        "file": "boards-clean/womens-twin-sister.png",
+        "width": 432,
+        "height": 2155,
+        "mode": "RGBA",
+        "bytes": 687930,
+        "sha256": "c02d1325aa55c9c647d2a7eaf935a9c67a3ef69770cfcbee177a99ab364c826c"
+      },
+      "webp": {
+        "file": "boards-webp/womens-twin-sister.webp",
+        "width": 432,
+        "height": 2155,
+        "mode": "RGBA",
+        "bytes": 32528,
+        "sha256": "2066811a04e337d993579678e0257a7a6d4bbd2b51a179c3ce173d4785eed592"
+      },
+      "alpha_levels": 122,
+      "opaque_components": 1,
+      "holes": 0
+    },
+    {
+      "name": "youth-prodigy",
+      "original": {
+        "file": "original-boards/youth-prodigy.webp",
+        "width": 332,
+        "height": 1200,
+        "mode": "RGBA",
+        "bytes": 48802,
+        "sha256": "5a346c03261d3201ae4f22eda4f19b9026137304303962e41341c44fc8964647"
+      },
+      "ai_master": {
+        "file": "boards/youth-prodigy.png",
+        "width": 724,
+        "height": 2172,
+        "mode": "RGBA",
+        "bytes": 2371176,
+        "sha256": "368c035ca239fdb178a361615bff2a1566ce75c6587e9fcb61df9f35b73c0efd"
+      },
+      "png": {
+        "file": "boards-clean/youth-prodigy.png",
+        "width": 574,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 1913752,
+        "sha256": "bc03f7a28bd82e1cc15ca21b1389f9a41da28258d21132a05623cd13cacdc3f9"
+      },
+      "webp": {
+        "file": "boards-webp/youth-prodigy.webp",
+        "width": 574,
+        "height": 2148,
+        "mode": "RGBA",
+        "bytes": 251734,
+        "sha256": "423b8861d2ee66d5fa15fb2ae89674c637dd095f7535ac098b670fae73d9b942"
+      },
+      "alpha_levels": 100,
+      "opaque_components": 1,
+      "holes": 0
+    }
+  ],
+  "backgrounds": [
+    {
+      "png": {
+        "file": "backgrounds/blue-glacier-wide.png",
+        "width": 1672,
+        "height": 941,
+        "mode": "RGB",
+        "bytes": 2283948,
+        "sha256": "9fd84198d51bf9b518beaff5c3598180dfe864fcb687713bfbc2a3a353837c22"
+      },
+      "webp": {
+        "file": "backgrounds/blue-glacier-wide.webp",
+        "width": 1672,
+        "height": 941,
+        "mode": "RGB",
+        "bytes": 212560,
+        "sha256": "64fdfbe51d53196f7361c50c9e7172e84a8276ac5c4d8702c87c1cba0de60be9"
+      }
+    },
+    {
+      "png": {
+        "file": "backgrounds/blue-ice-portal-portrait.png",
+        "width": 941,
+        "height": 1672,
+        "mode": "RGB",
+        "bytes": 1872150,
+        "sha256": "481bd5681ae4b0322b6332bbe6231460cff1787c14afe15ef2f2c77adf593b42"
+      },
+      "webp": {
+        "file": "backgrounds/blue-ice-portal-portrait.webp",
+        "width": 941,
+        "height": 1672,
+        "mode": "RGB",
+        "bytes": 119476,
+        "sha256": "58fee7dc69aea8418a12b33b473eb628c744bdd28f73a64be3983dc47e8cfb76"
+      }
+    },
+    {
+      "png": {
+        "file": "backgrounds/green-aurora-couloir-portrait.png",
+        "width": 941,
+        "height": 1672,
+        "mode": "RGB",
+        "bytes": 1746933,
+        "sha256": "27e8db974aefde720a0abc19f18b2e15bd9173dd839dc506417071fd0de92dfc"
+      },
+      "webp": {
+        "file": "backgrounds/green-aurora-couloir-portrait.webp",
+        "width": 941,
+        "height": 1672,
+        "mode": "RGB",
+        "bytes": 98650,
+        "sha256": "d449fff44a0d28a383b1274a87792eb375d0b0304f946377da9e86b19af08e52"
+      }
+    },
+    {
+      "png": {
+        "file": "backgrounds/green-aurora-wide.png",
+        "width": 1672,
+        "height": 941,
+        "mode": "RGB",
+        "bytes": 1896189,
+        "sha256": "582a56eeae7573be85a7b687a5473f0141acafb543baf9d5602a5537e1b7a701"
+      },
+      "webp": {
+        "file": "backgrounds/green-aurora-wide.webp",
+        "width": 1672,
+        "height": 941,
+        "mode": "RGB",
+        "bytes": 119952,
+        "sha256": "88727831f99f767f739e760c83078f07f57114a3e9a980eddc4c480959d91dbd"
+      }
+    },
+    {
+      "png": {
+        "file": "backgrounds/red-eclipse-ridge-portrait.png",
+        "width": 941,
+        "height": 1672,
+        "mode": "RGB",
+        "bytes": 1815227,
+        "sha256": "9795f06c91fd80483c6dc27bc246fef6f15ce9aaf2820f9b8e601f90497b764c"
+      },
+      "webp": {
+        "file": "backgrounds/red-eclipse-ridge-portrait.webp",
+        "width": 941,
+        "height": 1672,
+        "mode": "RGB",
+        "bytes": 112174,
+        "sha256": "2c01434eca597291a08b3e9e3c85528890044579e808fbaa0f17d1e15cf5137e"
+      }
+    },
+    {
+      "png": {
+        "file": "backgrounds/red-storm-wide.png",
+        "width": 1672,
+        "height": 941,
+        "mode": "RGB",
+        "bytes": 2085850,
+        "sha256": "6635299faaca26067197b820ee4b79083f7ab7d7c7b88f3f7f235cf34dbb6d7d"
+      },
+      "webp": {
+        "file": "backgrounds/red-storm-wide.webp",
+        "width": 1672,
+        "height": 941,
+        "mode": "RGB",
+        "bytes": 178986,
+        "sha256": "ed1aa2016615c10ab7586e6083be6b899275f16786d51482ab745a49871d4196"
+      }
+    }
+  ],
+  "note": "AI restoration can reconstruct small artwork details. Original assets and AI masters are retained. Source text is retained where AI invented labels."
+}
