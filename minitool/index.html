@@ -23,60 +23,9 @@
 
   <!-- 固定背景：雪山夜景 -->
   <div class="bg-scene" aria-hidden="true">
-    <svg viewBox="0 0 750 1334" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" class="sky1" stop-color="#081a2e"/>
-          <stop offset="0.42" class="sky2" stop-color="#12395c"/>
-          <stop offset="0.72" class="sky3" stop-color="#2e5f83"/>
-          <stop offset="1" class="sky4" stop-color="#6d95b3"/>
-        </linearGradient>
-        <radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
-          <stop offset="0.45" stop-color="#cfe3f2" stop-opacity="0.18"/>
-          <stop offset="1" stop-color="#cfe3f2" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#bcd6e8" stop-opacity="0.14"/>
-          <stop offset="1" stop-color="#bcd6e8" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-
-      <rect width="750" height="1334" fill="url(#sky)"/>
-      <circle cx="588" cy="168" r="150" fill="url(#moonGlow)"/>
-      <circle cx="588" cy="168" r="42" fill="#f3f8fc" opacity="0.95"/>
-      <circle cx="574" cy="158" r="7" fill="#dbe8f1" opacity="0.5"/>
-      <circle cx="602" cy="182" r="5" fill="#dbe8f1" opacity="0.4"/>
-
-      <g fill="#ffffff">
-        <circle cx="80" cy="90" r="1.6" opacity="0.9"/><circle cx="170" cy="52" r="1.1" opacity="0.6"/>
-        <circle cx="255" cy="128" r="1.4" opacity="0.8"/><circle cx="330" cy="70" r="1" opacity="0.55"/>
-        <circle cx="420" cy="140" r="1.3" opacity="0.7"/><circle cx="66" cy="210" r="1.1" opacity="0.5"/>
-        <circle cx="500" cy="60" r="1.5" opacity="0.85"/><circle cx="700" cy="120" r="1.2" opacity="0.65"/>
-        <circle cx="140" cy="300" r="1" opacity="0.45"/><circle cx="368" cy="240" r="1.2" opacity="0.55"/>
-        <circle cx="640" cy="300" r="1" opacity="0.4"/><circle cx="60" cy="380" r="1.2" opacity="0.5"/>
-        <circle cx="270" cy="410" r="1" opacity="0.4"/><circle cx="710" cy="420" r="1.2" opacity="0.45"/>
-        <circle cx="450" cy="330" r="1" opacity="0.4"/><circle cx="205" cy="180" r="1.8" opacity="0.95"/>
-      </g>
-
-      <!-- 远山 -->
-      <polygon class="m-far" points="0,760 120,600 210,690 320,560 430,700 540,585 650,720 750,640 750,900 0,900"
-               fill="#3d6787" opacity="0.75"/>
-      <!-- 中山 + 雪帽 -->
-      <polygon class="m-mid" points="0,880 90,700 190,810 300,650 410,800 520,670 630,810 750,700 750,1000 0,1000"
-               fill="#28506f"/>
-      <polygon points="262,712 300,650 338,712 322,704 310,718 296,702 282,716" fill="#e9f2f9"/>
-      <polygon points="482,732 520,670 558,732 542,724 530,738 516,722 500,736" fill="#dfeaf3"/>
-      <polygon points="600,812 630,810 668,872 640,864 622,880 606,862" fill="#d8e6f0"/>
-      <!-- 近山 + 雪帽 -->
-      <polygon class="m-near" points="0,1060 150,830 260,950 400,760 540,930 660,800 750,900 750,1334 0,1334"
-               fill="#14304a"/>
-      <polygon points="340,852 400,760 458,852 436,842 420,860 402,840 384,858 366,842" fill="#f4f9fd"/>
-      <polygon points="612,890 660,800 706,890 688,880 672,898 656,878 640,894" fill="#eef5fa"/>
-      <polygon points="92,918 150,830 206,918 188,908 170,926 152,906 132,922" fill="#e9f1f8"/>
-
-      <rect y="880" width="750" height="240" fill="url(#mist)"/>
-    </svg>
+    <img class="scene-img scene-img-bal" src="./assets/hero-blue.webp" alt="" />
+    <img class="scene-img scene-img-flex" src="./assets/hero-green.webp" alt="" />
+    <img class="scene-img scene-img-stab" src="./assets/hero-red.webp" alt="" />
     <div class="bg-dim"></div>
   </div>
 

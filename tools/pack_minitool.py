@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """打包 minitool -> dist/jones-26-27-size-helper.zip
 
-包含: index.html + assets/{data,main,style} + assets/bg-*.webp + assets/boards/*.webp
+包含: index.html + assets/{data,main,style} + assets/{bg,hero}-*.webp + assets/boards/*.webp
 不含: card_test.html（本地调试页）
 """
 import zipfile
@@ -18,6 +18,7 @@ files = [
     SRC / "assets" / "style.css",
 ]
 files += sorted((SRC / "assets").glob("bg-*.webp"))
+files += sorted((SRC / "assets").glob("hero-*.webp"))
 files += sorted((SRC / "assets" / "boards").glob("*.webp"))
 
 missing = [f for f in files if not f.exists()]
