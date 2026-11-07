@@ -186,8 +186,17 @@
 
   function renderModelMeta() {
     var el = $("modelMeta");
-    if (!state.model) { el.textContent = "没有找到匹配的雪板，试试其他关键词或切换人群。"; return; }
+    var pv = $("bpPreviewImg");
+    if (!state.model) {
+      el.textContent = "没有找到匹配的雪板，试试其他关键词或切换人群。";
+      if (pv) { pv.removeAttribute("src"); pv.alt = ""; pv.style.display = "none"; }
+      return;
+    }
     var m = state.model;
+    if (pv) {
+      if (m.img) { pv.src = m.img; pv.alt = m.name + " 雪板产品图"; pv.style.display = ""; }
+      else { pv.removeAttribute("src"); pv.alt = ""; pv.style.display = "none"; }
+    }
     var sizes = m.sizes.map(function (s) { return s.size; }).join(" / ");
     el.innerHTML = "";
     el.appendChild(document.createTextNode("可选尺码 "));
@@ -1007,10 +1016,9 @@
         track.appendChild(over);
       }
       var mark = document.createElement("i");
-      mark.className = "rcs-mark";
+      mark.className = "rcs-mark" + (pct(s.waist) > 76 ? " is-right" : "");
       mark.style.left = pct(s.waist) + "%";
-      var markLbl = document.createElement("span");
-      markLbl.className = "rcs-mark-lbl" + (pct(s.waist) > 76 ? " right-anchored" : "");
+      var markLbl = document.createElement("b");
       markLbl.textContent = "板腰 " + fmt(s.waist);
       mark.appendChild(markLbl);
       track.appendChild(mark);
@@ -1076,20 +1084,32 @@
       ctx.fillStyle = g; ctx.fillRect(0, 0, 750, 1180);
     }
 
-    // ---- 板子光晕 + 雪板实拍（立于光环正中） ----
-    var bg2 = ctx.createRadialGradient(375, 455, 30, 375, 455, 290);
+    // ---- 板子光晕 + 雪板实拍（拉近取上段放大：高清原图裁上部 ~2/3，冲击力优先） ----
+    var bg2 = ctx.createRadialGradient(375, 455, 40, 375, 455, 350);
     bg2.addColorStop(0, t.glow); bg2.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = bg2; ctx.fillRect(60, 120, 630, 620);
+    ctx.fillStyle = bg2; ctx.fillRect(40, 80, 670, 740);
 
     if (boardImg) {
-      var bh = 400, bw = boardImg.width / boardImg.height * bh;
+      var srcH = boardImg.height * 0.68;              // 高清源图取板头至板身主体
+      var dh = 680, dw = boardImg.width / srcH * dh;  // 显示宽度约为整板构图的两倍
       ctx.save();
-      ctx.translate(375, 462);
-      ctx.rotate(-6 * Math.PI / 180);
-      ctx.shadowColor = "rgba(0,0,0,0.45)"; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18;
-      ctx.drawImage(boardImg, -bw / 2, -bh / 2, bw, bh);
+      ctx.translate(375, 455);
+      ctx.rotate(-8 * Math.PI / 180);
+      // 第一遍：主题亮色柔光勾轮廓，让板从夜空中跳出
+      ctx.shadowColor = t.glow; ctx.shadowBlur = 36; ctx.shadowOffsetY = 0;
+      ctx.drawImage(boardImg, 0, 0, boardImg.width, srcH, -dw / 2, -dh / 2, dw, dh);
+      // 第二遍：正式投影落板
+      ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 56; ctx.shadowOffsetY = 26;
+      ctx.drawImage(boardImg, 0, 0, boardImg.width, srcH, -dw / 2, -dh / 2, dw, dh);
       ctx.restore();
     }
+
+    // ---- 尺码数字区衬底：板尾与数字交叠处压深，保证大数字清晰 ----
+    var nb = ctx.createLinearGradient(0, 650, 0, 800);
+    nb.addColorStop(0, "rgba(6,10,16,0)");
+    nb.addColorStop(0.4, "rgba(6,10,16,0.4)");
+    nb.addColorStop(1, "rgba(6,10,16,0.55)");
+    ctx.fillStyle = nb; ctx.fillRect(0, 650, 750, 150);
 
     // ---- 飘雪点缀 ----
     ctx.fillStyle = "#fff";
@@ -1101,7 +1121,7 @@
     }
     ctx.globalAlpha = 1;
 
-    // ---- 推荐尺码（数字 + W/UW 后缀 + cm 整体居中） ----
+    // ---- 推荐尺码（数字 + W/UW 后缀 + cm 整体居中；带轻投影与板尾分离） ----
     ctx.font = "800 116px sans-serif";
     var numText = String(s.len);
     var numW = ctx.measureText(numText).width;
@@ -1112,6 +1132,7 @@
     var cmW = ctx.measureText("cm").width + 12;
     var x0 = 375 - (numW + sufW + cmW) / 2;
     ctx.textAlign = "left";
+    ctx.shadowColor = "rgba(6,10,16,0.6)"; ctx.shadowBlur = 16; ctx.shadowOffsetY = 4;
     ctx.font = "800 116px sans-serif";
     ctx.fillStyle = "#fff";
     ctx.fillText(numText, x0, 765);
@@ -1123,6 +1144,7 @@
     ctx.font = "400 34px sans-serif";
     ctx.fillStyle = "rgba(255,255,255,0.8)";
     ctx.fillText("cm", x0 + numW + sufW, 765);
+    ctx.shadowColor = "rgba(0,0,0,0)"; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
     ctx.textAlign = "center";
 
     // ---- 型号与标签 ----

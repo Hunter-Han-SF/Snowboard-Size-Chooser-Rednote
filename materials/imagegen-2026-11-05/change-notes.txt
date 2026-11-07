@@ -89,3 +89,50 @@ badge-check.jpg 与 badge-check-final.jpg：局部文字修正前后的质量检
 模型版本标识，因此无法确认实际模型为 image 2.6。
 AI 修复可能重绘细小画面细节。原图、AI 母版及最终结果均保留用于复核。
 本次没有执行小红书平台上传或发布；推送内容为 Git 仓库文件与本地构建包。
+
+八、追加：备用背景已应用（2026-11-06 晚）
+
+应用方：ZCode（minitool-zip-builder skill 1.10.0 流程）
+- 横版三张替换首页三色场景层（同名覆盖，零代码改动）：
+  blue-glacier-wide.webp        -> minitool/assets/hero-blue.webp
+  green-aurora-wide.webp        -> minitool/assets/hero-green.webp
+  red-storm-wide.webp           -> minitool/assets/hero-red.webp
+- 竖版三张替换分享卡片主题背景（同名覆盖）：
+  blue-ice-portal-portrait.webp     -> minitool/assets/bg-balanced.webp（均衡/蓝）
+  green-aurora-couloir-portrait.webp -> minitool/assets/bg-flexible.webp（灵活/绿）
+  red-eclipse-ridge-portrait.webp    -> minitool/assets/bg-stable.webp（稳定/红）
+- main.js / style.css / data.js / index.html 均未改动，
+  check_ui_preservation.py 基线校验保持通过。
+- 新背景合计 841,798 字节，替换旧背景 902,626 字节，净减 60,828 字节。
+- dist/jones-26-27-size-helper.zip 重新打包：57 个文件，4,107,075 字节（3.92 MiB），
+  zip 内各文件与 minitool 源逐字节一致；skill 审计 Node/Python 双通过，
+  仅存 3.92 MiB > 建议 2 MiB 的体积提示（上限 10 MiB）。
+
+九、追加：分享卡片回退与主体强化（2026-11-06 深夜）
+
+用户反馈新竖版背景不如上一代好看、雪板占比太小。处理：
+- 卡片背景回退：bg-balanced/flexible/stable.webp 恢复为上一代 1500×2360 版本
+  （git checkout HEAD -- 恢复，均衡/灵活/稳定.png 超分产物）；
+  首页 hero 场景层维持新横版背景不变。
+- drawCard 主体强化（main.js）：
+  板高 400→592（+48%）、中心 (375,462)→(375,440)、倾角 -6°→-8°；
+  新增两遍绘制——第一遍以主题色 glow 柔光勾轮廓（雪板从夜空中分离），
+  第二遍正式投影（blur 56 / offsetY 26）；光晕径向渐变同步放大（r 290→345）；
+  尺码数字区加 y650-800 渐深衬底 + 数字描影（与板尾交叠处保持清晰）。
+- 三轮视觉评审（AI）：8/10 → 8.5/10（蓝）/ 9/10（绿），可发布；
+  宽板边界核算：Youth Prodigy 574 宽 @ bh592 → bw≈158，居中 ±79 无碰撞。
+- 回归：check_specs / check_ui_preservation / regression 19 项全过；
+  zip 4,559,xxx 字节级核对一致，skill 审计 Node 0 警告 / Python 仅 4.33MiB>2MiB 建议。
+
+十、追加：红卡换新背景 + 雪板特写构图（2026-11-06 夜）
+
+用户反馈红色（稳定）卡片"一点都不好看"：诊断确认旧红背景（稳定.png 超分）为无场景
+的暗红径向渐变幕布，与雪板冷暖打架、光晕失效。处理：
+- bg-stable.webp ← red-eclipse-ridge-portrait.webp（红色日食光环+陡峭雪峰实景，
+  941×1672）；蓝/绿维持上一代背景不变。
+- 雪板构图改"拉近特写"：高清源图裁上部 68%，显示高 680（宽约 124→202，近翻倍），
+  中心 (375,455) 旋转 -8°，板尾藏入尺码数字衬底区后方，形成"板从信息区后伸出"层次。
+  此前因原图仅 1200px 高不敢裁切，高清版（2141-2170px）已具备特写条件。
+- 视觉评审：红 8.5/10（摆脱廉价感，冲击力 5/5）；蓝绿构图同步受益。
+  已知差异：旧蓝/绿背景自带"我的本命板"标题字，新红背景为无字实景（后续可统一）。
+- zip 4,399,xxx 字节 56 文件，逐字节一致，审计同前。
